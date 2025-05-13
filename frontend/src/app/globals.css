@@ -12,7 +12,7 @@
 }
 
 body {
+  font-family: Archivo, sans-serif;
   background: var(--dark);
   color: var(--light);
-  font-family: Archivo, sans-serif;
 }
