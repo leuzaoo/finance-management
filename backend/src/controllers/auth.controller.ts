@@ -39,10 +39,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.json({ token });
+    res.status(200).json({ message: "Login realizado.", token });
     return;
   } catch (err: any) {
     res.status(500).json({ message: "Erro no login", error: err.message });
     return;
+  }
+};
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // todo: change this cookie name
+    res.clearCookie("");
+
+    res.status(200).json({ success: true, message: "Logout realizado." });
+    return;
+  } catch (error: any) {
+    console.log("Erro no controlador de logout: ", error.message);
+    res.status(500).json({ success: false, message: "Internal server error." });
   }
 };
