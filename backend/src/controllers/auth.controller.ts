@@ -39,7 +39,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.status(200).json({ message: "Login realizado.", token });
+    res.status(200).json({ message: "Login realizado com sucesso.", token });
     return;
   } catch (err: any) {
     res.status(500).json({ message: "Erro no login", error: err.message });
@@ -52,7 +52,9 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     // todo: change this cookie name
     res.clearCookie("");
 
-    res.status(200).json({ success: true, message: "Logout realizado." });
+    res
+      .status(200)
+      .json({ success: true, message: "Logout realizado com sucesso." });
     return;
   } catch (error: any) {
     console.log("Erro no controlador de logout: ", error.message);
