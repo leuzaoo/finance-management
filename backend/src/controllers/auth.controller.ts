@@ -1,21 +1,42 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 import User, { IUser } from "../models/User";
+
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { firstName, email, password } = req.body;
     const exists = await User.findOne({ email });
     if (exists) {
       res.status(400).json({ message: "Email já cadastrado" });
       return;
     }
-    const user = new User({ email, password });
+
+    const user = new User({ firstName, email, password });
     await user.save();
-    res.status(201).json({ message: "Usuário criado com sucesso" });
+
+    if (!JWT_SECRET) {
+      console.error("The variable JWT_SECRET was not defined.");
+    }
+
+    const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(201).json({
+      message: "Usuário criado com sucesso",
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        email: user.email,
+      },
+      token,
+    });
     return;
   } catch (err: any) {
     res.status(500).json({ message: "Erro no registro", error: err.message });
