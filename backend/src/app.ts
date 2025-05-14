@@ -1,19 +1,25 @@
 import express, { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
+
+import { connectDB } from "./config/db";
 
 import authRoutes from "./routes/auth.route";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || "";
-
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use("/api/v1", authRoutes);
 
@@ -26,14 +32,7 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ message: "Erro interno", error: err.message });
 });
 
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("MongoDB conectado");
-    app.listen(PORT, () =>
-      console.log(`Servidor rodando em http://localhost:${PORT}`)
-    );
-  })
-  .catch((err) => {
-    console.error("Erro ao conectar no MongoDB:", err);
-  });
+app.listen(PORT, () => {
+  connectDB();
+  console.log(`Server running on port ${PORT}`);
+});
