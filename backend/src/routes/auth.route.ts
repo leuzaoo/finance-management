@@ -17,6 +17,11 @@ const validate = (req: Request, res: Response, next: NextFunction): void => {
 router.post(
   "/register",
   [
+    body("firstName")
+      .isString()
+      .withMessage("Preencha um nome de usuário.")
+      .isLength({ min: 2 })
+      .withMessage("Nome deve conter no mínimo 2 caracteres"),
     body("email").isEmail().withMessage("Email inválido"),
     body("password")
       .isLength({ min: 6 })
