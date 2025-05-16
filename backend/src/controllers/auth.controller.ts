@@ -62,7 +62,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       expiresIn: "7d",
     });
 
-    setAuthCookie(res, token).json({ message: "Login realizado com sucesso" });
+    setAuthCookie(res, token).json({ message: "Login realizado com sucesso." });
     return;
   } catch (err: any) {
     res.status(500).json({ message: "Erro no login", error: err.message });
