@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
+import { clearAuthCookie, setAuthCookie } from "../utils/cookies";
 import User, { IUser } from "../models/User";
 
 dotenv.config();
@@ -60,7 +61,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    res.status(200).json({ message: "Login realizado com sucesso.", token });
+
+    setAuthCookie(res, token).json({ message: "Login realizado com sucesso" });
     return;
   } catch (err: any) {
     res.status(500).json({ message: "Erro no login", error: err.message });
@@ -70,12 +72,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
-    // todo: change this cookie name
-    res.clearCookie("");
-
-    res
-      .status(200)
-      .json({ success: true, message: "Logout realizado com sucesso." });
+    clearAuthCookie(res).json({ success: true, message: "Logout realizado." });
     return;
   } catch (error: any) {
     console.log("Erro no controlador de logout: ", error.message);
