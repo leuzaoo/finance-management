@@ -1,12 +1,12 @@
-import { Archivo } from "next/font/google";
+import { Raleway } from "next/font/google";
 import type { Metadata } from "next";
 
 import "./globals.css";
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+const raleway = Raleway({
+  variable: "--font-raleway",
   subsets: ["latin"],
-  weight: ["200", "400", "600", "700", "900"],
+  weight: ["200", "400", "500", "600", "700", "900"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${archivo.variable} antialiased`}>{children}</body>
+      <body className={`${raleway.variable} antialiased`}>{children}</body>
     </html>
   );
 }
