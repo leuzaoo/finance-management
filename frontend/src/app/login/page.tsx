@@ -2,17 +2,17 @@
 
 import Image from "next/image";
 
+import { PasswordIcon } from "../../assets/icons/PasswordIcon";
 import { Providers } from "../../utils/login-providers";
+import { MailIcon } from "../../assets/icons/MailIcon";
 
 import InputField from "../../components/ui/InputField";
 import Video from "../../components/ui/Video";
-import { MailIcon } from "../../assets/icons/MailIcon";
-import { PasswordIcon } from "../../assets/icons/PasswordIcon";
 
 const LoginPage = () => {
   return (
     <section className="mx-auto flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
-      <div className="w-full max-w-md p-4 lg:col-span-1">
+      <div className="mx-auto w-full max-w-md p-4 lg:col-span-1">
         <p className="text-4xl font-medium lg:text-5xl">
           Olá,{" "}
           <span className="bg-gradient-to-r from-blue-600 via-green-500 to-purple-600 bg-clip-text font-bold text-transparent">
@@ -25,8 +25,9 @@ const LoginPage = () => {
         <div className="mt-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
           {Providers.map(({ id, name, icon }) => (
             <button
+              disabled
               key={id}
-              className="bg-dark-light text-light/60 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium shadow-sm"
+              className={`bg-dark-light text-light/60 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-50`}
             >
               <Image src={icon} alt={name} width={20} height={20} />
               <span>Entrar com {name}</span>
