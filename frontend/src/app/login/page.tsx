@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { PasswordIcon } from "../../assets/icons/PasswordIcon";
 import { Providers } from "../../utils/login-providers";
@@ -57,7 +58,9 @@ const LoginPage = () => {
               <input type="checkbox" className="size-4" />
               Salvar dados?
             </div>
-            <p className="text-sky-200 underline">Esqueceu sua senha?</p>
+            <Link href="/register" className="text-sky-300 underline">
+              Esqueceu sua senha?
+            </Link>
           </div>
           <button
             type="submit"
