@@ -12,6 +12,7 @@ function InputField({ placeholder, type, image }: Props) {
   return (
     <div className="relative flex w-full min-w-xs flex-col items-center">
       <input
+        autoComplete="off"
         type={type}
         placeholder={placeholder}
         className="bg-dark-light border-light/10 text-light w-full rounded-md border py-2 pl-10 shadow-sm outline-none"
