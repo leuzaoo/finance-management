@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -48,7 +49,9 @@ const LoginPage = () => {
 
     const success = await login(email, password);
     if (success) {
-      router.push(callbackUrl);
+      setTimeout(() => {
+        router.push(callbackUrl);
+      }, 1500);
     }
   };
 
@@ -92,7 +95,7 @@ const LoginPage = () => {
           <input type="checkbox" className="size-4" />
           Salvar dados?
         </div>
-        <Link href="/register" className="text-sky-300 underline">
+        <Link href="/recover-password" className="text-sky-300 underline">
           Esqueceu sua senha?
         </Link>
       </div>
@@ -111,41 +114,50 @@ const LoginPage = () => {
   );
 
   return (
-    <section className="mx-auto flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
-      <div className="mx-auto w-full max-w-md p-4 lg:col-span-1">
-        <p className="text-4xl font-medium lg:text-5xl">
-          Olá,{" "}
-          <span className="bg-gradient-to-r from-blue-600 via-green-500 to-purple-600 bg-clip-text font-bold text-transparent">
-            novamente!
-          </span>
-        </p>
+    <>
+      <ToastContainer autoClose={1000} position="top-left" />
+      <section className="mx-auto flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
+        <div className="mx-auto w-full max-w-md p-4 lg:col-span-1">
+          <p className="text-4xl font-medium lg:text-5xl">
+            Olá,{" "}
+            <span className="bg-gradient-to-r from-blue-600 via-green-500 to-purple-600 bg-clip-text font-bold text-transparent">
+              novamente!
+            </span>
+          </p>
 
-        <h1 className="mt-3 font-light opacity-60">Faça login em sua conta.</h1>
+          <h1 className="text-light/30 mt-3">
+            Faça login em sua conta. Não possui?{" "}
+            <Link href="/register" className="text-sky-300 underline">
+              Criar conta
+            </Link>
+            .
+          </h1>
 
-        <div className="mt-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
-          {Providers.map(({ id, name, icon }) => (
-            <button
-              disabled
-              key={id}
-              className={`bg-dark-light text-light/60 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-50`}
-            >
-              <Image src={icon} alt={name} width={20} height={20} />
-              <span>Entrar com {name}</span>
-            </button>
-          ))}
+          <div className="mt-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
+            {Providers.map(({ id, name, icon }) => (
+              <button
+                disabled
+                key={id}
+                className={`bg-dark-light text-light/60 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-50`}
+              >
+                <Image src={icon} alt={name} width={20} height={20} />
+                <span>Entrar com {name}</span>
+              </button>
+            ))}
+          </div>
+
+          <p className="text-light/60 my-10 w-full text-center text-sm">
+            ou continue com seu e-mail
+          </p>
+
+          {renderForm()}
         </div>
 
-        <p className="text-light/60 my-10 w-full text-center text-sm">
-          ou continue com seu e-mail
-        </p>
-
-        {renderForm()}
-      </div>
-
-      <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
-        <Video />
-      </div>
-    </section>
+        <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
+          <Video />
+        </div>
+      </section>
+    </>
   );
 };
 
