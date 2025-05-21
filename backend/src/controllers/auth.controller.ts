@@ -29,6 +29,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       expiresIn: "7d",
     });
 
+    setAuthCookie(res, token);
+
     res.status(201).json({
       message: "Usuário criado com sucesso",
       user: {
