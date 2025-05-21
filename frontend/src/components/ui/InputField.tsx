@@ -6,12 +6,16 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
   placeholder: string;
   image: ReactNode;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function InputField({ placeholder, type, image }: Props) {
+function InputField({ placeholder, type, image, value, onChange }: Props) {
   return (
     <div className="relative flex w-full min-w-xs flex-col items-center">
       <input
+        onChange={onChange}
+        value={value}
         autoComplete="off"
         type={type}
         placeholder={placeholder}
