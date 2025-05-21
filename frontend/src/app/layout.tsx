@@ -1,5 +1,5 @@
-import { Raleway } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import { Raleway } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 
