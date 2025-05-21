@@ -27,7 +27,7 @@ interface AuthState {
   error: string | null;
   loadUserFromStorage: () => void;
   login: (email: string, password: string) => Promise<boolean>;
-  signup: (
+  register: (
     firstName: string,
     email: string,
     password: string,
@@ -88,7 +88,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
   },
 
-  signup: async (firstName, email, password) => {
+  register: async (firstName, email, password) => {
     set({ isLoading: true, error: null, message: null });
 
     try {
@@ -101,7 +101,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         email,
         password,
       });
-
       localStorage.setItem("auth_user", JSON.stringify(response.data.user));
 
       set({
