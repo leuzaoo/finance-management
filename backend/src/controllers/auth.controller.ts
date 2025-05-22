@@ -14,7 +14,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const { firstName, email, password } = req.body;
     const exists = await User.findOne({ email });
     if (exists) {
-      res.status(400).json({ message: "Email já cadastrado" });
+      res.status(400).json({ message: "Email já cadastrado." });
       return;
     }
 
@@ -32,7 +32,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     setAuthCookie(res, token);
 
     res.status(201).json({
-      message: "Usuário criado com sucesso",
+      message: "Conta criada com sucesso.",
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -52,12 +52,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
     const user = (await User.findOne({ email })) as IUser;
     if (!user) {
-      res.status(400).json({ message: "Credenciais inválidas" });
+      res.status(400).json({ message: "Credenciais inválidas." });
       return;
     }
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      res.status(400).json({ message: "Credenciais inválidas" });
+      res.status(400).json({ message: "Credenciais inválidas." });
       return;
     }
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
