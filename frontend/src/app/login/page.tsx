@@ -100,16 +100,12 @@ const LoginPage = () => {
         </Link>
       </div>
 
-      {isLoading ? (
-        renderLoader()
-      ) : (
-        <button
-          type="submit"
-          className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-xl"
-        >
-          Entrar
-        </button>
-      )}
+      <button
+        type="submit"
+        className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-xl"
+      >
+        Entrar
+      </button>
     </form>
   );
 
@@ -150,7 +146,7 @@ const LoginPage = () => {
             ou continue com seu e-mail
           </p>
 
-          {renderForm()}
+          {isLoading ? renderLoader() : renderForm()}
         </div>
 
         <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
