@@ -54,17 +54,17 @@ const RegisterPage = () => {
     if (success) {
       setTimeout(() => {
         router.push(callbackUrl);
-      }, 2000);
+      }, 3000);
     }
   };
 
   const renderLoader = () => (
-    <div className="flex justify-center rounded-lg bg-white py-4 text-black">
+    <div className="mt-5 flex justify-center rounded-lg bg-white py-4 text-black">
       <LoaderIcon />
     </div>
   );
   const renderForm = () => (
-    <form onSubmit={handleRegister} className="mt-20 flex flex-col">
+    <form onSubmit={handleRegister} className="mt-10 flex flex-col">
       <div className="space-y-3">
         <div className="space-y-1">
           <InputField
@@ -112,40 +112,50 @@ const RegisterPage = () => {
         </Link>
       </div>
 
-      {isLoading ? (
-        renderLoader()
-      ) : (
-        <button
-          type="submit"
-          className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-xl"
-        >
-          Finalizar
-        </button>
-      )}
+      <button
+        type="submit"
+        className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-xl"
+      >
+        Finalizar
+      </button>
     </form>
   );
 
   return (
     <>
-      <ToastContainer position="top-left" autoClose={1500} />
+      <ToastContainer position="top-left" autoClose={3000} />
       <section className="mx-auto flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
         <div className="mx-auto w-full max-w-md p-4 lg:col-span-1">
-          <p className="text-4xl font-medium lg:text-5xl">
-            <span className="bg-gradient-to-r from-blue-600 via-green-500 to-purple-600 bg-clip-text font-bold text-transparent">
-              Crie{" "}
-            </span>
-            a sua conta!
-          </p>
+          {isLoading ? (
+            <>
+              <p className="text-4xl font-bold lg:text-5xl">
+                Sua conta{" "}
+                <span className="bg-gradient-to-r from-blue-600 via-green-500 to-purple-600 bg-clip-text text-transparent">
+                  foi criada
+                </span>
+                !
+              </p>
+              <p className="text-light/50">Aguarde pelos últimos ajustes.</p>
+            </>
+          ) : (
+            <>
+              <p className="text-4xl font-medium lg:text-5xl">
+                <span className="bg-gradient-to-r from-blue-600 via-green-500 to-purple-600 bg-clip-text font-bold text-transparent">
+                  Crie{" "}
+                </span>
+                a sua conta!
+              </p>
+              <h1 className="text-light/30 mt-3">
+                Cadastre-se abaixo. Já possui uma conta?{" "}
+                <Link href="/login" className="text-sky-300 underline">
+                  Fazer login
+                </Link>
+                .
+              </h1>
+            </>
+          )}
 
-          <h1 className="text-light/30 mt-3">
-            Cadastre-se abaixo. Já possui uma conta?{" "}
-            <Link href="/login" className="text-sky-300 underline">
-              Fazer login
-            </Link>
-            .
-          </h1>
-
-          {renderForm()}
+          {isLoading ? renderLoader() : renderForm()}
         </div>
 
         <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
