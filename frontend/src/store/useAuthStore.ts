@@ -89,7 +89,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   register: async (firstName, email, password) => {
-    set({ isLoading: true, error: null, message: null });
+    set({ isLoading: false, error: null, message: null });
 
     try {
       const response: AxiosResponse<{
@@ -106,7 +106,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user: response.data.user,
         isAuthenticated: true,
-        isLoading: false,
+        isLoading: true,
         message: response.data.message || "Conta criada com sucesso.",
       });
 
