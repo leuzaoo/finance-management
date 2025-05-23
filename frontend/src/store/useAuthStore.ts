@@ -69,6 +69,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         message: string;
       }> = await axios.post(`${AUTH_API_URL}/login`, { email, password });
 
+      localStorage.setItem("auth_user", JSON.stringify(response.data.user));
+
       set({
         user: response.data.user,
         isAuthenticated: true,
@@ -89,7 +91,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   register: async (firstName, email, password) => {
-    set({ isLoading: false, error: null, message: null });
+    set({ isLoading: true, error: null, message: null });
 
     try {
       const response: AxiosResponse<{
@@ -106,7 +108,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user: response.data.user,
         isAuthenticated: true,
-        isLoading: true,
+        isLoading: false,
         message: response.data.message || "Conta criada com sucesso.",
       });
 
@@ -124,7 +126,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    set({ isLoading: true });
+    set({ isLoading: false });
 
     try {
       await axios.post(`${AUTH_API_URL}/logout`);
