@@ -44,7 +44,7 @@ export default function Sidebar() {
     <>
       <ToastContainer autoClose={1500} position="top-left" />
       <aside
-        className={`bg-dark-light transition-width flex h-screen flex-col overflow-hidden duration-300 ${collapsed ? "w-16" : "w-64"} `}
+        className={`transition-width flex h-screen flex-col overflow-hidden duration-300 ${collapsed ? "w-16" : "w-64"}`}
       >
         <div
           className={`flex w-full ${collapsed ? "justify-center" : "justify-end"}`}
