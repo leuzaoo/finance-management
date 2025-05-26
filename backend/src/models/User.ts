@@ -6,7 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   createdAt: Date;
-  UpdatedAt: Date;
+  updatedAt: Date;
   comparePassword(candidate: string): Promise<boolean>;
 }
 
