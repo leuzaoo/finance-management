@@ -5,7 +5,9 @@ import cors from "cors";
 
 import { connectDB } from "./config/db";
 
+import banksRouter from "./routes/bank.route";
 import authRoutes from "./routes/auth.route";
+import userRoutes from "./routes/user.route";
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.use(
 );
 
 app.use("/api/v1", authRoutes);
+app.use("/api/v1", userRoutes);
+app.use("/api/v1/banks", banksRouter);
 
 app.get("/api/v1/health", (_req: Request, res: Response) => {
   res.json({ status: "OK", timestamp: new Date() });

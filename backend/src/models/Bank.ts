@@ -1,6 +1,7 @@
-import { model, Schema, Document } from "mongoose";
+import { model, Schema, Document, Types } from "mongoose";
 
 export interface IBank extends Document {
+  user: Types.ObjectId;
   bankName: string;
   currencyType: string;
   createdAt: Date;
@@ -9,6 +10,7 @@ export interface IBank extends Document {
 
 const BankSchema = new Schema<IBank>(
   {
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     bankName: { type: String, required: true },
     currencyType: { type: String, required: true },
   },

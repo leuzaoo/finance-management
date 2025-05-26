@@ -16,7 +16,9 @@ export const authenticate = (
 ): void => {
   const token = req.cookies[COOKIE_NAME];
   if (!token) {
-    res.status(401).json({ message: "Não autorizado." });
+    res
+      .status(401)
+      .json({ message: "Não autorizado. Faça login e tente novamente." });
     return;
   }
 
