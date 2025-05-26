@@ -10,7 +10,7 @@ export default function Layout({
       <div>
         <Sidebar />
       </div>
-      <main className="flex-1 overflow-y-auto p-4">{children}</main>
+      <main className="flex-1 overflow-y-auto p-4 bg-light/10">{children}</main>
     </div>
   );
 }

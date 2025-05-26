@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --dark: #13171a;
+  --dark: #010101;
   --light: #fff;
   --dark-light: #1a1e23;
 }
 
 @theme {
   --font-archivo: var(--font-archivo);
-  --color-dark: #13171a;
+  --color-dark: #010101;
   --color-dark-light: #1a1e23;
   --color-light: #fff;
 }
