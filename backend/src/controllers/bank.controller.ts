@@ -10,7 +10,7 @@ export const addBank = async (
 ): Promise<void> => {
   try {
     const userId = req.userId!;
-    const { bankName, currencyType } = req.body;
+    const { bankName, currencyType, currencyValue = 0 } = req.body;
 
     const exists = await Bank.findOne({ bankName, user: userId });
     if (exists) {
@@ -18,7 +18,12 @@ export const addBank = async (
       return;
     }
 
-    const bank = new Bank({ bankName, currencyType, user: userId });
+    const bank = new Bank({
+      bankName,
+      currencyType,
+      currencyValue,
+      user: userId,
+    });
     await bank.save();
 
     res.status(201).json({
@@ -26,6 +31,7 @@ export const addBank = async (
       bank: {
         id: bank._id,
         bankName: bank.bankName,
+        currencyValue: bank.currencyValue,
         currencyType: bank.currencyType,
       },
     });
@@ -35,6 +41,35 @@ export const addBank = async (
       .status(500)
       .json({ message: "Erro ao registrar o banco.", error: error.message });
     return;
+  }
+};
+
+export const updateBankValue = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.userId!;
+    const { bankId } = req.params;
+    const { currencyValue } = req.body;
+
+    const bank = await Bank.findOneAndUpdate(
+      { _id: bankId, user: userId },
+      { currencyValue },
+      { new: true }
+    );
+    if (!bank) {
+      res
+        .status(404)
+        .json({ message: "Banco não encontrado. Tente novamente mais tarde." });
+      return;
+    }
+
+    res.json({ message: "Saldo atualizado.", bank });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: "Erro ao atualizar saldo.", error: error.message });
   }
 };
 

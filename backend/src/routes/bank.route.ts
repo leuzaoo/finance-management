@@ -3,7 +3,11 @@ import { validationResult, body } from "express-validator";
 
 import { authenticate } from "../middlewares/authenticate";
 
-import { addBank, listBanks } from "../controllers/bank.controller";
+import {
+  addBank,
+  listBanks,
+  updateBankValue,
+} from "../controllers/bank.controller";
 
 const router = Router();
 
@@ -22,13 +26,25 @@ router.post(
   [
     body("bankName")
       .isString()
-      .withMessage("O nome do banco deve ser um texto.")
+      .withMessage("O nome do banco deve ser texto.")
       .isLength({ min: 2 })
-      .withMessage("Preencha o nome do banco."),
-    body("currencyType").isString().withMessage("Selecione uma moeda."),
+      .withMessage("Precisa ter ao menos 2 caracteres."),
+    body("currencyType").isString().withMessage("Selecione uma moeda válida."),
+    body("currencyValue")
+      .optional()
+      .isNumeric()
+      .withMessage("O valor inicial deve ser numérico."),
   ],
   validate,
   addBank
+);
+
+router.put(
+  "/:bankId/value",
+  authenticate,
+  [body("currencyValue").isNumeric().withMessage("O valor deve ser numérico.")],
+  validate,
+  updateBankValue
 );
 
 router.get("/", authenticate, listBanks);
