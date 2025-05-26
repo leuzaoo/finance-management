@@ -88,7 +88,7 @@ export default function Sidebar() {
               <li key={item.id}>
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 transition-colors ${collapsed ? "justify-center" : ""} ${
+                  className={`flex items-center gap-2 px-4 py-2 transition-colors ${collapsed && "justify-center"} ${
                     pathname === item.href
                       ? "bg-light/10 text-light"
                       : "text-light/40 hover:bg-light/5"
