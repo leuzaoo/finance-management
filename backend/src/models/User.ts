@@ -1,10 +1,16 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
   firstName: string;
   email: string;
   password: string;
+  banks?: {
+    _id: Types.ObjectId;
+    bankName: string;
+    currencyType: string;
+    createdAt: Date;
+  }[];
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidate: string): Promise<boolean>;
@@ -16,8 +22,14 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+UserSchema.virtual("banks", {
+  ref: "Bank",
+  localField: "_id",
+  foreignField: "user",
+});
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
