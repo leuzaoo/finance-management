@@ -10,6 +10,7 @@ import {
   WalletIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  LogOutIcon,
 } from "lucide-react";
 
 import { useAuthStore } from "../../store/useAuthStore";
@@ -106,7 +107,7 @@ export default function Sidebar() {
             ))}
           </ul>
 
-          <div className="mb-4 px-4">
+          <div className="mb-4 px-2">
             {isLoading ? (
               <div className="flex justify-center py-2">
                 <LoaderIcon />
@@ -114,9 +115,9 @@ export default function Sidebar() {
             ) : (
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center justify-center gap-2 rounded-md bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-500"
+                className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-600 py-2 hover:bg-red-400"
               >
-                {!collapsed && "Sair"}
+                {!collapsed ? "Sair" : <LogOutIcon strokeWidth={1.5} />}
               </button>
             )}
           </div>
