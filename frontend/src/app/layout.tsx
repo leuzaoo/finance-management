@@ -1,4 +1,4 @@
-import { Raleway, Inter } from "next/font/google";
+import { Raleway, Inter, Oswald } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -10,6 +10,12 @@ const raleway = Raleway({
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const oswald = Oswald({
+  variable: "--font-oswald",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -27,7 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${raleway.variable} ${inter.variable} antialiased`}>
+      <body
+        className={`${raleway.variable} ${oswald.variable} ${inter.variable} antialiased`}
+      >
         {children}
       </body>
     </html>
