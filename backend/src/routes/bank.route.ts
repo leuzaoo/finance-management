@@ -1,5 +1,5 @@
 import { Router, NextFunction, Request, Response } from "express";
-import { validationResult, body } from "express-validator";
+import { validationResult, body, param } from "express-validator";
 
 import { authenticate } from "../middlewares/authenticate";
 
@@ -7,6 +7,7 @@ import {
   addBank,
   listBanks,
   updateBankValue,
+  deleteBank,
 } from "../controllers/bank.controller";
 
 const router = Router();
@@ -38,14 +39,25 @@ router.post(
   addBank
 );
 
+router.get("/", authenticate, listBanks);
+
 router.put(
   "/:bankId/value",
   authenticate,
-  [body("currencyValue").isNumeric().withMessage("O valor deve ser numérico.")],
+  [
+    param("bankId").isMongoId().withMessage("ID de banco inválido."),
+    body("currencyValue").isNumeric().withMessage("O valor deve ser numérico."),
+  ],
   validate,
   updateBankValue
 );
 
-router.get("/", authenticate, listBanks);
+router.delete(
+  "/:bankId",
+  authenticate,
+  [param("bankId").isMongoId().withMessage("ID de banco inválido.")],
+  validate,
+  deleteBank
+);
 
 export default router;
