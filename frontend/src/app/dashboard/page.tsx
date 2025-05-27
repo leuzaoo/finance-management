@@ -38,22 +38,21 @@ const DashboardPage = () => {
         onClose={() => setModalOpen(false)}
         onSubmit={handleCreate}
       />
-
       <section>
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="mt-4 flex items-center gap-4 overflow-auto pb-4">
           {banks.map((bank: Bank) => (
-            <div key={bank.bankName}>
-              <MoneyCard
-                label={bank.bankName}
-                value={formatCurrency(bank.currencyValue)}
-                currency={bank.currencyType}
-              />
-            </div>
+            <MoneyCard
+              key={bank.id}
+              bankId={bank.id}
+              label={bank.bankName}
+              value={formatCurrency(bank.currencyValue)}
+              currency={bank.currencyType}
+            />
           ))}
 
           <div
-            className="bg-light/10 h-24 min-w-56 rounded-xl"
+            className="bg-light/10 h-24 min-w-56 cursor-pointer rounded-xl hover:opacity-80"
             onClick={() => setModalOpen(true)}
           >
             <div className="flex flex-col p-3">
