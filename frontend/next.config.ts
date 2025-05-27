@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://finance-management-ncdf.onrender.com/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
