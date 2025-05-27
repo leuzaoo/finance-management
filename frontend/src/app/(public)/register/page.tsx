@@ -6,14 +6,14 @@ import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { LoaderIcon } from "../../assets/icons/LoaderCircleIcon";
-import { PasswordIcon } from "../../assets/icons/PasswordIcon";
-import { useAuthStore } from "../../store/useAuthStore";
-import { MailIcon } from "../../assets/icons/MailIcon";
-import { UserIcon } from "../../assets/icons/UserIcon";
+import { LoaderIcon } from "../../../assets/icons/LoaderCircleIcon";
+import { PasswordIcon } from "../../../assets/icons/PasswordIcon";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { MailIcon } from "../../../assets/icons/MailIcon";
+import { UserIcon } from "../../../assets/icons/UserIcon";
 
-import InputField from "../../components/ui/InputField";
-import Video from "../../components/ui/Video";
+import InputField from "../../../components/ui/InputField";
+import Video from "../../../components/ui/Video";
 
 type FieldErrors = { firstName?: string; email?: string; password?: string };
 
