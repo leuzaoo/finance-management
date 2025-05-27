@@ -4,7 +4,7 @@ import { create } from "zustand";
 
 axios.defaults.withCredentials = true;
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/banks`;
+const BANKS_PATH = "/api/v1/banks";
 
 interface BankFromApi {
   _id: string;
@@ -60,7 +60,7 @@ export const useBankStore = create<BankState>((set, get) => ({
   listBanks: async () => {
     set({ isLoading: true, error: null });
     const res = await safe(
-      () => axios.get<BankFromApi[]>(API_URL),
+      () => axios.get<BankFromApi[]>(BANKS_PATH),
       (err) => {
         const msg = (err as AxiosError<{ message: string }>)?.response?.data
           .message;
@@ -78,7 +78,7 @@ export const useBankStore = create<BankState>((set, get) => ({
     set({ isLoading: true, error: null });
     const res = await safe(
       () =>
-        axios.post(API_URL, {
+        axios.post(BANKS_PATH, {
           bankName,
           currencyType,
           currencyValue,
@@ -99,7 +99,7 @@ export const useBankStore = create<BankState>((set, get) => ({
 
   updateBankValue: async (bankId, currencyValue) => {
     set({ isLoading: true, error: null });
-    const url = `${API_URL}/${bankId}/value`;
+    const url = `${BANKS_PATH}/${bankId}/value`;
     const res = await safe(
       () => axios.put(url, { currencyValue }),
       (err) => {
@@ -123,7 +123,7 @@ export const useBankStore = create<BankState>((set, get) => ({
   deleteBank: async (bankId) => {
     set({ isLoading: true, error: null });
     const res = await safe(
-      () => axios.delete(`${API_URL}/${bankId}`),
+      () => axios.delete(`${BANKS_PATH}/${bankId}`),
       (err) => {
         const msg = (err as AxiosError<{ message: string }>)?.response?.data
           .message;

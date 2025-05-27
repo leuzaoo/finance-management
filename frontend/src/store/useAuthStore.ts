@@ -4,7 +4,7 @@ import { create } from "zustand";
 
 axios.defaults.withCredentials = true;
 
-const AUTH_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const AUTH_PATH = "/api/v1";
 
 const deleteCookie = (name: string) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -64,7 +64,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         token: string;
         user: User;
         message: string;
-      }> = await axios.post(`${AUTH_API_URL}/login`, { email, password });
+      }> = await axios.post(`${AUTH_PATH}/login`, { email, password });
 
       localStorage.setItem("auth_user", JSON.stringify(response.data.user));
 
@@ -95,7 +95,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         token: string;
         user: User;
         message: string;
-      }> = await axios.post(`${AUTH_API_URL}/register`, {
+      }> = await axios.post(`${AUTH_PATH}/register`, {
         firstName,
         email,
         password,
@@ -126,7 +126,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: false });
 
     try {
-      await axios.post(`${AUTH_API_URL}/logout`);
+      await axios.post(`${AUTH_PATH}/logout`);
     } catch (err) {
       console.error("Erro ao fazer logout no servidor:", err);
     } finally {
