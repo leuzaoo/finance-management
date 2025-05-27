@@ -1,10 +1,12 @@
-import { Response } from "express";
+import { Response, CookieOptions } from "express";
 
 const COOKIE_NAME = "token";
-const COOKIE_OPTIONS = {
+
+const COOKIE_OPTIONS: CookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax" as const,
+  secure: true,
+  sameSite: "none",
+  path: "/",
 };
 
 export function setAuthCookie(res: Response, token: string): Response {
