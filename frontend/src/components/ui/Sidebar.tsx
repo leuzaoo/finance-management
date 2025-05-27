@@ -33,7 +33,7 @@ export default function Sidebar() {
   const router = useRouter();
   const { user, logout, isLoading } = useAuthStore();
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   const handleLogout = async () => {
     await logout();

@@ -10,8 +10,7 @@ import {
 } from "../controllers/bank.controller";
 
 const router = Router();
-
-const validate = (req: Request, res: Response, next: NextFunction): void => {
+const validate = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array() });
