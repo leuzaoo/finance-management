@@ -2,8 +2,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc",
-    "start": "node dist/app.js",
-    "check-types": "tsc --noEmit"
+    "start": "node dist/app.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
