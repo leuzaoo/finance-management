@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://finance-management-ncdf.onrender.com/:path*",
+        destination: "https://finance-management-ncdf.onrender.com/api/:path*",
       },
     ];
   },
