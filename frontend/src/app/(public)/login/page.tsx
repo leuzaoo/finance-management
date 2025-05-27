@@ -7,14 +7,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { LoaderIcon } from "../../assets/icons/LoaderCircleIcon";
-import { PasswordIcon } from "../../assets/icons/PasswordIcon";
-import { useAuthStore } from "../../store/useAuthStore";
-import { Providers } from "../../utils/login-providers";
-import { MailIcon } from "../../assets/icons/MailIcon";
+import { LoaderIcon } from "../../../assets/icons/LoaderCircleIcon";
+import { PasswordIcon } from "../../../assets/icons/PasswordIcon";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { Providers } from "../../../utils/login-providers";
+import { MailIcon } from "../../../assets/icons/MailIcon";
 
-import InputField from "../../components/ui/InputField";
-import Video from "../../components/ui/Video";
+import InputField from "../../../components/ui/InputField";
+import Video from "../../../components/ui/Video";
 
 type FieldErrors = { email?: string; password?: string };
 

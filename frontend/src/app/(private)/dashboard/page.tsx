@@ -2,11 +2,11 @@
 import { PlusCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { useBankStore, Bank } from "../../store/useBankStore";
-import { formatCurrency } from "../../utils/format-currency";
+import { Bank, useBankStore } from "@/src/store/useBankStore";
+import { formatCurrency } from "@/src/utils/format-currency";
 
-import BankModal from "../../components/forms/BankModal";
-import MoneyCard from "../../components/ui/MoneyCard";
+import BankModal from "@/src/components/forms/BankModal";
+import MoneyCard from "@/src/components/ui/MoneyCard";
 
 const DashboardPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
