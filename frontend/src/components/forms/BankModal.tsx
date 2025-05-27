@@ -66,7 +66,7 @@ export default function BankModal({
             <label className="block text-sm font-medium">Moeda</label>
             <select
               name="currencyType"
-              className="bg-dark mt-1 w-full rounded border px-3 py-2 outline-none"
+              className="bg-dark mt-1 w-full cursor-pointer rounded border px-3 py-2 outline-none"
               value={currencyType}
               onChange={(e) => setCurrencyType(e.target.value)}
             >
@@ -88,7 +88,7 @@ export default function BankModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="mt-1 w-full rounded border px-3 py-2 outline-none"
+              className="font-inter mt-1 w-full rounded border px-3 py-2 outline-none"
               placeholder="200"
               required
               value={initialValue}
@@ -99,16 +99,12 @@ export default function BankModal({
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end space-x-2">
+        <div className="mt-6 flex w-full justify-end space-x-2">
           <button
-            type="button"
-            className="rounded border px-4 py-2"
-            onClick={onClose}
+            type="submit"
+            className="bg-light hover:bg-light/80 text-dark w-full cursor-pointer rounded px-4 py-2 font-semibold"
           >
-            Cancelar
-          </button>
-          <button type="submit" className="rounded bg-blue-600 px-4 py-2">
-            Criar
+            Salvar
           </button>
         </div>
       </form>

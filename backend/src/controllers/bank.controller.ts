@@ -73,6 +73,29 @@ export const updateBankValue = async (
   }
 };
 
+export const deleteBank = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.userId!;
+    const { bankId } = req.params;
+
+    const bank = await Bank.findOneAndDelete({ _id: bankId, user: userId });
+
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    res.json({ message: "Banco deletado com sucesso.", bankId });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: "Erro ao deletar o banco.", error: error.message });
+  }
+};
+
 export const listBanks = async (
   req: AuthRequest,
   res: Response

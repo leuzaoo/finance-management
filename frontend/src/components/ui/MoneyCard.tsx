@@ -1,23 +1,45 @@
-import CurrencyValue from "../utils/CurrencyValue";
+"use client";
+import { Trash2Icon } from "lucide-react";
+
+import { useBankStore } from "../../store/useBankStore";
+
+import CurrencyValue from "../../components/utils/CurrencyValue";
 
 interface Props {
+  bankId: string;
   label: string;
   value: string;
   currency: string;
 }
 
-function MoneyCard({ label, value, currency }: Props) {
+export default function MoneyCard({ bankId, label, value, currency }: Props) {
+  const deleteBank = useBankStore((s) => s.deleteBank);
+  const isLoading = useBankStore((s) => s.isLoading);
+
+  const handleDelete = async () => {
+    if (confirm(`Deseja realmente deletar o banco “${label}”?`)) {
+      await deleteBank(bankId);
+    }
+  };
+
   return (
-    <div className="bg-light/10 h-24 min-w-56 rounded-xl">
-      <div className="flex h-full flex-col justify-center p-3">
-        <span className="text-light/50 first-letter:capitalize">{label}</span>
-        <div className="mt-2 flex items-center justify-between gap-3">
-          <CurrencyValue value={value} />{" "}
-          <span className="text-lg opacity-60">{currency}</span>
+    <div className="bg-light/10 relative h-24 min-w-[14rem] rounded-xl p-3">
+      <button
+        onClick={handleDelete}
+        disabled={isLoading}
+        aria-label={`Deletar banco ${label}`}
+        className="text-light/60 absolute top-2 right-2 cursor-pointer hover:text-red-400 disabled:opacity-50"
+      >
+        <Trash2Icon size={20} />
+      </button>
+
+      <div className="flex h-full flex-col justify-center">
+        <span className="text-light/50 font-semibold capitalize">{label}</span>
+        <div className="mt-2 flex items-baseline justify-between gap-3">
+          <CurrencyValue value={value} />
+          <span className="text-2xl font-medium opacity-60">{currency}</span>
         </div>
       </div>
     </div>
   );
 }
-
-export default MoneyCard;
