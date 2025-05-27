@@ -1,4 +1,4 @@
-import axios, { type AxiosResponse, type AxiosError } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 
