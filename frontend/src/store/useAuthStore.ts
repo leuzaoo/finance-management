@@ -4,10 +4,7 @@ import { create } from "zustand";
 
 axios.defaults.withCredentials = true;
 
-const AUTH_API_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1"
-    : "/api/v1";
+const AUTH_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const deleteCookie = (name: string) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;

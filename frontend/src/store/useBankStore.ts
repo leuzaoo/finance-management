@@ -4,11 +4,7 @@ import { create } from "zustand";
 
 axios.defaults.withCredentials = true;
 
-const BASE = "/api/v1/banks";
-const API_URL =
-  process.env.NODE_ENV === "development"
-    ? `http://localhost:5000${BASE}`
-    : BASE;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/banks`;
 
 interface BankFromApi {
   _id: string;
