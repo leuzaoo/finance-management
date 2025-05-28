@@ -1,4 +1,5 @@
 import React from "react";
+
 import CurrencyValue from "../utils/CurrencyValue";
 
 interface Props {
