@@ -23,7 +23,7 @@ export default function MoneyCard({ bankId, label, value, currency }: Props) {
   };
 
   return (
-    <div className="bg-light/10 relative h-24 min-w-[14rem] rounded-xl p-3">
+    <div className="bg-dark relative h-24 min-w-[14rem] rounded-xl p-3">
       <button
         onClick={handleDelete}
         disabled={isLoading}
@@ -34,10 +34,10 @@ export default function MoneyCard({ bankId, label, value, currency }: Props) {
       </button>
 
       <div className="flex h-full flex-col justify-center">
-        <span className="text-light/50 font-semibold capitalize">{label}</span>
+        <span className="text-light/50 font-medium capitalize">{label}</span>
         <div className="mt-2 flex items-baseline justify-between gap-3">
           <CurrencyValue value={value} />
-          <span className="text-2xl font-medium opacity-60">{currency}</span>
+          <span className="text-2xl font-medium font-inter opacity-60">{currency}</span>
         </div>
       </div>
     </div>

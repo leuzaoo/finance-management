@@ -24,7 +24,7 @@ const menuItems = [
     href: "/dashboard",
     icon: <LayoutDashboardIcon />,
   },
-  { id: 1, label: "Cartões", href: "/cards", icon: <WalletIcon /> },
+  { id: 1, label: "Cartões", href: "/wallets", icon: <WalletIcon /> },
   { id: 2, label: "Configurações", href: "/settings", icon: <SettingsIcon /> },
 ];
 
