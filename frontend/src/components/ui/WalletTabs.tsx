@@ -1,7 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import React from "react";
 
 export interface Wallet {
   id: number;
@@ -14,30 +13,28 @@ export interface Wallet {
 
 interface WalletTabsProps {
   list: Wallet[];
-  basePath?: string;
+  activeSlug: string;
+  onSelect: (slug: string) => void;
 }
 
-export function WalletTabs({ list, basePath = "/wallets" }: WalletTabsProps) {
-  const params = useSearchParams();
-  const active = params.get("")?.toLowerCase() ?? "";
-
+export function WalletTabs({ list, activeSlug, onSelect }: WalletTabsProps) {
   return (
     <div className="bg-dark inline-flex space-x-2 rounded-lg p-1">
       {list.map((w) => {
-        const isActive = w.slug === active;
+        const isActive = w.slug === activeSlug;
 
         return (
-          <Link
+          <button
             key={w.id}
-            href={`${basePath}?=${w.slug}`}
-            className={`rounded-lg px-8 py-1 transition ${
+            onClick={() => onSelect(w.slug)}
+            className={`cursor-pointer rounded-md px-8 py-1 transition ${
               isActive
                 ? "text-dark bg-white font-semibold"
                 : "text-light/60 hover:bg-light/10 hover:text-light"
             } `}
           >
             {w.name}
-          </Link>
+          </button>
         );
       })}
     </div>
