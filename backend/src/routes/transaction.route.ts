@@ -24,7 +24,7 @@ const validate = (req: Request, res: Response, next: NextFunction): void => {
 };
 
 router.post(
-  "/:bankId/transactions",
+  "/:bankId/add",
   authenticate,
   param("bankId").isMongoId().withMessage("BankId inválido"),
   body("type")
@@ -43,7 +43,7 @@ router.post(
 );
 
 router.get(
-  "/:bankId/transactions",
+  "/:bankId/history",
   authenticate,
   param("bankId").isMongoId().withMessage("BankId inválido"),
   query("from").optional().isISO8601().toDate(),
