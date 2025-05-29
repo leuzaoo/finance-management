@@ -5,6 +5,7 @@ import cors from "cors";
 
 import { connectDB } from "./config/db";
 
+import transactionRoute from "./routes/transaction.route";
 import banksRouter from "./routes/bank.route";
 import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
@@ -26,6 +27,7 @@ app.use(
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", userRoutes);
 app.use("/api/v1/banks", banksRouter);
+app.use("/api/v1/transactions", transactionRoute);
 
 app.get("/api/v1/health", (_req: Request, res: Response) => {
   res.json({ status: "OK", timestamp: new Date() });
