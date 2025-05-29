@@ -1,8 +1,10 @@
-import { Request, Response } from "express";
-import Bank from "../models/Bank";
-import Transaction, { ITransaction } from "../models/Transaction";
-import { AuthRequest } from "../middlewares/authenticate";
+import { Response } from "express";
 import mongoose from "mongoose";
+
+import { AuthRequest } from "../middlewares/authenticate";
+
+import Transaction from "../models/Transaction";
+import Bank from "../models/Bank";
 
 export const addTransaction = async (
   req: AuthRequest,
