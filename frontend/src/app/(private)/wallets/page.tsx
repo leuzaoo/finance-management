@@ -1,4 +1,4 @@
-import { Wallets } from "@/src/components/ui/Wallets";
+import { Wallets } from "@/src/components/interface/Wallets";
 
 export default function WalletsPage() {
   return <Wallets />;
