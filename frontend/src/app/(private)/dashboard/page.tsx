@@ -1,6 +1,7 @@
 "use client";
 import { PlusCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import { Bank, useBankStore } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
@@ -42,13 +43,14 @@ const DashboardPage = () => {
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="mt-4 flex items-center gap-4 overflow-auto pb-4">
           {banks.map((bank: Bank) => (
-            <MoneyCard
-              key={bank.id}
-              bankId={bank.id}
-              label={bank.bankName}
-              value={formatCurrency(bank.currencyValue)}
-              currency={bank.currencyType}
-            />
+            <Link href={`/wallets/${bank.id}`}>
+              <MoneyCard
+                key={bank.id}
+                label={bank.bankName}
+                value={formatCurrency(bank.currencyValue)}
+                currency={bank.currencyType}
+              />
+            </Link>
           ))}
 
           <div
