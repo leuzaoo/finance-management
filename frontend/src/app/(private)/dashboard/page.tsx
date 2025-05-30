@@ -1,6 +1,6 @@
 "use client";
-import { PlusCircleIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 
 import { Bank, useBankStore } from "@/src/store/useBankStore";
