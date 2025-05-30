@@ -1,6 +1,5 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { ToastContainer } from "react-toastify";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -42,7 +41,6 @@ export default function Sidebar() {
 
   return (
     <>
-      <ToastContainer autoClose={1500} position="top-left" />
       <aside
         className={`transition-width flex h-screen flex-col overflow-hidden duration-300 ${collapsed ? "w-16" : "w-64"}`}
       >

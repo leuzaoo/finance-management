@@ -43,18 +43,6 @@ export interface BankState {
 const normalizeBanks = (items: BankFromApi[]): Bank[] =>
   items.map(({ _id, ...rest }) => ({ id: _id, ...rest }));
 
-async function safe<T>(
-  action: () => Promise<T>,
-  handleError: (err: unknown) => void,
-): Promise<T | null> {
-  try {
-    return await action();
-  } catch (err) {
-    handleError(err);
-    return null;
-  }
-}
-
 export const useBankStore = create<BankState>((set, get) => ({
   banks: [],
   isLoading: false,
