@@ -1,10 +1,12 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import WalletHistory from "@/src/components/ui/WalletHistory";
+import { useRouter } from "next/navigation";
+
 import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { toast } from "react-toastify";
+
 import CurrencyValue from "@/src/components/utils/CurrencyValue";
+import WalletHistory from "@/src/components/ui/WalletHistory";
 
 interface Props {
   bankId: string;
