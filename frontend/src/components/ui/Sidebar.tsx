@@ -28,7 +28,7 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/";
   const router = useRouter();
   const { user, logout, isLoading } = useAuthStore();
 
@@ -82,27 +82,38 @@ export default function Sidebar() {
 
         <nav className="mt-6 flex flex-1 flex-col justify-between">
           <ul className="space-y-2">
-            {menuItems.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 transition-colors ${collapsed && "justify-center"} ${
-                    pathname === item.href
-                      ? "bg-light/10 text-light"
-                      : "text-light/40 hover:bg-light/5"
-                  } `}
-                >
-                  {item.icon}
-                  {!collapsed && (
-                    <span
-                      className={`font-medium transition-opacity duration-300 ${collapsed ? "pointer-events-none opacity-0 delay-0" : "pointer-events-auto opacity-100 delay-300"}`}
-                    >
-                      {item.label}
-                    </span>
-                  )}
-                </Link>
-              </li>
-            ))}
+            {menuItems.map((item) => {
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + "/");
+
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={item.href}
+                    className={`flex items-center gap-2 px-4 py-2 transition-colors ${
+                      collapsed ? "justify-center" : ""
+                    } ${
+                      isActive
+                        ? "bg-light/10 text-light"
+                        : "text-light/40 hover:bg-light/5"
+                    }`}
+                  >
+                    {item.icon}
+                    {!collapsed && (
+                      <span
+                        className={`font-medium transition-opacity duration-300 ${
+                          collapsed
+                            ? "pointer-events-none opacity-0 delay-0"
+                            : "pointer-events-auto opacity-100 delay-300"
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="mb-4 px-2">
