@@ -1,44 +1,57 @@
 "use client";
-import { useState } from "react";
 
-import { MENU_WALLET_LIST, type Wallet } from "@/src/utils/constants";
+import { useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
 
-import { WalletValueCard } from "./WalletValueCard";
-import { WalletTabs } from "./WalletTabs";
-
 export function Wallets() {
-  const [activeWallet, setActiveWallet] = useState<Wallet>(MENU_WALLET_LIST[0]);
+  const { banks, isLoading, listBanks } = useBankStore();
 
-  const handleSelect = (slug: string) => {
-    const found = MENU_WALLET_LIST.find((w) => w.slug === slug);
-    if (found) setActiveWallet(found);
-  };
+  useEffect(() => {
+    listBanks();
+  }, [listBanks]);
+
+  if (isLoading) {
+    return <p>Carregando seus bancos...</p>;
+  }
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold">Cartões</h1>
-      <p className="mb-2 text-sm text-white/50">
-        Escolha um para ver mais detalhes
-      </p>
+      <h1 className="text-2xl font-semibold">Meus Cartões</h1>
+      <div className="mt-2 flex w-full flex-wrap gap-4">
+        {banks.map((bank: Bank) => (
+          <div
+            key={bank.id}
+            className="border-light/15 flex w-80 flex-col justify-between gap-8 rounded-xl border p-4"
+          >
+            <h2 className="font-semibold capitalize">{bank.bankName}</h2>
 
-      <WalletTabs
-        list={MENU_WALLET_LIST}
-        activeSlug={activeWallet.slug}
-        onSelect={handleSelect}
-      />
+            <div className="flex w-full items-center justify-between">
+              <span className="text-3xl font-semibold">
+                {formatCurrency(bank.currencyValue)}{" "}
+              </span>
+              <span className="text-xl font-medium">{bank.currencyType}</span>
+            </div>
 
-      <div className="flex items-center gap-8">
-        <WalletValueCard
-          label="Entradas"
-          value={formatCurrency(activeWallet.income)}
-          currencyType={activeWallet.currencyType}
-        />
-        <WalletValueCard
-          label="Saídas"
-          value={formatCurrency(activeWallet.expense)}
-          currencyType={activeWallet.currencyType}
-        />
+            <div className="flex w-full items-center justify-between">
+              <Image
+                src="/mastercard.png"
+                width={36}
+                height={100}
+                alt="Mastercard icon"
+              />
+              <Link
+                href={`/wallets/${bank.id}`}
+                className="flex items-center gap-1 text-sky-500 underline"
+              >
+                <span className="text-sm">Ver detalhes</span>
+              </Link>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
