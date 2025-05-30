@@ -8,6 +8,7 @@ import {
   listBanks,
   updateBankValue,
   deleteBank,
+  getBankById,
 } from "../controllers/bank.controller";
 
 const router = Router();
@@ -40,6 +41,7 @@ router.post(
 );
 
 router.get("/", authenticate, listBanks);
+router.get("/:bankId", authenticate, getBankById);
 
 router.put(
   "/:bankId/value",

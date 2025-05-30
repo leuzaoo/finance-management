@@ -110,3 +110,27 @@ export const listBanks = async (
       .json({ message: "Erro ao buscar bancos.", error: error.message });
   }
 };
+
+export const getBankById = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { bankId } = req.params;
+    const bank = await Bank.findOne({ _id: bankId, user: req.userId });
+
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    res.json({
+      id: bank._id,
+      bankName: bank.bankName,
+      currencyType: bank.currencyType,
+      currencyValue: bank.currencyValue,
+      createdAt: bank.createdAt,
+      updatedAt: bank.updatedAt,
+    });
+  } catch (error) {}
+};
