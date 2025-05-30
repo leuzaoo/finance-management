@@ -7,9 +7,9 @@ export default function CurrencyValue({ value }: Props) {
 
   return (
     <div>
-      <div className="font-oswald flex items-end">
+      <div className="flex items-end">
         <span className="text-3xl">{integer}</span>
-        <span className="text-sm font-extralight">,{cents}</span>
+        <span className="text-sm">,{cents}</span>
       </div>
     </div>
   );
