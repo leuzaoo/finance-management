@@ -1,13 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { NumericFormat } from "react-number-format";
 import DatePicker from "react-datepicker";
 
 import { TRANSACTION_CATEGORIES } from "@/src/utils/transaction.categories";
 import { useTransactionStore } from "@/src/store/useTransactionStore";
+
 import TitlePage from "../common/TitlePage";
 import InputField from "../ui/InputField";
-import { NumericFormat } from "react-number-format";
 
 interface TransactionModalProps {
   bankId: string;
