@@ -2,9 +2,8 @@
 import { formatCurrency } from "@/src/utils/format-currency";
 import { format } from "date-fns";
 
-import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
-
 import type { Transaction } from "@/src/store/useTransactionStore";
+import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 
 type Props = {
   transactions: Transaction[];
