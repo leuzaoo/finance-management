@@ -10,16 +10,20 @@ const nextConfig: NextConfig = {
     return config;
   },
   async rewrites() {
-    return [
-      {
+    const rules = [];
+
+    if (process.env.NODE_ENV === "development") {
+      rules.push({
         source: "/api/v1/:path*",
         destination: "http://localhost:5000/api/v1/:path*",
-      },
-      {
-        source: "/api/:path*",
-        destination: "https://finance-management-ncdf.onrender.com/api/:path*",
-      },
-    ];
+      });
+    }
+    rules.push({
+      source: "/api/:path*",
+      destination: "https://finance-management-ncdf.onrender.com/api/:path*",
+    });
+
+    return rules;
   },
 };
 
