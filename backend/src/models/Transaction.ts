@@ -1,6 +1,6 @@
 import { model, Schema, type Types } from "mongoose";
 
-export type TransactionType = "expense" | "income" | "transfer";
+export type TransactionType = "expense" | "income";
 
 export interface ITransaction extends Document {
   bank: Types.ObjectId;
@@ -19,7 +19,7 @@ const TransactionSchema = new Schema<ITransaction>(
     type: {
       type: String,
       required: true,
-      enum: ["expense", "income", "transfer"],
+      enum: ["expense", "income"],
     },
     amount: { type: Number, required: true },
     description: { type: String },

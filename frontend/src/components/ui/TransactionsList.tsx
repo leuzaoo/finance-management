@@ -2,14 +2,8 @@
 import { formatCurrency } from "@/src/utils/format-currency";
 import { format } from "date-fns";
 
-type Transaction = {
-  _id: string;
-  type: "expense" | "income" | "transfer";
-  amount: number;
-  category: string;
-  description?: string;
-  date: string;
-};
+import type { Transaction } from "@/src/store/useTransactionStore";
+import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 
 type Props = {
   transactions: Transaction[];
@@ -40,7 +34,9 @@ export default function TransactionsList({ transactions }: Props) {
               {format(new Date(tx.date), "dd/MM/yyyy")}
             </p>
           </div>
-          <p className="font-medium capitalize">{tx.category}</p>
+          <p className="font-medium capitalize">
+            {getCategoryLabel(tx.category)}
+          </p>
           {tx.description && (
             <p className="text-light/60 font-light first-letter:capitalize">
               {tx.description}

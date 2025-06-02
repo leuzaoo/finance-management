@@ -12,7 +12,7 @@ const API_URL =
 export type Transaction = {
   _id: string;
   bank: string;
-  type: "expense" | "income" | "transfer";
+  type: "expense" | "income";
   amount: number;
   category: string;
   description?: string;
@@ -32,7 +32,7 @@ interface TransactionState {
   addTransaction: (
     bankId: string,
     data: {
-      type: "expense" | "income" | "transfer";
+      type: "expense" | "income";
       amount: number;
       category: string;
       description?: string;
