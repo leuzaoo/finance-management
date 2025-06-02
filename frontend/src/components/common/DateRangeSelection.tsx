@@ -19,18 +19,15 @@ export default function DateRangeSelector({ setFromDate, setToDate }: Props) {
     setToDate(today);
   };
 
+  const mainStyle =
+    "cursor-pointer rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600";
+
   return (
     <div className="flex flex-wrap items-center gap-4">
-      <button
-        onClick={handleLastWeek}
-        className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
-      >
+      <button onClick={handleLastWeek} className={mainStyle}>
         Última semana
       </button>
-      <button
-        onClick={handleLastMonth}
-        className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
-      >
+      <button onClick={handleLastMonth} className={mainStyle}>
         Último mês
       </button>
     </div>
