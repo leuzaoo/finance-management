@@ -27,7 +27,6 @@ export default function WalletHistory({ bankId }: Props) {
     setCurrentPage(1);
   }, [bankId, fromDate, toDate, listTransactions]);
 
-  console.log(transactions)
   
   useEffect(() => {
     load();
