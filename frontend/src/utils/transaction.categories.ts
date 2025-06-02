@@ -5,5 +5,5 @@ export const TRANSACTION_CATEGORIES = [
   { value: "entertainment", label: "Entretenimento" },
   { value: "bills", label: "Contas" },
   { value: "shopping", label: "Compras" },
-  { value: "other", label: "Other" },
+  { value: "other", label: "Outros" },
 ];
