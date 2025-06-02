@@ -1,4 +1,5 @@
 "use client";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 type Props = {
   totalPages: number;
@@ -18,13 +19,13 @@ export default function Pagination({
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`rounded border px-3 py-1 ${
+        className={`rounded border p-1 ${
           currentPage === 1
             ? "border-light/20 text-light/40 cursor-not-allowed"
             : "border-light/60 text-light hover:border-light/80"
         }`}
       >
-        Anterior
+        <ChevronLeftIcon size={20} />
       </button>
 
       {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
@@ -44,13 +45,13 @@ export default function Pagination({
       <button
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`rounded border px-3 py-1 ${
+        className={`rounded border p-1 ${
           currentPage === totalPages
             ? "border-light/20 text-light/40 cursor-not-allowed"
             : "border-light/60 text-light hover:border-light/80"
         }`}
       >
-        Próximo
+        <ChevronRightIcon size={20} />
       </button>
     </div>
   );

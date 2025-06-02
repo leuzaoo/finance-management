@@ -4,7 +4,7 @@ import { format } from "date-fns";
 
 type Transaction = {
   _id: string;
-  type: "expense" | "income" | "transfer";
+  type: "expense" | "income";
   amount: number;
   category: string;
   description?: string;

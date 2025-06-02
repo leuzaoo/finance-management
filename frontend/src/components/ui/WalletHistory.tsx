@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 
-import AddTransactionButtons from "../forms/AddTransactionButtons";
 import DateRangeSelector from "../common/DateRangeSelection";
 import TransactionsList from "./TransactionsList";
 import DateFilters from "../common/DateFilters";
@@ -14,8 +13,7 @@ type Props = { bankId: string };
 const PAGE_SIZE = 6;
 
 export default function WalletHistory({ bankId }: Props) {
-  const { transactions, isLoading, listTransactions, addTransaction } =
-    useTransactionStore();
+  const { transactions, isLoading, listTransactions } = useTransactionStore();
 
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
@@ -66,8 +64,6 @@ export default function WalletHistory({ bankId }: Props) {
         currentPage={currentPage}
         goToPage={goToPage}
       />
-
-      <AddTransactionButtons bankId={bankId} />
     </div>
   );
 }

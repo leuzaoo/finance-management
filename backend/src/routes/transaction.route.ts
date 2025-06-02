@@ -28,16 +28,16 @@ router.post(
   authenticate,
   param("bankId").isMongoId().withMessage("BankId inválido"),
   body("type")
-    .isIn(["expense", "income", "transfer"])
-    .withMessage("Type deve ser 'expense', 'income' ou 'transfer'"),
-  body("amount").isNumeric().withMessage("Amount deve ser numérico"),
-  body("category").isString().withMessage("Category é obrigatório"),
+    .isIn(["expense", "income"])
+    .withMessage("O tipo deve ser 'Entrada' ou 'Saída'."),
+  body("amount").isNumeric().withMessage("Valor deve ser numérico."),
+  body("category").isString().withMessage("Categoria é obrigatório."),
   body("description").optional().isString(),
   body("date")
     .optional()
     .isISO8601()
     .toDate()
-    .withMessage("Date deve ser ISO8601"),
+    .withMessage("Date deve ser ISO8601."),
   validate,
   addTransaction
 );
