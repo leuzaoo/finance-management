@@ -23,13 +23,13 @@ export default function DateRangeSelector({ setFromDate, setToDate }: Props) {
     <div className="flex flex-wrap items-center gap-4">
       <button
         onClick={handleLastWeek}
-        className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
+        className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
       >
         Última semana
       </button>
       <button
         onClick={handleLastMonth}
-        className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
+        className="cursor-pointer rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600"
       >
         Último mês
       </button>
