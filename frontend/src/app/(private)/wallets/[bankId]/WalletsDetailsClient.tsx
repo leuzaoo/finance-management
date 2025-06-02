@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useBankStore, type Bank } from "@/src/store/useBankStore";
+import { formatCurrency } from "@/src/utils/format-currency";
 
 import WalletHistory from "@/src/components/ui/WalletHistory";
+import TitlePage from "@/src/components/common/TitlePage";
 
 interface Props {
   bankId: string;
@@ -45,13 +47,17 @@ export default function WalletDetailsClient({ bankId }: Props) {
   return (
     <>
       <div className="space-y-4">
-        <h2 className="text-xl font-bold">{bank.bankName}</h2>
-        <div className="text-3xl font-semibold">
-          {bank.currencyValue}{" "}
-          <span className="text-lg opacity-60">{bank.currencyType}</span>
+        <TitlePage text={bank.bankName} />
+        <div className="flex flex-col">
+          <span className="text-light/50 font-light">saldo da conta</span>
+          <p className="text-3xl font-semibold">
+            {formatCurrency(bank.currencyValue)}{" "}
+            <span className="text-base opacity-60">{bank.currencyType}</span>
+          </p>
         </div>
-        <p className="text-sm text-gray-500">
-          Criado em: {new Date(bank.createdAt).toLocaleDateString("pt-BR")}
+        <p className="text-light/50 text-sm font-light">
+          Banco adicionado em:{" "}
+          {new Date(bank.createdAt).toLocaleDateString("pt-BR")}
         </p>
         <WalletHistory bankId={bankId} />
       </div>
