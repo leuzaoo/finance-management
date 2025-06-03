@@ -46,9 +46,20 @@ export default function WalletHistory({ bankId }: Props) {
     setCurrentPage(page);
   };
 
+  const clearFilters = () => {
+    setFromDate(null);
+    setToDate(null);
+  };
+
   return (
     <div className="space-y-6">
-      <DateRangeSelector setFromDate={setFromDate} setToDate={setToDate} />
+      <DateRangeSelector
+        fromDate={fromDate}
+        toDate={toDate}
+        setFromDate={setFromDate}
+        setToDate={setToDate}
+        clearFilters={clearFilters}
+      />
 
       <DateFilters
         fromDate={fromDate}
