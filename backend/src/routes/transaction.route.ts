@@ -56,7 +56,7 @@ router.get(
 router.delete(
   "/:bankId/:txId",
   authenticate,
-  param("bankId").isMongoId().withMessage("BankId inválido"),
+  param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
   param("txId").isMongoId().withMessage("Transaction ID inválido"),
   validate,
   deleteTransaction
