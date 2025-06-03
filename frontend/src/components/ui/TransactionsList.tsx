@@ -1,15 +1,22 @@
 "use client";
 import { formatCurrency } from "@/src/utils/format-currency";
+import { Trash2Icon } from "lucide-react";
 import { format } from "date-fns";
 
-import type { Transaction } from "@/src/store/useTransactionStore";
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
+import {
+  useTransactionStore,
+  type Transaction,
+} from "@/src/store/useTransactionStore";
 
 type Props = {
+  bankId: string;
   transactions: Transaction[];
 };
 
-export default function TransactionsList({ transactions }: Props) {
+export default function TransactionsList({ bankId, transactions }: Props) {
+  const { deleteTransaction } = useTransactionStore();
+
   if (transactions.length === 0) {
     return <p className="text-light/60">Nenhuma transação encontrada.</p>;
   }
@@ -33,6 +40,23 @@ export default function TransactionsList({ transactions }: Props) {
             <p className="text-light/50 text-sm">
               {format(new Date(tx.date), "dd/MM/yyyy")}
             </p>
+            <button
+              onClick={() => {
+                if (
+                  confirm(
+                    `Confirme a exclusão de ${formatCurrency(
+                      tx.amount,
+                    )} | ${getCategoryLabel(tx.category)}`,
+                  )
+                ) {
+                  void deleteTransaction(bankId, tx._id);
+                }
+              }}
+              className="text-light/60 cursor-pointer p-1 hover:text-red-500"
+              title="Deletar transação"
+            >
+              <Trash2Icon size={16} strokeWidth={1.5} />
+            </button>
           </div>
           <p className="font-medium capitalize">
             {getCategoryLabel(tx.category)}

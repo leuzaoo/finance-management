@@ -10,6 +10,7 @@ import { authenticate } from "../middlewares/authenticate";
 
 import {
   addTransaction,
+  deleteTransaction,
   listTransactions,
 } from "../controllers/transaction.controller";
 
@@ -52,4 +53,12 @@ router.get(
   listTransactions
 );
 
+router.delete(
+  "/:bankId/:txId",
+  authenticate,
+  param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
+  param("txId").isMongoId().withMessage("O 'transactionId' está inválido."),
+  validate,
+  deleteTransaction
+);
 export default router;
