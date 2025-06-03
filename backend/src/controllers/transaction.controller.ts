@@ -82,3 +82,42 @@ export const listTransactions = async (
     return;
   }
 };
+
+export const deleteTransaction = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { bankId, txId } = req.params;
+
+    const bank = await Bank.findOne({ _id: bankId, user: req.userId });
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    const tx = await Transaction.findOne({ _id: txId, bank: bankId });
+    if (!tx) {
+      res.status(404).json({ message: "Transação não encontrada." });
+      return;
+    }
+
+    if (tx.type === "expense") {
+      bank.currencyValue += tx.amount;
+    } else if (tx.type === "income") {
+      bank.currencyValue -= tx.amount;
+    }
+
+    await bank.save();
+    await tx.deleteOne();
+
+    res.json({ message: "Transação deletada com sucesso." });
+    return;
+  } catch (err: any) {
+    console.error("deleteTransaction error:", err);
+    res
+      .status(500)
+      .json({ message: "Erro ao deletar transação", error: err.message });
+    return;
+  }
+};
