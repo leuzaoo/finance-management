@@ -27,7 +27,6 @@ export default function WalletHistory({ bankId }: Props) {
     setCurrentPage(1);
   }, [bankId, fromDate, toDate, listTransactions]);
 
-  
   useEffect(() => {
     load();
   }, [load]);
@@ -58,7 +57,7 @@ export default function WalletHistory({ bankId }: Props) {
         setToDate={setToDate}
       />
 
-      <TransactionsList transactions={paginatedTxs} />
+      <TransactionsList transactions={paginatedTxs} bankId={bankId} />
 
       <Pagination
         totalPages={totalPages}
