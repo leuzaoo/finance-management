@@ -15,6 +15,7 @@ interface TransactionModalProps {
   isOpen: boolean;
   currencyType: string;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
 type TransactionType = "expense" | "income";
@@ -24,6 +25,7 @@ export default function TransactionModal({
   isOpen,
   currencyType,
   onClose,
+  onSuccess,
 }: TransactionModalProps) {
   const addTransaction = useTransactionStore((s) => s.addTransaction);
   const isLoading = useTransactionStore((s) => s.isLoading);
@@ -34,6 +36,12 @@ export default function TransactionModal({
   const [description, setDescription] = useState<string>("");
   const [date, setDate] = useState<Date | null>(new Date());
 
+  const [errors, setErrors] = useState<{
+    amount?: string;
+    category?: string;
+    date?: string;
+  }>({});
+
   useEffect(() => {
     if (isOpen) {
       setType("expense");
@@ -41,21 +49,15 @@ export default function TransactionModal({
       setCategory("");
       setDescription("");
       setDate(new Date());
+      setErrors({});
     }
   }, [isOpen]);
 
-  const [errors, setErrors] = useState<{
-    amount?: string;
-    category?: string;
-  }>({});
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setErrors({});
 
     let hasError = false;
-
     if (amount == null || isNaN(amount) || amount <= 0) {
       setErrors({ amount: "Insira um valor válido maior que zero." });
       return;
@@ -73,11 +75,16 @@ export default function TransactionModal({
     try {
       await addTransaction(bankId, {
         type,
-        amount: amount,
+        amount: amount!,
         category,
         description: description.trim() || undefined,
         date: date!,
       });
+
+      if (onSuccess) {
+        onSuccess();
+      }
+
       onClose();
     } catch (err) {
       console.error("Error adding transaction:", err);
@@ -186,6 +193,9 @@ export default function TransactionModal({
             className="bg-dark-light border-light/10 mt-1 w-full rounded border px-3 py-2 text-white"
             dateFormat="dd/MM/yyyy"
           />
+          {errors.date && (
+            <p className="mt-1 text-xs text-red-500">{errors.date}</p>
+          )}
         </div>
 
         <button
