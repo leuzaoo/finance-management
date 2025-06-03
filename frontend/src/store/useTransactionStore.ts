@@ -39,6 +39,8 @@ interface TransactionState {
       date?: Date;
     },
   ) => Promise<void>;
+
+  deleteTransaction: (bankId: string, txId: string) => Promise<void>;
 }
 
 export const useTransactionStore = create<TransactionState>((set, get) => ({
@@ -84,6 +86,26 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao adicionar transação.";
+      set({ error: msg });
+      toast.error(msg);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteTransaction: async (bankId, txId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const url = `${API_URL}/${encodeURIComponent(bankId)}/${encodeURIComponent(
+        txId,
+      )}`;
+      await axios.delete(url);
+
+      toast.success("Transação deletada com sucesso!");
+      await get().listTransactions(bankId);
+    } catch (err) {
+      const e = err as AxiosError<{ message: string }>;
+      const msg = e.response?.data.message || "Erro ao deletar transação.";
       set({ error: msg });
       toast.error(msg);
     } finally {
