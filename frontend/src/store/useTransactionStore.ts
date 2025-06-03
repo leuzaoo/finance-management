@@ -101,7 +101,6 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       )}`;
       await axios.delete(url);
 
-      toast.success("Transação deletada com sucesso!");
       await get().listTransactions(bankId);
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;

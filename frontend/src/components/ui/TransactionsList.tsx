@@ -39,7 +39,7 @@ export default function TransactionsList({ bankId, transactions }: Props) {
             </span>
 
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (
                   confirm(
                     `Confirme a exclusão de ${formatCurrency(
@@ -47,7 +47,8 @@ export default function TransactionsList({ bankId, transactions }: Props) {
                     )} | ${getCategoryLabel(tx.category)}`,
                   )
                 ) {
-                  void deleteTransaction(bankId, tx._id);
+                  await deleteTransaction(bankId, tx._id);
+                  window.location.reload();
                 }
               }}
               className="text-light/60 cursor-pointer p-1 hover:text-red-500"
