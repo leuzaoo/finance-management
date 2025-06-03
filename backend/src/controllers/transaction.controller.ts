@@ -109,9 +109,10 @@ export const deleteTransaction = async (
     }
 
     await bank.save();
-    await tx.deleteOne();
 
-    res.json({ message: "Transação deletada com sucesso." });
+    await Transaction.deleteOne({ _id: txId });
+
+    res.status(200).json({ message: "Transação deletada com sucesso." });
     return;
   } catch (err: any) {
     console.error("deleteTransaction error:", err);

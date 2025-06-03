@@ -26,7 +26,7 @@ export default function TransactionsList({ bankId, transactions }: Props) {
       {transactions.map((tx) => (
         <li
           key={tx._id}
-          className="bg-dark border-light/20 flex flex-col justify-between space-y-2 rounded-lg border p-4"
+          className="bg-dark border-light/20 relative flex flex-col justify-between space-y-2 rounded-lg border p-4"
         >
           <div className="flex w-full justify-between">
             <span
@@ -37,9 +37,7 @@ export default function TransactionsList({ bankId, transactions }: Props) {
               {tx.type === "expense" ? "-" : "+"}
               {formatCurrency(tx.amount)}
             </span>
-            <p className="text-light/50 text-sm">
-              {format(new Date(tx.date), "dd/MM/yyyy")}
-            </p>
+
             <button
               onClick={() => {
                 if (
@@ -66,6 +64,9 @@ export default function TransactionsList({ bankId, transactions }: Props) {
               {tx.description}
             </p>
           )}
+          <span className="text-light/50 absolute right-4 bottom-4 text-xs font-medium">
+            {format(new Date(tx.date), "dd/MM/yyyy")}
+          </span>
         </li>
       ))}
     </ul>
