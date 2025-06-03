@@ -57,7 +57,7 @@ router.delete(
   "/:bankId/:txId",
   authenticate,
   param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
-  param("txId").isMongoId().withMessage("Transaction ID inválido"),
+  param("txId").isMongoId().withMessage("O 'transactionId' está inválido."),
   validate,
   deleteTransaction
 );
