@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Trash2Icon } from "lucide-react";
 
 import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
-import { Trash2Icon } from "lucide-react";
 
 interface Props {
   bank: Bank;
