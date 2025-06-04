@@ -70,7 +70,7 @@ export const listTransactions = async (
       if (to) filter.date.$lte = to;
     }
 
-    const txs = await Transaction.find(filter).sort({ date: -1 }).lean();
+    const txs = await Transaction.find(filter).sort({ createdAt: -1 }).lean();
 
     res.json(txs);
     return;
