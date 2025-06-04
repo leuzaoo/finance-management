@@ -16,15 +16,16 @@ interface Props {
 }
 
 export default function WalletDetailsClient({ bankId }: Props) {
+  const router = useRouter();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
-
   const fetchBank = useCallback(async () => {
     if (!bankId) return;
+
     try {
       setLoading(true);
       const data = await getBankById(bankId);
@@ -38,7 +39,10 @@ export default function WalletDetailsClient({ bankId }: Props) {
   }, [bankId, getBankById, router]);
 
   useEffect(() => {
-    if (!bankId) return router.push("/dashboard/wallets");
+    if (!bankId) {
+      router.push("/dashboard/wallets");
+      return;
+    }
     fetchBank();
   }, [bankId, fetchBank, router]);
 
@@ -88,7 +92,11 @@ export default function WalletDetailsClient({ bankId }: Props) {
           onSuccess={fetchBank}
         />
 
-        <WalletHistory bankId={bankId} />
+        <WalletHistory
+          bankId={bankId}
+          initialBalance={bank.currencyValue}
+          createdAt={bank.createdAt}
+        />
       </div>
     </>
   );
