@@ -1,7 +1,12 @@
 "use client";
+
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
+import {
+  buildFullChartData,
+  filterChartDataByRange,
+} from "@/src/utils/chart-utils";
 
 import DateRangeSelector from "../common/DateRangeSelection";
 import TransactionsList from "./TransactionsList";
@@ -40,68 +45,15 @@ export default function WalletHistory({
     load();
   }, [load]);
 
-  const chartData = useMemo(() => {
-    const startDate = new Date(createdAt);
-    startDate.setHours(0, 0, 0, 0);
+  const filteredChartData = useMemo(() => {
+    const complete = buildFullChartData(
+      createdAt,
+      initialBalance,
+      transactions,
+    );
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    let maxDate = new Date(today);
-
-    for (const tx of transactions) {
-      const txDateObj = new Date(tx.date);
-      txDateObj.setHours(0, 0, 0, 0);
-      if (txDateObj.getTime() > maxDate.getTime()) {
-        maxDate = txDateObj;
-      }
-    }
-
-    const dates: Date[] = [];
-    for (
-      let d = new Date(startDate);
-      d.getTime() <= maxDate.getTime();
-      d.setDate(d.getDate() + 1)
-    ) {
-      dates.push(new Date(d));
-    }
-
-    type DeltaMap = Record<string, number>;
-    const deltasByDay: DeltaMap = {};
-    for (const tx of transactions) {
-      const [isoDay] = tx.date.split("T");
-      const delta = tx.type === "expense" ? -tx.amount : tx.amount;
-      if (!deltasByDay[isoDay]) {
-        deltasByDay[isoDay] = delta;
-      } else {
-        deltasByDay[isoDay] += delta;
-      }
-    }
-
-    let sumAllDeltas = 0;
-    for (const value of Object.values(deltasByDay)) {
-      sumAllDeltas += value;
-    }
-    const balanceAtCreation = initialBalance - sumAllDeltas;
-
-    let runningBalance = balanceAtCreation;
-    const result: Array<{ date: string; balance: number }> = [];
-
-    for (const dateObj of dates) {
-      const isoDay = dateObj.toISOString().split("T")[0];
-
-      if (deltasByDay[isoDay] !== undefined) {
-        runningBalance += deltasByDay[isoDay];
-      }
-
-      result.push({
-        date: isoDay,
-        balance: runningBalance,
-      });
-    }
-
-    return result;
-  }, [transactions, createdAt, initialBalance]);
+    return filterChartDataByRange(complete, fromDate, toDate);
+  }, [transactions, createdAt, initialBalance, fromDate, toDate]);
 
   if (isLoading) {
     return <p className="py-4">Carregando histórico…</p>;
@@ -140,7 +92,7 @@ export default function WalletHistory({
         setToDate={setToDate}
       />
 
-      <div className="2md:grid-cols-2 grid gap-10">
+      <div className="2md:grid grid-cols-2 gap-10">
         <div>
           <TransactionsList transactions={paginatedTxs} bankId={bankId} />
           {totalPages > 1 && (
@@ -152,10 +104,9 @@ export default function WalletHistory({
           )}
         </div>
 
-        <div className="">
+        <div>
           <p className="mb-4 text-2xl font-semibold">Histórico da conta</p>
-
-          <BalanceChart data={chartData} />
+          <BalanceChart data={filteredChartData} />
         </div>
       </div>
     </div>
