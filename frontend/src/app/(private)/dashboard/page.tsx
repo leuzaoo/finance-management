@@ -17,8 +17,6 @@ const DashboardPage = () => {
     listBanks();
   }, [listBanks]);
 
-  console.log(banks);
-
   const handleCreate = async (data: {
     bankName: string;
     currencyType: string;
@@ -43,9 +41,8 @@ const DashboardPage = () => {
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="mt-4 flex items-center gap-4 overflow-auto pb-4">
           {banks.map((bank: Bank) => (
-            <Link href={`/wallets/${bank.id}`}>
+            <Link href={`/wallets/${bank.id}`} key={bank.id}>
               <MoneyCard
-                key={bank.id}
                 label={bank.bankName}
                 value={formatCurrency(bank.currencyValue)}
                 currency={bank.currencyType}
@@ -53,7 +50,7 @@ const DashboardPage = () => {
             </Link>
           ))}
 
-          <div
+          <button
             className="bg-light/10 h-24 min-w-56 cursor-pointer rounded-xl hover:opacity-80"
             onClick={() => setModalOpen(true)}
           >
@@ -63,7 +60,7 @@ const DashboardPage = () => {
                 <PlusCircleIcon />
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </section>
     </>
