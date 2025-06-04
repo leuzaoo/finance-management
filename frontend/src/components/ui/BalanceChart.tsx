@@ -1,6 +1,6 @@
 "use client";
-import { formatCurrency } from "@/src/utils/format-currency";
 import React from "react";
+import { formatCurrency } from "@/src/utils/format-currency";
 import {
   ResponsiveContainer,
   LineChart,
