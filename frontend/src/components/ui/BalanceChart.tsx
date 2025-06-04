@@ -48,6 +48,7 @@ export default function BalanceChart({
             dataKey="date"
             tickFormatter={dateFormatter || defaultDateFormatter}
             stroke="#aaa"
+            fontSize={"12px"}
           />
           <YAxis
             tickFormatter={(value) =>
