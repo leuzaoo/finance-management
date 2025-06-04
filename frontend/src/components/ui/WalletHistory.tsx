@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 
@@ -7,12 +7,21 @@ import DateRangeSelector from "../common/DateRangeSelection";
 import TransactionsList from "./TransactionsList";
 import DateFilters from "../common/DateFilters";
 import Pagination from "../common/Pagination";
+import BalanceChart from "./BalanceChart";
 
-type Props = { bankId: string };
+interface Props {
+  bankId: string;
+  initialBalance: number;
+  createdAt: string;
+}
 
 const PAGE_SIZE = 6;
 
-export default function WalletHistory({ bankId }: Props) {
+export default function WalletHistory({
+  bankId,
+  initialBalance,
+  createdAt,
+}: Props) {
   const { transactions, isLoading, listTransactions } = useTransactionStore();
 
   const [fromDate, setFromDate] = useState<Date | null>(null);
@@ -30,6 +39,69 @@ export default function WalletHistory({ bankId }: Props) {
   useEffect(() => {
     load();
   }, [load]);
+
+  const chartData = useMemo(() => {
+    const startDate = new Date(createdAt);
+    startDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let maxDate = new Date(today);
+
+    for (const tx of transactions) {
+      const txDateObj = new Date(tx.date);
+      txDateObj.setHours(0, 0, 0, 0);
+      if (txDateObj.getTime() > maxDate.getTime()) {
+        maxDate = txDateObj;
+      }
+    }
+
+    const dates: Date[] = [];
+    for (
+      let d = new Date(startDate);
+      d.getTime() <= maxDate.getTime();
+      d.setDate(d.getDate() + 1)
+    ) {
+      dates.push(new Date(d));
+    }
+
+    type DeltaMap = Record<string, number>;
+    const deltasByDay: DeltaMap = {};
+    for (const tx of transactions) {
+      const [isoDay] = tx.date.split("T");
+      const delta = tx.type === "expense" ? -tx.amount : tx.amount;
+      if (!deltasByDay[isoDay]) {
+        deltasByDay[isoDay] = delta;
+      } else {
+        deltasByDay[isoDay] += delta;
+      }
+    }
+
+    let sumAllDeltas = 0;
+    for (const value of Object.values(deltasByDay)) {
+      sumAllDeltas += value;
+    }
+    const balanceAtCreation = initialBalance - sumAllDeltas;
+
+    let runningBalance = balanceAtCreation;
+    const result: Array<{ date: string; balance: number }> = [];
+
+    for (const dateObj of dates) {
+      const isoDay = dateObj.toISOString().split("T")[0];
+
+      if (deltasByDay[isoDay] !== undefined) {
+        runningBalance += deltasByDay[isoDay];
+      }
+
+      result.push({
+        date: isoDay,
+        balance: runningBalance,
+      });
+    }
+
+    return result;
+  }, [transactions, createdAt, initialBalance]);
 
   if (isLoading) {
     return <p className="py-4">Carregando histórico…</p>;
@@ -68,13 +140,24 @@ export default function WalletHistory({ bankId }: Props) {
         setToDate={setToDate}
       />
 
-      <TransactionsList transactions={paginatedTxs} bankId={bankId} />
+      <div className="2md:grid-cols-2 grid gap-10">
+        <div>
+          <TransactionsList transactions={paginatedTxs} bankId={bankId} />
+          {totalPages > 1 && (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goToPage={goToPage}
+            />
+          )}
+        </div>
 
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        goToPage={goToPage}
-      />
+        <div className="">
+          <p className="mb-4 text-2xl font-semibold">Histórico da conta</p>
+
+          <BalanceChart data={chartData} />
+        </div>
+      </div>
     </div>
   );
 }
