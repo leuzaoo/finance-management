@@ -10,6 +10,7 @@
 @theme {
   --font-archivo: var(--font-archivo);
   --font-inter: var(--font-inter);
+  --breakpoint-2md: 54rem;
   --color-dark: #010101;
   --color-dark-light: #1a1e23;
   --color-light: #fff;
