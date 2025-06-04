@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
-import { useBankStore } from "@/src/store/useBankStore";
 import { PlusCircleIcon } from "lucide-react";
 
-import WalletCard from "../ui/WalletCard";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
+import { useBankStore } from "@/src/store/useBankStore";
+
 import BankModal from "../forms/BankModal";
+import WalletCard from "../ui/WalletCard";
 
 export function Wallets() {
   const [modalOpen, setModalOpen] = useState(false);
