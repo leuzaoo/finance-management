@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
+  images: {
+    domains: ["images.unsplash.com"],
+  },
   async rewrites() {
     const rules = [];
 
