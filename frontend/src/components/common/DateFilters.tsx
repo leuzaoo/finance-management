@@ -8,6 +8,10 @@ type Props = {
   setToDate: (date: Date | null) => void;
 };
 
+const mainInputStyle =
+  "border-light/30 w-full rounded border p-1 text-sm bg-dark/50";
+const dateInputFormat = "dd/MM/yy";
+
 export default function DateFilters({
   fromDate,
   toDate,
@@ -15,30 +19,28 @@ export default function DateFilters({
   setToDate,
 }: Props) {
   return (
-    <div className="flex flex-wrap items-center gap-4 font-light">
-      <label className="flex flex-col">
+    <div className="flex items-center gap-4 font-light">
+      <label className="flex flex-col text-sm">
         <div className="flex items-center space-x-2">
           <span>De:</span>
           <DatePicker
             selected={fromDate}
             onChange={(date) => setFromDate(date)}
             isClearable
-            placeholderText="Data inicial"
-            className="border-light/30 w-32 rounded border p-1"
-            dateFormat="dd/MM/yyyy"
+            className={`${mainInputStyle}`}
+            dateFormat={`${dateInputFormat}`}
           />
         </div>
       </label>
-      <label className="flex flex-col">
+      <label className="flex flex-col text-sm">
         <div className="flex items-center space-x-2">
           <span>Até:</span>
           <DatePicker
             selected={toDate}
             onChange={(date) => setToDate(date)}
             isClearable
-            placeholderText="Data final"
-            className="border-light/30 w-32 rounded border p-1"
-            dateFormat="dd/MM/yyyy"
+            className={`${mainInputStyle}`}
+            dateFormat={`${dateInputFormat}`}
           />
         </div>
       </label>

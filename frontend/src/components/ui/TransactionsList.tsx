@@ -26,7 +26,7 @@ export default function TransactionsList({ bankId, transactions }: Props) {
       {transactions.map((tx) => (
         <li
           key={tx._id}
-          className="bg-dark border-light/20 relative flex flex-col justify-between space-y-2 rounded-lg border p-4"
+          className="bg-dark/50 border-light/20 relative flex flex-col justify-between space-y-2 rounded-lg border p-4"
         >
           <div className="flex w-full justify-between">
             <span

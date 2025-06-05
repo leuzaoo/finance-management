@@ -29,19 +29,20 @@ export default function DateRangeSelector({
   };
 
   const noFiltersApplied = fromDate === null && toDate === null;
-  const mainStyle = "cursor-pointer rounded bg-blue-500 px-3 py-1 text-white";
+  const mainStyle =
+    "cursor-pointer rounded text-blue-500 text-sm underline transition-all duration-200";
 
   return (
     <div className="flex flex-wrap items-center gap-4">
       <button
         onClick={handleLastWeek}
-        className={`${mainStyle} hover:bg-blue-600`}
+        className={`${mainStyle} hover:text-blue-600`}
       >
         Última semana
       </button>
       <button
         onClick={handleLastMonth}
-        className={`${mainStyle} hover:bg-blue-600`}
+        className={`${mainStyle} hover:text-blue-600`}
       >
         Último mês
       </button>
@@ -49,7 +50,7 @@ export default function DateRangeSelector({
       <button
         onClick={clearFilters}
         disabled={noFiltersApplied}
-        className={`rounded bg-blue-500 px-3 py-1 text-white ${noFiltersApplied ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:bg-blue-600"} `}
+        className={`${mainStyle} ${noFiltersApplied ? "cursor-not-allowed! no-underline opacity-50" : "cursor-pointer hover:text-blue-600"} `}
       >
         Limpar filtros
       </button>
