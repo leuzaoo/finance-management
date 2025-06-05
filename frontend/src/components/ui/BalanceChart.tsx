@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { formatCurrency } from "@/src/utils/format-currency";
+import { format } from "date-fns";
 import {
   ResponsiveContainer,
   LineChart,
@@ -27,9 +28,7 @@ export default function BalanceChart({
   }
 
   const defaultDateFormatter = (dt: string) => {
-    const isoDate = dt.split("T")[0];
-    const parts = isoDate.split("-");
-    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    return format(new Date(dt), "dd/MM/yy");
   };
 
   const defaultTooltipFormatter = (value: number) => {
@@ -37,13 +36,13 @@ export default function BalanceChart({
   };
 
   return (
-    <div className="bg-dark h-64 w-full p-4">
+    <div className="bg-dark/50 border-light/20 h-64 w-full rounded-lg border">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
-          margin={{ top: 8, right: 16, left: 0, bottom: 8 }}
+          margin={{ top: 24, right: 40, left: 0, bottom: 16 }}
         >
-          <CartesianGrid stroke="#444" strokeDasharray="3 3" />
+          <CartesianGrid stroke="#202020" strokeDasharray="8 8" />
           <XAxis
             dataKey="date"
             tickFormatter={dateFormatter || defaultDateFormatter}
