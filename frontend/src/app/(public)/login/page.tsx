@@ -1,20 +1,18 @@
-// app/login/page.tsx
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { LoaderIcon } from "../../../assets/icons/LoaderCircleIcon";
-import { PasswordIcon } from "../../../assets/icons/PasswordIcon";
-import { useAuthStore } from "../../../store/useAuthStore";
-import { Providers } from "../../../utils/login-providers";
-import { MailIcon } from "../../../assets/icons/MailIcon";
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
+import { ToastContainer } from "react-toastify";
 
-import InputField from "../../../components/ui/InputField";
-import Video from "../../../components/ui/Video";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
+import { useAuthStore } from "@/src/store/useAuthStore";
+
+import RegisterAndLoginBg from "@/src/components/ui/RegisterAndLoginBg";
+import InputField from "@/src/components/ui/InputField";
 
 type FieldErrors = { email?: string; password?: string };
 
@@ -27,7 +25,6 @@ export default function LoginPage() {
   const { login, isLoading } = useAuthStore();
   const router = useRouter();
 
-  // Pega o callbackUrl da query string no client
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const cb = params.get("callbackUrl");
@@ -66,43 +63,28 @@ export default function LoginPage() {
               novamente!
             </span>
           </p>
-          <h1 className="text-light/30 mt-3">
+          <h1 className="text-light/50 mt-3">
             Faça login em sua conta. Não possui?{" "}
-            <Link href="/register" className="text-sky-300 underline">
+            <Link
+              href="/register"
+              className="text-sky-500 underline hover:text-sky-600"
+            >
               Criar conta
             </Link>
-            .
           </h1>
-
-          <div className="mt-3 flex flex-col items-center justify-between gap-3 sm:flex-row">
-            {Providers.map(({ id, name, icon }) => (
-              <button
-                key={id}
-                disabled
-                className="bg-dark-light text-light/60 flex w-full items-center justify-center gap-2 rounded-lg p-3 text-sm font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <Image src={icon} alt={name} width={20} height={20} />
-                <span>Entrar com {name}</span>
-              </button>
-            ))}
-          </div>
-
-          <p className="text-light/60 my-10 w-full text-center text-sm">
-            ou continue com seu e-mail
-          </p>
 
           {isLoading ? (
             <div className="flex justify-center rounded-lg bg-white py-4 text-black">
               <LoaderIcon />
             </div>
           ) : (
-            <form onSubmit={handleLogin} className="flex flex-col">
+            <form onSubmit={handleLogin} className="mt-8 flex flex-col">
               <div className="space-y-3">
                 <div className="space-y-1">
                   <InputField
                     type="email"
                     placeholder="johndoe@mail.com"
-                    image={<MailIcon />}
+                    image={<EmailIcon style={{ fontSize: 20 }} />}
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                   />
@@ -114,7 +96,7 @@ export default function LoginPage() {
                   <InputField
                     type="password"
                     placeholder="••••••••••••"
-                    image={<PasswordIcon />}
+                    image={<LockIcon style={{ fontSize: 20 }} />}
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                   />
@@ -147,7 +129,7 @@ export default function LoginPage() {
           )}
         </div>
         <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
-          <Video />
+          <RegisterAndLoginBg />
         </div>
       </section>
     </>

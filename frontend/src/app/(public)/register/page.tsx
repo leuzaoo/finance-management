@@ -1,19 +1,19 @@
-// app/register/page.tsx
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { LoaderIcon } from "../../../assets/icons/LoaderCircleIcon";
-import { PasswordIcon } from "../../../assets/icons/PasswordIcon";
-import { useAuthStore } from "../../../store/useAuthStore";
-import { MailIcon } from "../../../assets/icons/MailIcon";
-import { UserIcon } from "../../../assets/icons/UserIcon";
+import { ToastContainer } from "react-toastify";
+import EmailIcon from "@mui/icons-material/Email";
+import BadgeIcon from "@mui/icons-material/Badge";
+import LockIcon from "@mui/icons-material/Lock";
 
-import InputField from "../../../components/ui/InputField";
-import Video from "../../../components/ui/Video";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
+import { useAuthStore } from "@/src/store/useAuthStore";
+
+import RegisterAndLoginBg from "@/src/components/ui/RegisterAndLoginBg";
+import InputField from "@/src/components/ui/InputField";
 
 type FieldErrors = { firstName?: string; email?: string; password?: string };
 
@@ -103,10 +103,12 @@ export default function RegisterPage() {
                     value={firstName}
                     type="text"
                     placeholder="Primeiro nome"
-                    image={<UserIcon />}
+                    image={<BadgeIcon style={{ fontSize: 20 }} />}
                   />
                   {fieldErrors.firstName && (
-                    <p className="text-xs text-red-500">{fieldErrors.firstName}</p>
+                    <p className="text-xs text-red-500">
+                      {fieldErrors.firstName}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-1">
@@ -115,7 +117,7 @@ export default function RegisterPage() {
                     value={email}
                     type="email"
                     placeholder="Email"
-                    image={<MailIcon />}
+                    image={<EmailIcon style={{ fontSize: 20 }} />}
                   />
                   {fieldErrors.email && (
                     <p className="text-xs text-red-500">{fieldErrors.email}</p>
@@ -127,10 +129,12 @@ export default function RegisterPage() {
                     value={password}
                     type="password"
                     placeholder="Senha"
-                    image={<PasswordIcon />}
+                    image={<LockIcon style={{ fontSize: 20 }} />}
                   />
                   {fieldErrors.password && (
-                    <p className="text-xs text-red-500">{fieldErrors.password}</p>
+                    <p className="text-xs text-red-500">
+                      {fieldErrors.password}
+                    </p>
                   )}
                 </div>
               </div>
@@ -150,7 +154,7 @@ export default function RegisterPage() {
           )}
         </div>
         <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
-          <Video />
+          <RegisterAndLoginBg />
         </div>
       </section>
     </>
