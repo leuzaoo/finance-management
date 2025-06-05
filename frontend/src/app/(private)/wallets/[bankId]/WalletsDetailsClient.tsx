@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import { PlusCircleIcon } from "lucide-react";
@@ -9,7 +9,14 @@ import { formatCurrency } from "@/src/utils/format-currency";
 
 import TransactionModal from "@/src/components/forms/TransactionModal";
 import WalletHistory from "@/src/components/ui/WalletHistory";
+import BalanceChart from "@/src/components/ui/BalanceChart";
 import TitlePage from "@/src/components/common/TitlePage";
+
+import {
+  buildFullChartData,
+  filterChartDataByRange,
+} from "@/src/utils/chart-utils";
+import { useTransactionStore } from "@/src/store/useTransactionStore";
 
 interface Props {
   bankId: string;
@@ -18,7 +25,10 @@ interface Props {
 export default function WalletDetailsClient({ bankId }: Props) {
   const router = useRouter();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
+  const { transactions, listTransactions } = useTransactionStore();
 
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +56,35 @@ export default function WalletDetailsClient({ bankId }: Props) {
     fetchBank();
   }, [bankId, fetchBank, router]);
 
+  const loadTransactions = useCallback(() => {
+    listTransactions(bankId, {
+      from: fromDate ?? undefined,
+      to: toDate ?? undefined,
+    });
+  }, [bankId, fromDate, toDate, listTransactions]);
+
+  useEffect(() => {
+    loadTransactions();
+  }, [loadTransactions]);
+
+  const filteredChartData = useMemo(() => {
+    if (!bank) {
+      return [];
+    }
+
+    const fullData = buildFullChartData(
+      bank.createdAt,
+      bank.currencyValue,
+      transactions.map((tx) => ({
+        date: tx.date,
+        amount: tx.amount,
+        type: tx.type,
+      })),
+    );
+
+    return filterChartDataByRange(fullData, fromDate, toDate);
+  }, [transactions, bank, fromDate, toDate]);
+
   if (loading || isBankLoading) {
     return <div>Carregando dados do banco…</div>;
   }
@@ -58,45 +97,48 @@ export default function WalletDetailsClient({ bankId }: Props) {
     <>
       <ToastContainer autoClose={2000} />
 
-      <div className="space-y-4">
-        <div className="flex items-end gap-2">
-          <TitlePage text={bank.bankName} />
-          <span className="text-lg opacity-60">{bank.currencyType}</span>
-        </div>
+      <TransactionModal
+        bankId={bankId}
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        currencyType={bank.currencyType}
+        onSuccess={() => {
+          fetchBank();
+          loadTransactions();
+        }}
+      />
 
-        <div className="flex w-full items-start justify-between">
-          <div className="flex flex-col">
-            <span className="text-light/50 font-light">saldo da conta</span>
-            <p className="text-3xl font-semibold">
-              {formatCurrency(bank.currencyValue)}
-            </p>
+      <div className="2md:grid-cols-2 grid gap-4 space-y-4">
+        <div>
+          <div className="flex items-center justify-between">
+            <TitlePage text={bank.bankName} />
+            <div className="flex items-end gap-2">
+              <span className="2md:text-2xl text-xl font-semibold">
+                {formatCurrency(bank.currencyValue)}
+              </span>
+              <span className="2md:text-lg text-sm opacity-60">
+                ({bank.currencyType})
+              </span>
+            </div>
           </div>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="bg-light text-dark flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-lg hover:opacity-60"
-          >
-            Novo <PlusCircleIcon size={20} />
-          </button>
+
+          <div className="mt-4 flex items-end justify-between">
+            <span className="text-light/70 font-light">Transações</span>
+            <button
+              onClick={() => setModalOpen(true)}
+              className="bg-light text-dark 2md:text-base flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-sm transition-all duration-200 hover:opacity-60"
+            >
+              Adicionar <PlusCircleIcon size={20} />
+            </button>
+          </div>
+
+          <WalletHistory bankId={bankId} />
         </div>
 
-        <p className="text-light/50 text-sm font-light">
-          Banco adicionado em:{" "}
-          {new Date(bank.createdAt).toLocaleDateString("pt-BR")}
-        </p>
-
-        <TransactionModal
-          bankId={bankId}
-          isOpen={isModalOpen}
-          onClose={() => setModalOpen(false)}
-          currencyType={bank.currencyType}
-          onSuccess={fetchBank}
-        />
-
-        <WalletHistory
-          bankId={bankId}
-          initialBalance={bank.currencyValue}
-          createdAt={bank.createdAt}
-        />
+        <div>
+          <p className="mb-4 text-2xl font-semibold">Histórico da conta</p>
+          <BalanceChart data={filteredChartData} />
+        </div>
       </div>
     </>
   );
