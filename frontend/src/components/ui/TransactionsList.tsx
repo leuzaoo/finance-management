@@ -26,11 +26,11 @@ export default function TransactionsList({ bankId, transactions }: Props) {
       {transactions.map((tx) => (
         <li
           key={tx._id}
-          className="bg-dark/50 border-light/20 relative flex flex-col justify-between space-y-2 rounded-lg border p-4"
+          className="bg-dark/50 border-light/20 relative flex flex-col justify-between rounded-lg border px-4 py-2"
         >
           <div className="flex w-full justify-between">
             <span
-              className={`text-2xl font-semibold ${
+              className={`text-xl font-semibold ${
                 tx.type === "expense" ? "text-red-500" : "text-green-600"
               }`}
             >
@@ -61,7 +61,7 @@ export default function TransactionsList({ bankId, transactions }: Props) {
             {getCategoryLabel(tx.category)}
           </p>
           {tx.description && (
-            <p className="text-light/60 font-light first-letter:capitalize">
+            <p className="text-light/60 text-sm font-light first-letter:capitalize">
               {tx.description}
             </p>
           )}
