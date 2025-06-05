@@ -1,5 +1,6 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import { NumericFormat } from "react-number-format";
+
 import InputField from "../ui/InputField";
 
 export interface BankModalProps {
