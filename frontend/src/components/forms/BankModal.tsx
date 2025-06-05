@@ -1,5 +1,6 @@
 import React, { useEffect, useState, FormEvent } from "react";
 import { NumericFormat } from "react-number-format";
+import InputField from "../ui/InputField";
 
 export interface BankModalProps {
   isOpen: boolean;
@@ -10,6 +11,9 @@ export interface BankModalProps {
     initialValue?: number;
   }) => void;
 }
+
+const inputStyle =
+  "bg-dark-light border-light/10 text-light w-full rounded-md border py-2 pl-2 shadow-sm outline-none";
 
 export default function BankModal({
   isOpen,
@@ -36,7 +40,7 @@ export default function BankModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div
         className="absolute inset-0 bg-black/30 backdrop-blur-sm"
         onClick={onClose}
@@ -44,18 +48,15 @@ export default function BankModal({
 
       <form
         onSubmit={handleSubmit}
-        className="bg-dark text-light relative w-full max-w-md rounded-lg p-6 shadow-xl"
+        className="bg-dark text-light relative w-full max-w-md rounded-lg border border-white/30 p-4 shadow-xl"
       >
         <h3 className="text-2xl font-medium">Cadastrar Banco</h3>
 
         <div className="mt-4 space-y-4">
           <div>
             <label className="block text-sm font-medium">Nome</label>
-            <input
+            <InputField
               type="text"
-              name="bankName"
-              required
-              className="mt-1 w-full rounded border px-3 py-2 outline-none"
               placeholder="Nubank, Itaú, Wise"
               value={bankName}
               onChange={(e) => setBankName(e.target.value)}
@@ -66,7 +67,7 @@ export default function BankModal({
             <label className="block text-sm font-medium">Moeda</label>
             <select
               name="currencyType"
-              className="bg-dark mt-1 w-full cursor-pointer rounded border px-3 py-2 outline-none"
+              className={inputStyle}
               value={currencyType}
               onChange={(e) => setCurrencyType(e.target.value)}
             >
@@ -88,7 +89,7 @@ export default function BankModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="font-inter mt-1 w-full rounded border px-3 py-2 outline-none"
+              className={inputStyle}
               placeholder="200"
               required
               value={initialValue}
