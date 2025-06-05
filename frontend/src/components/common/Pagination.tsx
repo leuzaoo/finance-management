@@ -7,6 +7,9 @@ type Props = {
   goToPage: (page: number) => void;
 };
 
+const currentPageStyle = "border-light/20 text-light/40 cursor-not-allowed";
+const notCurrentPageStyle = "border-light/60 text-light hover:border-light/80";
+
 export default function Pagination({
   totalPages,
   currentPage,
@@ -19,10 +22,8 @@ export default function Pagination({
       <button
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`rounded border p-1 ${
-          currentPage === 1
-            ? "border-light/20 text-light/40 cursor-not-allowed"
-            : "border-light/60 text-light hover:border-light/80"
+        className={`cursor-pointer rounded border p-1 transition-all duration-200 hover:opacity-60 ${
+          currentPage === 1 ? { currentPageStyle } : { notCurrentPageStyle }
         }`}
       >
         <ChevronLeftIcon size={20} />
@@ -32,10 +33,10 @@ export default function Pagination({
         <button
           key={num}
           onClick={() => goToPage(num)}
-          className={`rounded border px-3 py-1 ${
+          className={`cursor-pointer rounded border px-3 py-1 transition-all duration-200 hover:opacity-60 ${
             num === currentPage
               ? "text-dark bg-white font-semibold"
-              : "border-light/60 text-light hover:border-light/80"
+              : { notCurrentPageStyle }
           }`}
         >
           {num}
@@ -45,10 +46,10 @@ export default function Pagination({
       <button
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`rounded border p-1 ${
+        className={`cursor-pointer rounded border p-1 transition-all duration-200 hover:opacity-60 ${
           currentPage === totalPages
-            ? "border-light/20 text-light/40 cursor-not-allowed"
-            : "border-light/60 text-light hover:border-light/80"
+            ? { currentPageStyle }
+            : { notCurrentPageStyle }
         }`}
       >
         <ChevronRightIcon size={20} />
