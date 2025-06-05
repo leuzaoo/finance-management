@@ -94,7 +94,7 @@ export default function TransactionModal({
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div
         onClick={onClose}
         className="absolute inset-0 bg-black/50 backdrop-blur-xs"
@@ -102,12 +102,12 @@ export default function TransactionModal({
 
       <form
         onSubmit={handleSubmit}
-        className="bg-dark relative z-10 w-full max-w-md rounded-lg p-6 text-white"
+        className="bg-dark relative z-10 w-full max-w-md rounded-lg border border-white/30 p-4 text-white"
       >
         <button
           onClick={onClose}
           type="button"
-          className="absolute top-4 right-4 cursor-pointer text-gray-400 hover:text-gray-200"
+          className="absolute top-4 right-4 cursor-pointer text-gray-400 hover:text-red-600"
         >
           ✕
         </button>

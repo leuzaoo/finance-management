@@ -108,17 +108,15 @@ export default function WalletDetailsClient({ bankId }: Props) {
         }}
       />
 
-      <div className="2md:grid-cols-2 grid gap-4 space-y-4">
+      <div className="2md:grid-cols-2 2md:grid gap-8 space-y-4">
         <div>
           <div className="flex items-center justify-between">
             <TitlePage text={bank.bankName} />
             <div className="flex items-end gap-2">
-              <span className="2md:text-2xl text-xl font-semibold">
+              <span className="text-2xl font-semibold">
                 {formatCurrency(bank.currencyValue)}
               </span>
-              <span className="2md:text-lg text-sm opacity-60">
-                ({bank.currencyType})
-              </span>
+              <span className="text-lg opacity-60">({bank.currencyType})</span>
             </div>
           </div>
 
