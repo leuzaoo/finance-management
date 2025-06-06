@@ -63,14 +63,14 @@ export const listSubscriptions = async (
       return;
     }
 
-    const subs = await Subscription.find().lean();
+    const subs = await Subscription.find({ bank: bankId }).lean();
 
     res.json(subs);
     return;
   } catch (error: any) {
     console.error("listSubscriptions error:", error);
     res.status(500).json({
-      message: "Erro ao buscar a lista de assinaturas: ",
+      message: "Erro ao buscar a lista de assinaturas.",
       error: error.message,
     });
     return;
