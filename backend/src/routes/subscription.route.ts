@@ -15,6 +15,7 @@ import {
 } from "../controllers/subscription.controller";
 
 const router = Router();
+
 const validate = (req: Request, res: Response, next: NextFunction): void => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -24,9 +25,21 @@ const validate = (req: Request, res: Response, next: NextFunction): void => {
   next();
 };
 
-router.post("/:bankId/add", authenticate, addSubscription);
+router.post(
+  "/:bankId/add",
+  authenticate,
+  param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
+  validate,
+  addSubscription
+);
 
-router.get("/:bankId", authenticate, listSubscriptions);
+router.get(
+  "/:bankId",
+  authenticate,
+  param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
+  validate,
+  listSubscriptions
+);
 
 router.delete(
   "/:bankId/:subId",
@@ -36,4 +49,5 @@ router.delete(
   validate,
   deleteSubscription
 );
+
 export default router;
