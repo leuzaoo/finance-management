@@ -77,6 +77,49 @@ export const listSubscriptions = async (
   }
 };
 
+export const updateSubscription = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { bankId, subId } = req.params;
+    const { platform, amount } = req.body;
+
+    const bank = await Bank.findOne({ _id: bankId, user: req.userId });
+
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    const sub = await Subscription.findOne({ _id: subId, bank: bankId });
+    if (!sub) {
+      res.status(404).json({ message: "Assinatura não encontrada." });
+      return;
+    }
+
+    if (platform !== undefined) {
+      sub.platform = platform.trim();
+    }
+
+    if (amount !== undefined) {
+      sub.amount = Number(amount);
+    }
+
+    await sub.save();
+
+    res.status(200).json(sub);
+
+    return;
+  } catch (error: any) {
+    console.error("updateSubscription error:", error);
+    res
+      .status(500)
+      .json({ message: "Erro ao atualizar assinatura", error: error.message });
+    return;
+  }
+};
+
 export const deleteSubscription = async (
   req: AuthRequest,
   res: Response

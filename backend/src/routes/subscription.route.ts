@@ -1,4 +1,4 @@
-import { param, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import {
   Router,
   type NextFunction,
@@ -12,6 +12,7 @@ import {
   addSubscription,
   deleteSubscription,
   listSubscriptions,
+  updateSubscription,
 } from "../controllers/subscription.controller";
 
 const router = Router();
@@ -29,6 +30,18 @@ router.post(
   "/:bankId/add",
   authenticate,
   param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
+  body("platform")
+    .exists()
+    .withMessage("Campo 'platform' é obrigatório.")
+    .bail()
+    .isString()
+    .withMessage("'platform' deve ser texto."),
+  body("amount")
+    .exists()
+    .withMessage("Campo 'amount' é obrigatório.")
+    .bail()
+    .isNumeric()
+    .withMessage("'amount' deve ser numérico."),
   validate,
   addSubscription
 );
@@ -39,6 +52,23 @@ router.get(
   param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
   validate,
   listSubscriptions
+);
+
+router.put(
+  "/:bankId/:subId",
+  authenticate,
+  param("bankId").isMongoId().withMessage("O 'bankId' está inválido."),
+  param("subId").isMongoId().withMessage("O 'subId' está inválido."),
+  body("platform")
+    .optional()
+    .isString()
+    .withMessage("'platform' deve ser texto válido se fornecido."),
+  body("amount")
+    .optional()
+    .isNumeric()
+    .withMessage("'amount' deve ser numérico se fornecido."),
+  validate,
+  updateSubscription
 );
 
 router.delete(
