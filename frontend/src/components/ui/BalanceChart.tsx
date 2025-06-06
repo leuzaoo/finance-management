@@ -36,7 +36,7 @@ export default function BalanceChart({
   };
 
   return (
-    <div className="bg-dark/50 border-light/20 h-64 w-full rounded-lg border">
+    <div className="bg-dark/50 border-light/20 mt-2 h-64 w-full rounded-lg border">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}

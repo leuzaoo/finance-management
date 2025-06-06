@@ -4,19 +4,19 @@ import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import { PlusCircleIcon } from "lucide-react";
 
+import { useTransactionStore } from "@/src/store/useTransactionStore";
 import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
-
-import TransactionModal from "@/src/components/forms/TransactionModal";
-import WalletHistory from "@/src/components/ui/WalletHistory";
-import BalanceChart from "@/src/components/ui/BalanceChart";
-import TitlePage from "@/src/components/common/TitlePage";
-
 import {
   buildFullChartData,
   filterChartDataByRange,
 } from "@/src/utils/chart-utils";
-import { useTransactionStore } from "@/src/store/useTransactionStore";
+
+import TransactionModal from "@/src/components/forms/TransactionModal";
+import SubscriptionsCard from "@/src/components/ui/SubscriptionsCard";
+import WalletHistory from "@/src/components/ui/WalletHistory";
+import BalanceChart from "@/src/components/ui/BalanceChart";
+import TitlePage from "@/src/components/common/TitlePage";
 
 interface Props {
   bankId: string;
@@ -134,8 +134,15 @@ export default function WalletDetailsClient({ bankId }: Props) {
         </div>
 
         <div>
-          <p className="mb-4 text-2xl font-semibold">Histórico da conta</p>
-          <BalanceChart data={filteredChartData} />
+          <section>
+            <TitlePage text="Histórico da conta" />
+            <BalanceChart data={filteredChartData} />
+          </section>
+
+          <section className="bg-dark/50 mt-4 rounded-lg p-4">
+            <TitlePage text="Assinaturas" />
+            <SubscriptionsCard bankId={bankId} />
+          </section>
         </div>
       </div>
     </>
