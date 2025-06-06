@@ -49,3 +49,63 @@ export const addSubscription = async (
     return;
   }
 };
+
+export const listSubscriptions = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { bankId } = req.params;
+
+    const bank = await Bank.findOne({ _id: bankId, user: req.userId });
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    const subs = await Subscription.find().lean();
+
+    res.json(subs);
+    return;
+  } catch (error: any) {
+    console.error("listSubscriptions error:", error);
+    res.status(500).json({
+      message: "Erro ao buscar a lista de assinaturas: ",
+      error: error.message,
+    });
+    return;
+  }
+};
+
+export const deleteSubscription = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { bankId, subId } = req.params;
+
+    const bank = await Bank.findOne({ _id: bankId, user: req.userId });
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    const sub = await Subscription.findOne({ _id: subId, bank: bankId });
+    if (!sub) {
+      res.status(404).json({ message: "Assinatura não encontrada." });
+      return;
+    }
+
+    await sub.save();
+    await Subscription.deleteOne({ _id: subId });
+
+    res.status(200).json({ message: "Assinatura deletada com sucesso." });
+    return;
+  } catch (error: any) {
+    console.error("deleteSubscription error:", error);
+    res
+      .status(500)
+      .json({ message: "Erro ao deletar assinatura.", error: error.message });
+    return;
+  }
+};
