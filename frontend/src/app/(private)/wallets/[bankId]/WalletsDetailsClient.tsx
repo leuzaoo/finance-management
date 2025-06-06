@@ -141,7 +141,10 @@ export default function WalletDetailsClient({ bankId }: Props) {
 
           <section className="bg-dark/50 mt-4 rounded-lg p-4">
             <TitlePage text="Assinaturas" />
-            <SubscriptionsCard bankId={bankId} />
+            <SubscriptionsCard
+              bankId={bankId}
+              currencyType={bank.currencyType}
+            />
           </section>
         </div>
       </div>

@@ -8,9 +8,10 @@ import { formatCurrency } from "@/src/utils/format-currency";
 
 interface Props {
   bankId: string;
+  currencyType: string;
 }
 
-const SubscriptionsCard: React.FC<Props> = ({ bankId }) => {
+const SubscriptionsCard: React.FC<Props> = ({ bankId, currencyType }) => {
   const { subscriptions, listSubscriptions, deleteSubscription, isLoading } =
     useSubscriptionStore();
 
@@ -42,7 +43,10 @@ const SubscriptionsCard: React.FC<Props> = ({ bankId }) => {
             </div>
 
             <div className="flex items-center gap-4">
-              <span>{formatCurrency(item.amount)} </span>
+              <div className="flex gap-1">
+                <span>{formatCurrency(item.amount)}</span>
+                <span className="font-light">{currencyType}</span>
+              </div>
               <button
                 className="text-light/50 hover:text-light cursor-pointer"
                 onClick={() => {
