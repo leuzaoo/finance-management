@@ -20,3 +20,13 @@ body {
   background: var(--dark);
   color: var(--light);
 }
+
+.css-1toxriw-MuiList-root-MuiMenu-list {
+  padding: 0 !important;
+  background-color: #1a1a1a !important;
+  color: var(--light);
+}
+
+.css-rizt0-MuiTypography-root {
+  font-family: "Archivo", "Inter", sans-serif !important;
+}

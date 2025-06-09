@@ -14,6 +14,11 @@ interface SubscriptionModalProps {
   currencyType: string;
   onClose: () => void;
   onSuccess?: () => void;
+  subscriptionToEdit?: {
+    _id: string;
+    platform: string;
+    amount: number;
+  };
 }
 
 export default function SubscriptionModal({
@@ -22,8 +27,10 @@ export default function SubscriptionModal({
   currencyType,
   onClose,
   onSuccess,
+  subscriptionToEdit,
 }: SubscriptionModalProps) {
   const addSubscription = useSubscriptionStore((s) => s.addSubscription);
+  const updateSubscription = useSubscriptionStore((s) => s.updateSubscription);
   const isLoading = useSubscriptionStore((s) => s.isLoading);
 
   const [platform, setPlatform] = useState<string>("");
@@ -35,18 +42,21 @@ export default function SubscriptionModal({
   }>({});
 
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+    if (subscriptionToEdit) {
+      setPlatform(subscriptionToEdit.platform);
+      setAmount(subscriptionToEdit.amount);
+    } else {
       setPlatform("");
       setAmount(0);
-      setErrors({});
     }
-  }, [isOpen]);
+    setErrors({});
+  }, [isOpen, subscriptionToEdit]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
-    let hasError = false;
     if (amount == null || isNaN(amount) || amount <= 0) {
       setErrors({ amount: "Insira um valor válido maior que zero." });
       return;
@@ -56,13 +66,15 @@ export default function SubscriptionModal({
       return;
     }
 
-    if (hasError) return;
-
     try {
-      await addSubscription(bankId, {
-        platform,
-        amount: amount!,
-      });
+      if (subscriptionToEdit) {
+        await updateSubscription(bankId, subscriptionToEdit._id, {
+          platform,
+          amount,
+        });
+      } else {
+        await addSubscription(bankId, { platform, amount });
+      }
 
       if (onSuccess) {
         onSuccess();
@@ -139,7 +151,13 @@ export default function SubscriptionModal({
           disabled={isLoading}
           className="w-full cursor-pointer rounded bg-blue-600 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
         >
-          {isLoading ? "Salvando..." : "Salvar"}
+          {isLoading
+            ? subscriptionToEdit
+              ? "Atualizando..."
+              : "Salvando..."
+            : subscriptionToEdit
+              ? "Atualizar"
+              : "Salvar"}
         </button>
       </form>
     </div>,

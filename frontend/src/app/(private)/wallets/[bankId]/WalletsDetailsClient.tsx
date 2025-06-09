@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import { PlusCircleIcon } from "lucide-react";
 
-import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
+import {
+  useSubscriptionStore,
+  Subscription,
+} from "@/src/store/useSubscriptionStore";
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
@@ -28,25 +31,26 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const router = useRouter();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
   const { transactions, listTransactions } = useTransactionStore();
-  const { listSubscriptions } = useSubscriptionStore();
+  const { subscriptions, listSubscriptions, deleteSubscription } =
+    useSubscriptionStore();
 
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
   const [isTransactionModalOpen, setTransactionModalOpen] = useState(false);
   const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
+  const [editingSub, setEditingSub] = useState<Subscription | null>(null);
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
   const prevCount = useRef(transactions.length);
 
   const fetchBank = useCallback(async () => {
     if (!bankId) return;
-
+    setLoading(true);
     try {
-      setLoading(true);
       const data = await getBankById(bankId);
       setBank(data);
-    } catch (error: unknown) {
-      console.error({ message: "Erro ao buscar dados do banco", error });
+    } catch (e) {
+      console.error(e);
       router.push("/dashboard");
     } finally {
       setLoading(false);
@@ -73,10 +77,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
   }, [loadTransactions]);
 
   useEffect(() => {
-    if (transactions.length < prevCount.current) {
-      fetchBank();
-    }
-
+    if (transactions.length < prevCount.current) fetchBank();
     prevCount.current = transactions.length;
   }, [transactions.length, fetchBank]);
 
@@ -89,10 +90,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
   }, [loadSubscriptions]);
 
   const filteredChartData = useMemo(() => {
-    if (!bank) {
-      return [];
-    }
-
+    if (!bank) return [];
     const fullData = buildFullChartData(
       bank.createdAt,
       bank.currencyValue,
@@ -102,14 +100,12 @@ export default function WalletDetailsClient({ bankId }: Props) {
         type: tx.type,
       })),
     );
-
     return filterChartDataByRange(fullData, fromDate, toDate);
   }, [transactions, bank, fromDate, toDate]);
 
   if (loading || isBankLoading) {
     return <div>Carregando dados do banco…</div>;
   }
-
   if (!bank) {
     return <div>Banco não encontrado.</div>;
   }
@@ -129,7 +125,22 @@ export default function WalletDetailsClient({ bankId }: Props) {
         }}
       />
 
-      <div className="2md:grid-cols-2 2md:grid gap-8 space-y-4">
+      <SubscriptionModal
+        bankId={bankId}
+        isOpen={subscriptionModalOpen || !!editingSub}
+        onClose={() => {
+          setSubscriptionModalOpen(false);
+          setEditingSub(null);
+        }}
+        currencyType={bank.currencyType}
+        onSuccess={() => {
+          fetchBank();
+          loadSubscriptions();
+        }}
+        subscriptionToEdit={editingSub ?? undefined}
+      />
+
+      <div className="2md:grid 2md:grid-cols-2 gap-8 space-y-4">
         <div>
           <div className="flex items-center justify-between">
             <TitlePage text={bank.bankName} />
@@ -145,7 +156,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
             <span className="text-light/70 font-light">Transações</span>
             <button
               onClick={() => setTransactionModalOpen(true)}
-              className="bg-light text-dark 2md:text-base flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-sm transition-all duration-200 hover:opacity-60"
+              className="bg-light text-dark flex items-center gap-2 rounded-sm px-3 py-1 text-sm hover:opacity-60"
             >
               Adicionar <PlusCircleIcon size={20} />
             </button>
@@ -161,22 +172,14 @@ export default function WalletDetailsClient({ bankId }: Props) {
           </section>
 
           <section className="bg-dark/50 mt-6 rounded-lg p-4">
-            <SubscriptionModal
-              bankId={bankId}
-              isOpen={subscriptionModalOpen}
-              currencyType={bank.currencyType}
-              onClose={() => setSubscriptionModalOpen(false)}
-              onSuccess={() => {
-                fetchBank();
-                loadSubscriptions();
-              }}
-            />
-
             <div className="flex items-center justify-between">
               <TitlePage text="Assinaturas" />
               <button
-                className="text-light/50 hover:text-light cursor-pointer transition-all duration-200"
-                onClick={() => setSubscriptionModalOpen(true)}
+                className="text-light/50 hover:text-light cursor-pointer"
+                onClick={() => {
+                  setSubscriptionModalOpen(true);
+                  setEditingSub(null);
+                }}
               >
                 <PlusCircleIcon strokeWidth={1.5} size={28} />
               </button>
@@ -185,6 +188,11 @@ export default function WalletDetailsClient({ bankId }: Props) {
             <SubscriptionsCard
               bankId={bankId}
               currencyType={bank.currencyType}
+              onEdit={(sub) => {
+                setEditingSub(sub);
+                setSubscriptionModalOpen(false);
+              }}
+              onDelete={(subId) => deleteSubscription(bankId, subId)}
             />
           </section>
         </div>
