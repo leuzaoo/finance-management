@@ -28,6 +28,12 @@ interface SubscriptionState {
     data: { platform: string; amount: number },
   ) => Promise<void>;
 
+  updateSubscription: (
+    bankId: string,
+    subId: string,
+    data: { platform: string; amount: number },
+  ) => Promise<void>;
+
   listSubscriptions: (bankId: string) => Promise<void>;
 
   deleteSubscription: (bankId: string, subId: string) => Promise<void>;
@@ -66,6 +72,27 @@ export const useSubscriptionStore = create<SubscriptionState>((set, get) => ({
     } catch (error) {
       const e = error as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao adicionar assinatura.";
+      set({ error: msg });
+      toast.error(msg);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  updateSubscription: async (
+    bankId: string,
+    subId: string,
+    data: { platform?: string; amount?: number },
+  ) => {
+    set({ isLoading: true, error: null });
+    try {
+      const url = `${API_URL}/${encodeURIComponent(bankId)}/${encodeURIComponent(subId)}`;
+      await axios.put(url, data);
+      toast.success("Assinatura atualizada com sucesso!");
+      await get().listSubscriptions(bankId);
+    } catch (error) {
+      const e = error as AxiosError<{ message: string }>;
+      const msg = e.response?.data.message || "Erro ao atualizar assinatura.";
       set({ error: msg });
       toast.error(msg);
     } finally {
