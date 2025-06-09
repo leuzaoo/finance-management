@@ -12,7 +12,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 function InputField({ placeholder, type, image, value, onChange }: Props) {
   return (
-    <div className="relative flex w-full min-w-xs flex-col items-center">
+    <div className="relative flex w-full flex-col items-center">
       <input
         onChange={onChange}
         value={value}

@@ -1,9 +1,10 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ToastContainer } from "react-toastify";
 import { PlusCircleIcon } from "lucide-react";
 
+import { useSubscriptionStore } from "@/src/store/useSubscriptionStore";
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
@@ -12,6 +13,7 @@ import {
   filterChartDataByRange,
 } from "@/src/utils/chart-utils";
 
+import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
 import TransactionModal from "@/src/components/forms/TransactionModal";
 import SubscriptionsCard from "@/src/components/ui/SubscriptionsCard";
 import WalletHistory from "@/src/components/ui/WalletHistory";
@@ -26,12 +28,15 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const router = useRouter();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
   const { transactions, listTransactions } = useTransactionStore();
+  const { listSubscriptions } = useSubscriptionStore();
 
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isTransactionModalOpen, setTransactionModalOpen] = useState(false);
+  const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
+  const prevCount = useRef(transactions.length);
 
   const fetchBank = useCallback(async () => {
     if (!bankId) return;
@@ -67,6 +72,22 @@ export default function WalletDetailsClient({ bankId }: Props) {
     loadTransactions();
   }, [loadTransactions]);
 
+  useEffect(() => {
+    if (transactions.length < prevCount.current) {
+      fetchBank();
+    }
+
+    prevCount.current = transactions.length;
+  }, [transactions.length, fetchBank]);
+
+  const loadSubscriptions = useCallback(() => {
+    listSubscriptions(bankId);
+  }, [bankId, listSubscriptions]);
+
+  useEffect(() => {
+    loadSubscriptions();
+  }, [loadSubscriptions]);
+
   const filteredChartData = useMemo(() => {
     if (!bank) {
       return [];
@@ -99,8 +120,8 @@ export default function WalletDetailsClient({ bankId }: Props) {
 
       <TransactionModal
         bankId={bankId}
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+        isOpen={isTransactionModalOpen}
+        onClose={() => setTransactionModalOpen(false)}
         currencyType={bank.currencyType}
         onSuccess={() => {
           fetchBank();
@@ -123,7 +144,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
           <div className="mt-4 flex items-end justify-between">
             <span className="text-light/70 font-light">Transações</span>
             <button
-              onClick={() => setModalOpen(true)}
+              onClick={() => setTransactionModalOpen(true)}
               className="bg-light text-dark 2md:text-base flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-sm transition-all duration-200 hover:opacity-60"
             >
               Adicionar <PlusCircleIcon size={20} />
@@ -139,8 +160,28 @@ export default function WalletDetailsClient({ bankId }: Props) {
             <BalanceChart data={filteredChartData} />
           </section>
 
-          <section className="bg-dark/50 mt-4 rounded-lg p-4">
-            <TitlePage text="Assinaturas" />
+          <section className="bg-dark/50 mt-6 rounded-lg p-4">
+            <SubscriptionModal
+              bankId={bankId}
+              isOpen={subscriptionModalOpen}
+              currencyType={bank.currencyType}
+              onClose={() => setSubscriptionModalOpen(false)}
+              onSuccess={() => {
+                fetchBank();
+                loadSubscriptions();
+              }}
+            />
+
+            <div className="flex items-center justify-between">
+              <TitlePage text="Assinaturas" />
+              <button
+                className="text-light/50 hover:text-light cursor-pointer transition-all duration-200"
+                onClick={() => setSubscriptionModalOpen(true)}
+              >
+                <PlusCircleIcon strokeWidth={1.5} size={28} />
+              </button>
+            </div>
+
             <SubscriptionsCard
               bankId={bankId}
               currencyType={bank.currencyType}

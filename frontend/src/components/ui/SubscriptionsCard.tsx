@@ -30,7 +30,7 @@ const SubscriptionsCard: React.FC<Props> = ({ bankId, currencyType }) => {
   }
 
   return (
-    <div className="mt-6">
+    <div>
       <ul>
         {subscriptions.map((item) => (
           <li key={item._id} className="mt-4 flex items-center justify-between">
@@ -39,11 +39,11 @@ const SubscriptionsCard: React.FC<Props> = ({ bankId, currencyType }) => {
                 className="h-4 w-4 rounded-full bg-blue-500"
                 aria-hidden="true"
               />
-              <span>{item.platform}</span>
+              <span className="text-sm">{item.platform}</span>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex gap-1">
+              <div className="flex gap-1 text-sm">
                 <span>{formatCurrency(item.amount)}</span>
                 <span className="font-light">{currencyType}</span>
               </div>

@@ -48,7 +48,6 @@ export default function TransactionsList({ bankId, transactions }: Props) {
                   )
                 ) {
                   await deleteTransaction(bankId, tx._id);
-                  window.location.reload();
                 }
               }}
               className="text-light/60 cursor-pointer p-1 hover:text-red-500"
