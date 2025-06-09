@@ -114,18 +114,18 @@ export default function SubscriptionsCard({
       >
         <MenuItem onClick={handleEdit}>
           <ListItemIcon>
-            <PencilIcon size={16} className="text-light" strokeWidth={1.5} />
+            <PencilIcon size={16} className="text-dark/70" />
           </ListItemIcon>
           <ListItemText>
-            <span className="text-sm font-light">Editar</span>
+            <span className="font-inter! text-sm font-light">Editar</span>
           </ListItemText>
         </MenuItem>
         <MenuItem onClick={handleDelete}>
           <ListItemIcon>
-            <Trash2Icon size={16} className="text-light" strokeWidth={1.5} />
+            <Trash2Icon size={16} className="text-dark/70" />
           </ListItemIcon>
           <ListItemText>
-            <span className="text-sm font-light">Deletar</span>
+            <span className="font-inter! text-sm font-light">Deletar</span>
           </ListItemText>
         </MenuItem>
       </Menu>
