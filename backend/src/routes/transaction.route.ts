@@ -12,6 +12,7 @@ import {
   addTransaction,
   deleteTransaction,
   listTransactions,
+  categorySummary,
 } from "../controllers/transaction.controller";
 
 const router = Router();
@@ -51,6 +52,16 @@ router.get(
   query("to").optional().isISO8601().toDate(),
   validate,
   listTransactions
+);
+
+router.get(
+  "/:bankId/summary/categories",
+  authenticate,
+  param("bankId").isMongoId().withMessage("bankId inválido"),
+  query("from").optional().isISO8601().toDate(),
+  query("to").optional().isISO8601().toDate(),
+  validate,
+  categorySummary
 );
 
 router.delete(

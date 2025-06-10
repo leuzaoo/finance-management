@@ -83,6 +83,59 @@ export const listTransactions = async (
   }
 };
 
+export const categorySummary = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { bankId } = req.params;
+    const from: Date | undefined = req.query.from as any;
+    const to: Date | undefined = req.query.to as any;
+
+    const bank = await Bank.findOne({ _id: bankId, user: req.userId });
+    if (!bank) {
+      res.status(404).json({ message: "Banco não encontrado." });
+      return;
+    }
+
+    const match: any = {
+      bank: new mongoose.Types.ObjectId(bankId),
+      type: "expense",
+    };
+
+    if (from || to) {
+      match.date = {};
+      if (from) match.date.$gte = from;
+      if (to) match.date.$lte = to;
+    }
+
+    const summary = await Transaction.aggregate([
+      { $match: match },
+      {
+        $group: {
+          _id: "$category",
+          total: { $sum: "$amount" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          total: 1,
+        },
+      },
+      { $sort: { total: -1 } },
+    ]);
+
+    res.json(summary);
+  } catch (error: any) {
+    console.error("categorySummary error:", error);
+    res
+      .status(500)
+      .json({ message: "Erro ao agregar por categoria", error: error.message });
+  }
+};
+
 export const deleteTransaction = async (
   req: AuthRequest,
   res: Response
