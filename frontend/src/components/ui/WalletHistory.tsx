@@ -1,6 +1,6 @@
 "use client";
-
 import { useEffect, useState, useCallback } from "react";
+
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 
 import DateRangeSelector from "../common/DateRangeSelection";
@@ -10,18 +10,25 @@ import Pagination from "../common/Pagination";
 
 interface Props {
   bankId: string;
+  fromDate: Date | null;
+  toDate: Date | null;
+  setFromDate: (d: Date | null) => void;
+  setToDate: (d: Date | null) => void;
 }
 
 const PAGE_SIZE = 6;
 
-export default function WalletHistory({ bankId }: Props) {
+export default function WalletHistory({
+  bankId,
+  fromDate,
+  toDate,
+  setFromDate,
+  setToDate,
+}: Props) {
   const { transactions, isLoading, listTransactions } = useTransactionStore();
-
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const load = useCallback(() => {
+  const loadTransactions = useCallback(() => {
     listTransactions(bankId, {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
@@ -30,12 +37,8 @@ export default function WalletHistory({ bankId }: Props) {
   }, [bankId, fromDate, toDate, listTransactions]);
 
   useEffect(() => {
-    load();
-  }, [load]);
-
-  if (isLoading) {
-    return <p className="py-4">Carregando histórico…</p>;
-  }
+    loadTransactions();
+  }, [loadTransactions]);
 
   const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
   const paginatedTxs = transactions.slice(
@@ -47,7 +50,6 @@ export default function WalletHistory({ bankId }: Props) {
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
-
   const clearFilters = () => {
     setFromDate(null);
     setToDate(null);
@@ -55,17 +57,6 @@ export default function WalletHistory({ bankId }: Props) {
 
   return (
     <div className="mt-4 space-y-4">
-      <div>
-        <TransactionsList transactions={paginatedTxs} bankId={bankId} />
-        {totalPages > 1 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            goToPage={goToPage}
-          />
-        )}
-      </div>
-
       <DateFilters
         fromDate={fromDate}
         toDate={toDate}
@@ -80,6 +71,23 @@ export default function WalletHistory({ bankId }: Props) {
         setToDate={setToDate}
         clearFilters={clearFilters}
       />
+
+      {isLoading ? (
+        <p className="py-4">Carregando histórico…</p>
+      ) : paginatedTxs.length === 0 ? (
+        <p className="text-light/60">Nenhuma transação encontrada.</p>
+      ) : (
+        <>
+          <TransactionsList transactions={paginatedTxs} bankId={bankId} />
+          {totalPages > 1 && (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goToPage={goToPage}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }

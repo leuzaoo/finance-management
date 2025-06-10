@@ -1,9 +1,12 @@
 "use client";
-import { formatCurrency } from "@/src/utils/format-currency";
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Trash2Icon } from "lucide-react";
 import { format } from "date-fns";
 
+import { useBankStore, type Bank } from "@/src/store/useBankStore";
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
+import { formatCurrency } from "@/src/utils/format-currency";
 import {
   useTransactionStore,
   type Transaction,
@@ -15,7 +18,35 @@ type Props = {
 };
 
 export default function TransactionsList({ bankId, transactions }: Props) {
-  const { deleteTransaction } = useTransactionStore();
+  const router = useRouter();
+  const { listTransactions, deleteTransaction } = useTransactionStore();
+  const { getBankById } = useBankStore();
+
+  const [fromDate, setFromDate] = useState<Date | null>(null);
+  const [toDate, setToDate] = useState<Date | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [bank, setBank] = useState<Bank | null>(null);
+
+  const fetchBank = useCallback(async () => {
+    if (!bankId) return;
+    setLoading(true);
+    try {
+      const data = await getBankById(bankId);
+      setBank(data);
+    } catch (e) {
+      console.error(e);
+      router.push("/dashboard");
+    } finally {
+      setLoading(false);
+    }
+  }, [bankId, getBankById, router]);
+
+  const loadTransactions = useCallback(() => {
+    listTransactions(bankId, {
+      from: fromDate ?? undefined,
+      to: toDate ?? undefined,
+    });
+  }, [bankId, fromDate, toDate, listTransactions]);
 
   if (transactions.length === 0) {
     return <p className="text-light/60">Nenhuma transação encontrada.</p>;
@@ -48,6 +79,8 @@ export default function TransactionsList({ bankId, transactions }: Props) {
                   )
                 ) {
                   await deleteTransaction(bankId, tx._id);
+                  fetchBank();
+                  loadTransactions();
                 }
               }}
               className="text-light/60 cursor-pointer p-1 hover:text-red-500"
