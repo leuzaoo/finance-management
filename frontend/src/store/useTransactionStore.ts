@@ -57,20 +57,22 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const params: Record<string, string> = {};
-      if (opts?.from) params.from = opts.from.toISOString();
+      if (opts?.from) {
+        const start = new Date(opts.from);
+        start.setHours(0, 0, 0, 0);
+        params.from = start.toISOString();
+      }
       if (opts?.to) {
         const end = new Date(opts.to);
         end.setHours(23, 59, 59, 999);
         params.to = end.toISOString();
       }
 
-      const url = `${API_URL}/${encodeURIComponent(bankId)}/history`;
+      const url = `${API_URL}/${bankId}/history`;
       const res: AxiosResponse<Transaction[]> = await axios.get(url, {
         params,
       });
       set({ transactions: res.data, isLoading: false });
-
-      await get().getCategorySummary(bankId, opts);
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao buscar histórico.";
@@ -94,11 +96,10 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
         params.to = end.toISOString();
       }
 
-      const url = `${API_URL}/${encodeURIComponent(bankId)}/summary/categories`;
+      const url = `${API_URL}/${bankId}/summary/categories`;
       const res: AxiosResponse<CategorySummary[]> = await axios.get(url, {
         params,
       });
-
       set({ categorySummary: res.data, isCategoryLoading: false });
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;
