@@ -15,7 +15,6 @@ interface Props {
   setFromDate: (d: Date | null) => void;
   setToDate: (d: Date | null) => void;
 }
-
 const PAGE_SIZE = 6;
 
 export default function WalletHistory({
@@ -39,6 +38,11 @@ export default function WalletHistory({
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
+
+
+  if (isLoading) {
+    return <p className="py-4">Carregando histórico…</p>;
+  }
 
   const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
   const paginatedTxs = transactions.slice(

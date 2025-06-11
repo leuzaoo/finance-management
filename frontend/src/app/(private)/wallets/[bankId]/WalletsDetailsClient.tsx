@@ -1,5 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 import { ToastContainer } from "react-toastify";
@@ -34,6 +35,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const router = useRouter();
   const { listSubscriptions, deleteSubscription } = useSubscriptionStore();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
+
   const {
     transactions,
     listTransactions,
@@ -45,12 +47,16 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
 
+
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
 
   const [isTxModalOpen, setTxModalOpen] = useState(false);
   const [subModalOpen, setSubModalOpen] = useState(false);
   const [editingSub, setEditingSub] = useState<Subscription | null>(null);
+
+  const [bank, setBank] = useState<Bank | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchBank = useCallback(async () => {
     setLoading(true);
@@ -74,6 +80,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
     });
+
     getCategorySummary(bankId, {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
@@ -140,6 +147,17 @@ export default function WalletDetailsClient({ bankId }: Props) {
               </span>{" "}
               <span className="text-lg opacity-60">({bank.currencyType})</span>
             </div>
+          </div>
+
+
+          <div className="mt-4 flex items-end justify-between">
+            <span className="text-light/70 font-light">Transações</span>
+            <button
+              onClick={() => setTransactionModalOpen(true)}
+              className="bg-light text-dark flex items-center gap-2 rounded-sm px-3 py-1 text-sm hover:opacity-60"
+            >
+              Adicionar <PlusCircleIcon size={20} />
+            </button>
           </div>
 
           <WalletHistory
