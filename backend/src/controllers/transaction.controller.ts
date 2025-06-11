@@ -89,8 +89,6 @@ export const categorySummary = async (
 ): Promise<void> => {
   try {
     const { bankId } = req.params;
-    const from: Date | undefined = req.query.from as any;
-    const to: Date | undefined = req.query.to as any;
 
     const bank = await Bank.findOne({ _id: bankId, user: req.userId });
     if (!bank) {
@@ -98,16 +96,31 @@ export const categorySummary = async (
       return;
     }
 
+    const rawFrom = req.query.from as string | undefined;
+    const rawTo = req.query.to as string | undefined;
+
+    const fromDate = rawFrom ? new Date(rawFrom) : undefined;
+    const toDate = rawTo ? new Date(rawTo) : undefined;
+
+    console.log("→ categorySummary inputs:", {
+      rawFrom,
+      rawTo,
+      fromDate,
+      toDate,
+    });
+
     const match: any = {
       bank: new mongoose.Types.ObjectId(bankId),
       type: "expense",
     };
 
-    if (from || to) {
+    if (fromDate || toDate) {
       match.date = {};
-      if (from) match.date.$gte = from;
-      if (to) match.date.$lte = to;
+      if (fromDate) match.date.$gte = fromDate;
+      if (toDate) match.date.$lte = toDate;
     }
+
+    console.log("→ categorySummary match:", JSON.stringify(match, null, 2));
 
     const summary = await Transaction.aggregate([
       { $match: match },
