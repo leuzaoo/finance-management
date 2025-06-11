@@ -39,7 +39,6 @@ export default function WalletHistory({
     loadTransactions();
   }, [loadTransactions]);
 
-
   if (isLoading) {
     return <p className="py-4">Carregando histórico…</p>;
   }

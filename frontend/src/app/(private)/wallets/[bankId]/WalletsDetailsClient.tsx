@@ -47,16 +47,12 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
 
-
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
 
   const [isTxModalOpen, setTxModalOpen] = useState(false);
   const [subModalOpen, setSubModalOpen] = useState(false);
   const [editingSub, setEditingSub] = useState<Subscription | null>(null);
-
-  const [bank, setBank] = useState<Bank | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const fetchBank = useCallback(async () => {
     setLoading(true);
@@ -149,11 +145,10 @@ export default function WalletDetailsClient({ bankId }: Props) {
             </div>
           </div>
 
-
           <div className="mt-4 flex items-end justify-between">
             <span className="text-light/70 font-light">Transações</span>
             <button
-              onClick={() => setTransactionModalOpen(true)}
+              onClick={() => setTxModalOpen(true)}
               className="bg-light text-dark flex items-center gap-2 rounded-sm px-3 py-1 text-sm hover:opacity-60"
             >
               Adicionar <PlusCircleIcon size={20} />
