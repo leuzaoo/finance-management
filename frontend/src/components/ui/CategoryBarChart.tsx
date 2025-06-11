@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
+
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 import { formatCurrency } from "@/src/utils/format-currency";
 
