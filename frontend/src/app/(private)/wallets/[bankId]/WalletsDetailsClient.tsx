@@ -1,6 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
-
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { ToastContainer } from "react-toastify";
@@ -33,23 +32,22 @@ interface Props {
 
 export default function WalletDetailsClient({ bankId }: Props) {
   const router = useRouter();
+
   const { listSubscriptions, deleteSubscription } = useSubscriptionStore();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
-
   const {
     transactions,
     listTransactions,
     getCategorySummary,
-    isLoading: isCategoryLoading,
     categorySummary,
+    isLoading: isCategoryLoading,
+    deleteTransaction,
   } = useTransactionStore();
 
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
-
   const [isTxModalOpen, setTxModalOpen] = useState(false);
   const [subModalOpen, setSubModalOpen] = useState(false);
   const [editingSub, setEditingSub] = useState<Subscription | null>(null);
@@ -66,26 +64,41 @@ export default function WalletDetailsClient({ bankId }: Props) {
     }
   }, [bankId, getBankById, router]);
 
+  const handleDelete = useCallback(
+    async (txId: string) => {
+      await deleteTransaction(bankId, txId, {
+        from: fromDate ?? undefined,
+        to: toDate ?? undefined,
+      });
+      await fetchBank();
+    },
+    [bankId, fromDate, toDate, deleteTransaction, fetchBank],
+  );
+
   useEffect(() => {
     if (!bankId) return router.push("/dashboard");
     fetchBank();
-  }, [bankId, fetchBank, router]);
-
-  useEffect(() => {
     listTransactions(bankId, {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
     });
-
     getCategorySummary(bankId, {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
     });
-  }, [bankId, fromDate, toDate, listTransactions, getCategorySummary]);
+  }, [
+    bankId,
+    fetchBank,
+    listTransactions,
+    getCategorySummary,
+    fromDate,
+    toDate,
+    listSubscriptions,
+  ]);
 
-  const filteredChartData = React.useMemo(() => {
+  const filteredChartData = useMemo(() => {
     if (!bank) return [];
-    const fullData = buildFullChartData(
+    const full = buildFullChartData(
       bank.createdAt,
       bank.currencyValue,
       transactions.map((tx) => ({
@@ -94,11 +107,16 @@ export default function WalletDetailsClient({ bankId }: Props) {
         type: tx.type,
       })),
     );
-    return filterChartDataByRange(fullData, fromDate, toDate);
+    return filterChartDataByRange(full, fromDate, toDate);
   }, [bank, transactions, fromDate, toDate]);
 
-  if (loading || isBankLoading) return <div>Carregando dados…</div>;
-  if (!bank) return <div>Banco não encontrado.</div>;
+  if (loading || isBankLoading) {
+    return <div>Carregando dados…</div>;
+  }
+
+  if (!bank) {
+    return <div>Banco não encontrado.</div>;
+  }
 
   return (
     <>
@@ -112,6 +130,10 @@ export default function WalletDetailsClient({ bankId }: Props) {
         onSuccess={() => {
           fetchBank();
           listTransactions(bankId, {
+            from: fromDate ?? undefined,
+            to: toDate ?? undefined,
+          });
+          getCategorySummary(bankId, {
             from: fromDate ?? undefined,
             to: toDate ?? undefined,
           });
@@ -134,6 +156,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
       />
 
       <div className="2md:grid grid-cols-2 gap-8 space-y-4">
+        {/* Coluna da esquerda: Transações + filtros */}
         <div>
           <div className="flex items-center justify-between">
             <TitlePage text={bank.bankName} />
@@ -161,9 +184,11 @@ export default function WalletDetailsClient({ bankId }: Props) {
             toDate={toDate}
             setFromDate={setFromDate}
             setToDate={setToDate}
+            onDelete={handleDelete}
           />
         </div>
 
+        {/* Coluna da direita: Gráficos + assinaturas */}
         <div>
           <section className="mt-6">
             <TitlePage text="Histórico da conta" />

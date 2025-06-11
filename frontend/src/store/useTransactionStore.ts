@@ -35,7 +35,11 @@ interface TransactionState {
   ) => Promise<void>;
 
   addTransaction: (bankId: string, data: any) => Promise<void>;
-  deleteTransaction: (bankId: string, txId: string) => Promise<void>;
+  deleteTransaction: (
+    bankId: string,
+    txId: string,
+    opts?: { from?: Date; to?: Date },
+  ) => Promise<void>;
 
   categorySummary: CategorySummary[];
   isCategoryLoading: boolean;
@@ -123,7 +127,9 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       });
 
       toast.success("Transação adicionada com sucesso!");
-      await get().listTransactions(bankId);
+
+      await get().listTransactions(bankId, data.opts);
+      await get().getCategorySummary(bankId, data.opts);
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao adicionar transação.";
@@ -134,7 +140,7 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     }
   },
 
-  deleteTransaction: async (bankId, txId) => {
+  deleteTransaction: async (bankId, txId, opts) => {
     set({ isLoading: true, error: null });
     try {
       const url = `${API_URL}/${encodeURIComponent(bankId)}/${encodeURIComponent(
@@ -142,7 +148,8 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       )}`;
       await axios.delete(url);
 
-      await get().listTransactions(bankId);
+      await get().listTransactions(bankId, opts);
+      await get().getCategorySummary(bankId, opts);
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao deletar transação.";

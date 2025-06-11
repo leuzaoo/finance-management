@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 
@@ -14,7 +14,9 @@ interface Props {
   toDate: Date | null;
   setFromDate: (d: Date | null) => void;
   setToDate: (d: Date | null) => void;
+  onDelete: (txId: string) => Promise<void>;
 }
+
 const PAGE_SIZE = 6;
 
 export default function WalletHistory({
@@ -23,11 +25,12 @@ export default function WalletHistory({
   toDate,
   setFromDate,
   setToDate,
+  onDelete,
 }: Props) {
   const { transactions, isLoading, listTransactions } = useTransactionStore();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const loadTransactions = useCallback(() => {
+  useEffect(() => {
     listTransactions(bankId, {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
@@ -35,28 +38,13 @@ export default function WalletHistory({
     setCurrentPage(1);
   }, [bankId, fromDate, toDate, listTransactions]);
 
-  useEffect(() => {
-    loadTransactions();
-  }, [loadTransactions]);
-
-  if (isLoading) {
-    return <p className="py-4">Carregando histórico…</p>;
-  }
+  if (isLoading) return <p className="py-4">Carregando histórico…</p>;
 
   const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
-  const paginatedTxs = transactions.slice(
+  const pageTxs = transactions.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE,
   );
-
-  const goToPage = (page: number) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
-  const clearFilters = () => {
-    setFromDate(null);
-    setToDate(null);
-  };
 
   return (
     <div className="mt-4 space-y-4">
@@ -72,21 +60,26 @@ export default function WalletHistory({
         toDate={toDate}
         setFromDate={setFromDate}
         setToDate={setToDate}
-        clearFilters={clearFilters}
+        clearFilters={() => {
+          setFromDate(null);
+          setToDate(null);
+        }}
       />
 
-      {isLoading ? (
-        <p className="py-4">Carregando histórico…</p>
-      ) : paginatedTxs.length === 0 ? (
+      {pageTxs.length === 0 ? (
         <p className="text-light/60">Nenhuma transação encontrada.</p>
       ) : (
         <>
-          <TransactionsList transactions={paginatedTxs} bankId={bankId} />
+          <TransactionsList
+            bankId={bankId}
+            transactions={pageTxs}
+            onDelete={onDelete}
+          />
           {totalPages > 1 && (
             <Pagination
               totalPages={totalPages}
               currentPage={currentPage}
-              goToPage={goToPage}
+              goToPage={setCurrentPage}
             />
           )}
         </>

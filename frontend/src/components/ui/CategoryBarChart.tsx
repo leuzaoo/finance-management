@@ -19,8 +19,8 @@ interface Props {
 
 export default function CategoryBarChart({
   data,
-  currencyType,
   isLoading,
+  currencyType,
 }: Props) {
   if (isLoading) {
     return (
@@ -53,8 +53,8 @@ export default function CategoryBarChart({
           const pct = sumTotal > 0 ? (d.total / sumTotal) * 100 : 0;
           const widthPct = `${Math.round(pct)}%`;
           return (
-            <li key={d.category} className="flex items-center gap-4">
-              <span className="w-24 font-medium capitalize">
+            <li key={d.category} className="flex items-center gap-1">
+              <span className="w-20 font-medium capitalize">
                 {getCategoryLabel(d.category)}
               </span>
               <div className="bg-light/10 relative h-3 flex-1 overflow-hidden rounded-full">
@@ -63,12 +63,9 @@ export default function CategoryBarChart({
                   style={{ width: widthPct }}
                 />
               </div>
-              <div className="flex items-center gap-1">
-                <span className="w-20 text-right font-medium">
-                  {formatCurrency(d.total)}
-                </span>
-                <span className="font-light">{currencyType}</span>
-              </div>
+              <span className="w-20 text-right font-medium">
+                {formatCurrency(d.total)}
+              </span>
             </li>
           );
         })}
