@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState, useCallback } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
@@ -54,7 +53,6 @@ export default function WalletHistory({
     if (page < 1 || page > totalPages) return;
     setCurrentPage(page);
   };
-
   const clearFilters = () => {
     setFromDate(null);
     setToDate(null);
@@ -62,17 +60,6 @@ export default function WalletHistory({
 
   return (
     <div className="mt-4 space-y-4">
-      <div>
-        <TransactionsList transactions={paginatedTxs} bankId={bankId} />
-        {totalPages > 1 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            goToPage={goToPage}
-          />
-        )}
-      </div>
-
       <DateFilters
         fromDate={fromDate}
         toDate={toDate}
@@ -87,6 +74,23 @@ export default function WalletHistory({
         setToDate={setToDate}
         clearFilters={clearFilters}
       />
+
+      {isLoading ? (
+        <p className="py-4">Carregando histórico…</p>
+      ) : paginatedTxs.length === 0 ? (
+        <p className="text-light/60">Nenhuma transação encontrada.</p>
+      ) : (
+        <>
+          <TransactionsList transactions={paginatedTxs} bankId={bankId} />
+          {totalPages > 1 && (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goToPage={goToPage}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }

@@ -19,6 +19,11 @@ export type Transaction = {
   date: string;
 };
 
+export type CategorySummary = {
+  category: string;
+  total: number;
+};
+
 interface TransactionState {
   transactions: Transaction[];
   isLoading: boolean;
@@ -29,18 +34,15 @@ interface TransactionState {
     opts?: { from?: Date; to?: Date },
   ) => Promise<void>;
 
-  addTransaction: (
-    bankId: string,
-    data: {
-      type: "expense" | "income";
-      amount: number;
-      category: string;
-      description?: string;
-      date?: Date;
-    },
-  ) => Promise<void>;
-
+  addTransaction: (bankId: string, data: any) => Promise<void>;
   deleteTransaction: (bankId: string, txId: string) => Promise<void>;
+
+  categorySummary: CategorySummary[];
+  isCategoryLoading: boolean;
+  getCategorySummary: (
+    bankId: string,
+    opts?: { from?: Date; to?: Date },
+  ) => Promise<void>;
 }
 
 export const useTransactionStore = create<TransactionState>((set, get) => ({
@@ -48,23 +50,62 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
   isLoading: false,
   error: null,
 
+  categorySummary: [],
+  isCategoryLoading: false,
+
   listTransactions: async (bankId, opts) => {
     set({ isLoading: true, error: null });
     try {
       const params: Record<string, string> = {};
-      if (opts?.from) params.from = opts.from.toISOString();
-      if (opts?.to) params.to = opts.to.toISOString();
+      if (opts?.from) {
+        const start = new Date(opts.from);
+        start.setHours(0, 0, 0, 0);
+        params.from = start.toISOString();
+      }
+      if (opts?.to) {
+        const end = new Date(opts.to);
+        end.setHours(23, 59, 59, 999);
+        params.to = end.toISOString();
+      }
 
-      const url = `${API_URL}/${encodeURIComponent(bankId)}/history`;
+      const url = `${API_URL}/${bankId}/history`;
       const res: AxiosResponse<Transaction[]> = await axios.get(url, {
         params,
       });
-
       set({ transactions: res.data, isLoading: false });
     } catch (err) {
       const e = err as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao buscar histórico.";
       set({ error: msg, isLoading: false });
+      toast.error(msg);
+    }
+  },
+
+  getCategorySummary: async (bankId, opts) => {
+    set({ isCategoryLoading: true, error: null });
+    try {
+      const params: Record<string, string> = {};
+      if (opts?.from) {
+        const start = new Date(opts.from);
+        start.setHours(0, 0, 0, 0);
+        params.from = start.toISOString();
+      }
+      if (opts?.to) {
+        const end = new Date(opts.to);
+        end.setHours(23, 59, 59, 999);
+        params.to = end.toISOString();
+      }
+
+      const url = `${API_URL}/${bankId}/summary/categories`;
+      const res: AxiosResponse<CategorySummary[]> = await axios.get(url, {
+        params,
+      });
+      set({ categorySummary: res.data, isCategoryLoading: false });
+    } catch (err) {
+      const e = err as AxiosError<{ message: string }>;
+      const msg =
+        e.response?.data.message || "Erro ao buscar resumo por categoria.";
+      set({ error: msg, isCategoryLoading: false });
       toast.error(msg);
     }
   },
