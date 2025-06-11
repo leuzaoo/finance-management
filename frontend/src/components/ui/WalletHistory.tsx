@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 
 import DateRangeSelector from "../common/DateRangeSelection";
@@ -10,18 +11,24 @@ import Pagination from "../common/Pagination";
 
 interface Props {
   bankId: string;
+  fromDate: Date | null;
+  toDate: Date | null;
+  setFromDate: (d: Date | null) => void;
+  setToDate: (d: Date | null) => void;
 }
-
 const PAGE_SIZE = 6;
 
-export default function WalletHistory({ bankId }: Props) {
+export default function WalletHistory({
+  bankId,
+  fromDate,
+  toDate,
+  setFromDate,
+  setToDate,
+}: Props) {
   const { transactions, isLoading, listTransactions } = useTransactionStore();
-
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const load = useCallback(() => {
+  const loadTransactions = useCallback(() => {
     listTransactions(bankId, {
       from: fromDate ?? undefined,
       to: toDate ?? undefined,
@@ -30,8 +37,8 @@ export default function WalletHistory({ bankId }: Props) {
   }, [bankId, fromDate, toDate, listTransactions]);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    loadTransactions();
+  }, [loadTransactions]);
 
   if (isLoading) {
     return <p className="py-4">Carregando histórico…</p>;
