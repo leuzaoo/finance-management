@@ -1,6 +1,7 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { ToastContainer } from "react-toastify";
 import { PlusCircleIcon } from "lucide-react";
 
@@ -31,8 +32,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const router = useRouter();
   const { getBankById, isLoading: isBankLoading } = useBankStore();
   const { transactions, listTransactions } = useTransactionStore();
-  const { subscriptions, listSubscriptions, deleteSubscription } =
-    useSubscriptionStore();
+  const { listSubscriptions, deleteSubscription } = useSubscriptionStore();
 
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
@@ -41,7 +41,6 @@ export default function WalletDetailsClient({ bankId }: Props) {
   const [editingSub, setEditingSub] = useState<Subscription | null>(null);
   const [bank, setBank] = useState<Bank | null>(null);
   const [loading, setLoading] = useState(true);
-  const prevCount = useRef(transactions.length);
 
   const fetchBank = useCallback(async () => {
     if (!bankId) return;
@@ -75,11 +74,6 @@ export default function WalletDetailsClient({ bankId }: Props) {
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
-
-  useEffect(() => {
-    if (transactions.length < prevCount.current) fetchBank();
-    prevCount.current = transactions.length;
-  }, [transactions.length, fetchBank]);
 
   const loadSubscriptions = useCallback(() => {
     listSubscriptions(bankId);
@@ -162,7 +156,13 @@ export default function WalletDetailsClient({ bankId }: Props) {
             </button>
           </div>
 
-          <WalletHistory bankId={bankId} />
+          <WalletHistory
+            bankId={bankId}
+            fromDate={fromDate}
+            toDate={toDate}
+            setFromDate={setFromDate}
+            setToDate={setToDate}
+          />
         </div>
 
         <div>
