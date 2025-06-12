@@ -172,7 +172,7 @@ export default function WalletDetailsClient({ bankId }: Props) {
             <span className="text-light/70 font-light">Transações</span>
             <button
               onClick={() => setTxModalOpen(true)}
-              className="bg-light text-dark flex items-center gap-2 rounded-sm px-3 py-1 text-sm hover:opacity-60"
+              className="bg-light text-dark flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-sm transition-all duration-200 hover:opacity-60"
             >
               Adicionar <PlusCircleIcon size={20} />
             </button>
