@@ -107,9 +107,11 @@ export default function SubscriptionModal({
           ✕
         </button>
 
-        <TitlePage text="Nova Assinatura" />
+        <TitlePage
+          text={subscriptionToEdit ? "Editar assinatura" : "Nova assinatura"}
+        />
 
-        <div className="mb-4 flex flex-col space-y-3">
+        <div className="mb-4 mt-2 flex flex-col space-y-3">
           <div>
             <label className="text-md block font-medium">Valor *</label>
             <NumericFormat
