@@ -1,13 +1,15 @@
 "use client";
 import React from "react";
-import { useWalletDetails } from "@/src/hooks/useWalletDetails";
-import { WalletHeader } from "@/src/components/wallets/WalletHeader";
+import { ToastContainer } from "react-toastify";
+
+import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSection";
 import { TransactionsSection } from "@/src/components/wallets/TransactionsSection";
 import { ChartsSection } from "@/src/components/wallets/ChartsSection";
-import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSection";
-import TransactionModal from "@/src/components/forms/TransactionModal";
+import { WalletHeader } from "@/src/components/wallets/WalletHeader";
+import { useWalletDetails } from "@/src/hooks/useWalletDetails";
+
 import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
-import { ToastContainer } from "react-toastify";
+import TransactionModal from "@/src/components/forms/TransactionModal";
 
 export default function WalletDetailsClient({ bankId }: { bankId: string }) {
   const {
