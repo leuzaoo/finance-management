@@ -29,11 +29,16 @@ export function SubscriptionsSection({
           <PlusCircleIcon />
         </button>
       </div>
+
       <SubscriptionsCard
         bankId={bankId}
         currencyType={currencyType}
-        onEdit={onEdit}
-        onDelete={onDelete}
+        onEdit={(sub) => {
+          onEdit(sub);
+        }}
+        onDelete={(id) => {
+          onDelete(id);
+        }}
       />
     </section>
   );

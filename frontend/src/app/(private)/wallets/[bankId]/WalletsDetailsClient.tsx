@@ -2,14 +2,15 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
 
-import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSection";
-import { TransactionsSection } from "@/src/components/wallets/TransactionsSection";
-import { ChartsSection } from "@/src/components/wallets/ChartsSection";
-import { WalletHeader } from "@/src/components/wallets/WalletHeader";
+import type { Subscription } from "@/src/store/useSubscriptionStore";
 import { useWalletDetails } from "@/src/hooks/useWalletDetails";
 
+import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSection";
+import { TransactionsSection } from "@/src/components/wallets/TransactionsSection";
 import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
 import TransactionModal from "@/src/components/forms/TransactionModal";
+import { ChartsSection } from "@/src/components/wallets/ChartsSection";
+import { WalletHeader } from "@/src/components/wallets/WalletHeader";
 
 export default function WalletDetailsClient({ bankId }: { bankId: string }) {
   const {
@@ -41,6 +42,16 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
   if (loading || isBankLoading) return <p>Carregando…</p>;
   if (!bank) return <p>Banco não encontrado.</p>;
 
+  const handleAdd = () => {
+    setEditingSub(null);
+    setSubModalOpen(true);
+  };
+
+  const handleEdit = (sub: Subscription) => {
+    setEditingSub(sub);
+    setSubModalOpen(true);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -62,6 +73,7 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
           });
         }}
       />
+
       <SubscriptionModal
         bankId={bankId}
         isOpen={subModalOpen}
@@ -104,8 +116,8 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
           <SubscriptionsSection
             bankId={bankId}
             currencyType={bank.currencyType}
-            onAdd={() => setSubModalOpen(true)}
-            onEdit={(sub) => setEditingSub(sub)}
+            onAdd={handleAdd}
+            onEdit={handleEdit}
             onDelete={handleDeleteSub}
           />
         </div>
