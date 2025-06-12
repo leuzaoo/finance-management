@@ -8,7 +8,7 @@ import TransactionsList from "./TransactionsList";
 import DateFilters from "../common/DateFilters";
 import Pagination from "../common/Pagination";
 
-interface Props {
+export interface WalletHistoryProps {
   bankId: string;
   fromDate: Date | null;
   toDate: Date | null;
@@ -26,7 +26,7 @@ export default function WalletHistory({
   setFromDate,
   setToDate,
   onDelete,
-}: Props) {
+}: WalletHistoryProps) {
   const { transactions, isLoading, listTransactions } = useTransactionStore();
   const [currentPage, setCurrentPage] = useState(1);
 

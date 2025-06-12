@@ -1,130 +1,51 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { ToastContainer } from "react-toastify";
-import { PlusCircleIcon } from "lucide-react";
-
-import { useTransactionStore } from "@/src/store/useTransactionStore";
-import { useBankStore, type Bank } from "@/src/store/useBankStore";
-import {
-  useSubscriptionStore,
-  type Subscription,
-} from "@/src/store/useSubscriptionStore";
-
-import { formatCurrency } from "@/src/utils/format-currency";
-import {
-  buildFullChartData,
-  filterChartDataByRange,
-} from "@/src/utils/chart-utils";
-
-import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
+import React from "react";
+import { useWalletDetails } from "@/src/hooks/useWalletDetails";
+import { WalletHeader } from "@/src/components/wallets/WalletHeader";
+import { TransactionsSection } from "@/src/components/wallets/TransactionsSection";
+import { ChartsSection } from "@/src/components/wallets/ChartsSection";
+import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSection";
 import TransactionModal from "@/src/components/forms/TransactionModal";
-import SubscriptionsCard from "@/src/components/ui/SubscriptionsCard";
-import CategoryBarChart from "@/src/components/ui/CategoryBarChart";
-import WalletHistory from "@/src/components/ui/WalletHistory";
-import BalanceChart from "@/src/components/ui/BalanceChart";
-import TitlePage from "@/src/components/common/TitlePage";
+import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
+import { ToastContainer } from "react-toastify";
 
-interface Props {
-  bankId: string;
-}
-
-export default function WalletDetailsClient({ bankId }: Props) {
-  const router = useRouter();
-
-  const { listSubscriptions, deleteSubscription } = useSubscriptionStore();
-  const { getBankById, isLoading: isBankLoading } = useBankStore();
+export default function WalletDetailsClient({ bankId }: { bankId: string }) {
   const {
+    bank,
+    loading,
+    isBankLoading,
+    fromDate,
+    toDate,
+    setFromDate,
+    setToDate,
+    txModalOpen,
+    setTxModalOpen,
+    subModalOpen,
+    setSubModalOpen,
+    editingSub,
+    setEditingSub,
     transactions,
-    listTransactions,
-    getCategorySummary,
     categorySummary,
-    isLoading: isCategoryLoading,
-    deleteTransaction,
-  } = useTransactionStore();
-
-  const [bank, setBank] = useState<Bank | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
-  const [isTxModalOpen, setTxModalOpen] = useState(false);
-  const [subModalOpen, setSubModalOpen] = useState(false);
-  const [editingSub, setEditingSub] = useState<Subscription | null>(null);
-
-  const fetchBank = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await getBankById(bankId);
-      setBank(data);
-    } catch {
-      router.push("/dashboard");
-    } finally {
-      setLoading(false);
-    }
-  }, [bankId, getBankById, router]);
-
-  const handleDelete = useCallback(
-    async (txId: string) => {
-      await deleteTransaction(bankId, txId, {
-        from: fromDate ?? undefined,
-        to: toDate ?? undefined,
-      });
-      await fetchBank();
-    },
-    [bankId, fromDate, toDate, deleteTransaction, fetchBank],
-  );
-
-  useEffect(() => {
-    if (!bankId) return router.push("/dashboard");
-    fetchBank();
-    listTransactions(bankId, {
-      from: fromDate ?? undefined,
-      to: toDate ?? undefined,
-    });
-    getCategorySummary(bankId, {
-      from: fromDate ?? undefined,
-      to: toDate ?? undefined,
-    });
-  }, [
-    bankId,
+    filteredChartData,
+    isCategoryLoading,
     fetchBank,
     listTransactions,
     getCategorySummary,
-    fromDate,
-    toDate,
     listSubscriptions,
-  ]);
+    handleDeleteTx,
+    handleDeleteSub,
+  } = useWalletDetails(bankId);
 
-  const filteredChartData = useMemo(() => {
-    if (!bank) return [];
-    const full = buildFullChartData(
-      bank.createdAt,
-      bank.currencyValue,
-      transactions.map((tx) => ({
-        date: tx.date,
-        amount: tx.amount,
-        type: tx.type,
-      })),
-    );
-    return filterChartDataByRange(full, fromDate, toDate);
-  }, [bank, transactions, fromDate, toDate]);
-
-  if (loading || isBankLoading) {
-    return <div>Carregando dados…</div>;
-  }
-
-  if (!bank) {
-    return <div>Banco não encontrado.</div>;
-  }
+  if (loading || isBankLoading) return <p>Carregando…</p>;
+  if (!bank) return <p>Banco não encontrado.</p>;
 
   return (
     <>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer />
 
       <TransactionModal
         bankId={bankId}
-        isOpen={isTxModalOpen}
+        isOpen={txModalOpen}
         onClose={() => setTxModalOpen(false)}
         currencyType={bank.currencyType}
         onSuccess={() => {
@@ -139,91 +60,52 @@ export default function WalletDetailsClient({ bankId }: Props) {
           });
         }}
       />
-
       <SubscriptionModal
         bankId={bankId}
-        isOpen={subModalOpen || !!editingSub}
-        onClose={() => {
-          setSubModalOpen(false);
-          setEditingSub(null);
-        }}
+        isOpen={subModalOpen}
+        onClose={() => setSubModalOpen(false)}
         currencyType={bank.currencyType}
-        subscriptionToEdit={editingSub ?? undefined}
+        subscriptionToEdit={editingSub || undefined}
         onSuccess={() => {
           fetchBank();
           listSubscriptions(bankId);
         }}
       />
 
-      <div className="2md:grid grid-cols-2 gap-8 space-y-4">
-        {/* Coluna da esquerda: Transações + filtros */}
+      <div className="2md:grid grid-cols-2 gap-8">
         <div>
-          <div className="flex items-center justify-between">
-            <TitlePage text={bank.bankName} />
-            <div>
-              <span className="text-3xl font-semibold">
-                {formatCurrency(bank.currencyValue)}
-              </span>{" "}
-              <span className="text-lg opacity-60">({bank.currencyType})</span>
-            </div>
-          </div>
+          <WalletHeader
+            bankName={bank.bankName}
+            balance={bank.currencyValue}
+            currency={bank.currencyType}
+            onOpenModal={() => setTxModalOpen(true)}
+          />
 
-          <div className="mt-4 flex items-end justify-between">
-            <span className="text-light/70 font-light">Transações</span>
-            <button
-              onClick={() => setTxModalOpen(true)}
-              className="bg-light text-dark flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-sm transition-all duration-200 hover:opacity-60"
-            >
-              Adicionar <PlusCircleIcon size={20} />
-            </button>
-          </div>
-
-          <WalletHistory
+          <TransactionsSection
             bankId={bankId}
             fromDate={fromDate}
             toDate={toDate}
             setFromDate={setFromDate}
             setToDate={setToDate}
-            onDelete={handleDelete}
+            onDelete={handleDeleteTx}
           />
         </div>
 
-        {/* Coluna da direita: Gráficos + assinaturas */}
         <div>
-          <section className="mt-6">
-            <TitlePage text="Histórico da conta" />
-            <BalanceChart data={filteredChartData} />
-          </section>
-
-          <CategoryBarChart
-            data={categorySummary}
+          <ChartsSection
+            balanceData={filteredChartData}
+            categoryData={categorySummary}
             currencyType={bank.currencyType}
-            isLoading={isCategoryLoading}
+            isCategoryLoading={isCategoryLoading}
           />
 
-          <section className="bg-dark/50 mt-6 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <TitlePage text="Assinaturas" />
-              <button
-                onClick={() => {
-                  setSubModalOpen(true);
-                  setEditingSub(null);
-                }}
-                className="text-light/50 hover:text-light"
-              >
-                <PlusCircleIcon />
-              </button>
-            </div>
-            <SubscriptionsCard
-              bankId={bankId}
-              currencyType={bank.currencyType}
-              onEdit={(sub) => {
-                setEditingSub(sub);
-                setSubModalOpen(true);
-              }}
-              onDelete={(subId) => deleteSubscription(bankId, subId)}
-            />
-          </section>
+          <SubscriptionsSection
+            bankId={bankId}
+            currencyType={bank.currencyType}
+            onAdd={() => setSubModalOpen(true)}
+            onEdit={(sub) => setEditingSub(sub)}
+            onDelete={handleDeleteSub}
+          />
         </div>
       </div>
     </>
