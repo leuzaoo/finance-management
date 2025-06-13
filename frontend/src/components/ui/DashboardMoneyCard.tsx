@@ -1,7 +1,8 @@
-import { formatCurrency } from "@/src/utils/format-currency";
-import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
+
+import { formatCurrency } from "@/src/utils/format-currency";
 
 interface Props {
   totalBalance: number;
