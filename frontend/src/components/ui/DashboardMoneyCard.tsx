@@ -1,8 +1,7 @@
-import type { Bank } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
 import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
-import React, { useMemo, useState } from "react";
+import React from "react";
 
 interface Props {
   banks: Bank[];
