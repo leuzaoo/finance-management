@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PlusCircleIcon } from "lucide-react";
 import Link from "next/link";
 
 import { Bank, useBankStore } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
 
+import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
 import BankModal from "@/src/components/forms/BankModal";
 import MoneyCard from "@/src/components/ui/MoneyCard";
 
@@ -16,6 +17,10 @@ const DashboardPage = () => {
   useEffect(() => {
     listBanks();
   }, [listBanks]);
+
+  const totalBalance = useMemo(() => {
+    return banks.reduce((sum, b) => sum + b.currencyValue, 0);
+  }, [banks]);
 
   const handleCreate = async (data: {
     bankName: string;
@@ -63,6 +68,8 @@ const DashboardPage = () => {
           </button>
         </div>
       </section>
+
+      <DashboardMoneyCard totalBalance={totalBalance} />
     </>
   );
 };
