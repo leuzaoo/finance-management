@@ -1,6 +1,7 @@
 export const TRANSACTION_CATEGORIES = [
   { value: "locomotion", label: "Transporte" },
   { value: "shopping", label: "Compras" },
+  { value: "market", label: "Mercado" },
   { value: "food", label: "Comida" },
   { value: "rent", label: "Aluguel" },
   { value: "bills", label: "Contas" },
