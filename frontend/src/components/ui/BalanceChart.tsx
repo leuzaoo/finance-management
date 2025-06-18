@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
-import { formatCurrency } from "@/src/utils/format-currency";
 import { format } from "date-fns";
+import React from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -11,6 +10,10 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+
+import { formatCurrency } from "@/src/utils/format-currency";
+
+import TitlePage from "../common/TitlePage";
 
 interface Props {
   data: Array<{ date: string; balance: number }>;
@@ -36,7 +39,8 @@ export default function BalanceChart({
   };
 
   return (
-    <div className="bg-dark/50 border-light/20 mt-2 h-64 w-full rounded-lg border">
+    <div className="bg-dark/50 mt-2 h-64 w-full rounded-lg p-4">
+      <TitlePage text="Histórico" />
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
