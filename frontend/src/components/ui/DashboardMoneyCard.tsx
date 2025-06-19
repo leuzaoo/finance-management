@@ -1,30 +1,24 @@
-import React, { useMemo, useState } from "react";
-import Link from "next/link";
-import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
-
+// atualizei para receber todos os banks e uma moeda selecionada
 import { formatCurrency } from "@/src/utils/format-currency";
-import type { Bank } from "@/src/store/useBankStore";
+import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
+import React, { useState } from "react";
+import { Bank } from "@/src/store/useBankStore";
 
 interface Props {
   banks: Bank[];
 }
 
 const DashboardMoneyCard = ({ banks }: Props) => {
-  const [selectedCurrency, setSelectedCurrency] = useState<string>("BRL");
+  const [currency, setCurrency] = useState<"BRL" | "USD" | "GBP">("BRL");
 
-  const totalBalance = useMemo(() => {
-    return banks
-      .filter((b) => b.currencyType === selectedCurrency)
-      .reduce((sum, b) => sum + b.currencyValue, 0);
-  }, [banks, selectedCurrency]);
-
-  const currencies = useMemo(
-    () => Array.from(new Set(banks.map((b) => b.currencyType))),
-    [banks],
-  );
+  // soma apenas os bancos que têm a moeda selecionada
+  const total = banks
+    .filter((b) => b.currencyType === currency)
+    .reduce((sum, b) => sum + b.currencyValue, 0);
 
   return (
-    <div className="mt-4 space-y-6">
+    <div className="space-y-6">
       <div className="bg-dark/50 w-[20rem] rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -32,20 +26,20 @@ const DashboardMoneyCard = ({ banks }: Props) => {
             <span>Total</span>
           </div>
           <select
-            className="bg-dark/10 cursor-pointer rounded font-medium"
-            value={selectedCurrency}
-            onChange={(e) => setSelectedCurrency(e.currentTarget.value)}
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as any)}
+            className="bg-dark/10 cursor-pointer rounded px-2 py-1"
           >
-            {currencies.map((cur) => (
-              <option key={cur} value={cur} className="bg-dark">
-                {cur}
+            {["BRL", "USD", "GBP"].map((c) => (
+              <option key={c} value={c}>
+                {c}
               </option>
             ))}
           </select>
         </div>
         <div className="mt-6">
           <span className="text-3xl font-semibold">
-            {formatCurrency(totalBalance)}
+            {formatCurrency(total)}
           </span>
         </div>
         <Link

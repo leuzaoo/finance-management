@@ -2,56 +2,38 @@
 import { useEffect, useMemo } from "react";
 import { useBankStore } from "@/src/store/useBankStore";
 import { useTransactionStore } from "@/src/store/useTransactionStore";
-import { buildFullChartData } from "@/src/utils/chart-utils";
+import { buildDashboardChartData, Point } from "@/src/utils/dashboard-chart";
 
-export function useDashboardHistory() {
+export function useDashboardHistory(): Point[] {
   const { banks, listBanks } = useBankStore();
   const { transactions, listTransactions } = useTransactionStore();
 
-  // 1) Carrega bancos e transações
+  // 1) carrega bancos → depois para cada banco carrega suas transações
   useEffect(() => {
-    (async () => {
-      await listBanks();
-      for (const b of banks) {
-        await listTransactions(b.id);
-      }
-    })();
+    listBanks().then(() => {
+      banks.forEach((b) => listTransactions(b.id));
+    });
   }, [banks.length, listBanks, listTransactions]);
 
-  // 2) Para cada banco, calcula saldo inicial e série histórica
-  const perBankSeries = useMemo(() => {
+  // 2) monta array com createdAt, saldo inicial e txs ordenadas
+  const bankHistories = useMemo(() => {
     return banks.map((b) => {
-      // filtra as transações desse banco e ordena ASC por data
       const txs = transactions
         .filter((t) => t.bank === b.id)
-        .sort((a, z) => new Date(a.date).getTime() - new Date(z.date).getTime());
+        .sort(
+          (a, z) => new Date(a.date).getTime() - new Date(z.date).getTime(),
+        );
 
-      // calcula o efeito líquido de todas as txs: receitas são +, despesas são -
-      const netTx = txs.reduce(
-        (acc, t) => acc + (t.type === "expense" ? -t.amount : t.amount),
-        0
+      const net = txs.reduce(
+        (sum, t) => sum + (t.type === "expense" ? -t.amount : t.amount),
+        0,
       );
+      const initialBalance = b.currencyValue - net;
 
-      // saldo inicial = saldo atual - soma líquida das txs
-      const initialBalance = b.currencyValue - netTx;
-
-      // gera a série histórica corretamente
-      return buildFullChartData(b.createdAt, initialBalance, txs);
+      return { createdAt: b.createdAt, initialBalance, transactions: txs };
     });
   }, [banks, transactions]);
 
-  // 3) mescla ponto a ponto somando os saldos de todas as carteiras
-  const mergedSeries = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const series of perBankSeries) {
-      for (const pt of series) {
-        map.set(pt.date, (map.get(pt.date) || 0) + pt.balance);
-      }
-    }
-    return Array.from(map.entries())
-      .map(([date, balance]) => ({ date, balance }))
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  }, [perBankSeries]);
-
-  return mergedSeries;
+  // 3) devolve a série agregada
+  return useMemo(() => buildDashboardChartData(bankHistories), [bankHistories]);
 }
