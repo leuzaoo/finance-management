@@ -23,7 +23,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
       {transactions.map((tx) => (
         <li
           key={tx._id}
-          className="bg-dark/50 border-light/20 relative flex flex-col justify-between rounded-lg border px-4 py-2"
+          className="bg-dark/50 relative flex flex-col justify-between rounded-lg px-4 py-2"
         >
           <div className="flex w-full justify-between">
             <span
