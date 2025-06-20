@@ -1,10 +1,5 @@
 // src/utils/dashboard-chart.ts
-import {
-  toIsoDateString,
-  getDateRange,
-  groupDeltasByDay,
-  getMaxDate,
-} from "./chart-utils";
+import { toIsoDateString } from "./chart-utils";
 
 export interface Point {
   date: string;
@@ -12,49 +7,34 @@ export interface Point {
 }
 
 /**
- * Monta a série histórica agregada de TODOS os bancos,
- * a partir de createdAt, saldo inicial e lista de transações.
+ * Gera a série de [data, saldo] **só** em transações (mais a data inicial).
  */
 export function buildDashboardChartData(
-  bankHistories: Array<{
-    createdAt: string;
-    initialBalance: number;
-    transactions: Array<{
-      date: string;
-      amount: number;
-      type: "expense" | "income";
-    }>;
+  createdAt: string,
+  initialBalance: number,
+  transactions: Array<{
+    date: string;
+    amount: number;
+    type: "expense" | "income";
   }>,
 ): Point[] {
-  // 1) gera série individual para cada wallet
-  const perBankSeries: Point[][] = bankHistories.map(
-    ({ createdAt, initialBalance, transactions }) => {
-      const start = new Date(createdAt);
-      start.setHours(0, 0, 0, 0);
+  // 1) ponto inicial
+  const series: Point[] = [
+    { date: toIsoDateString(new Date(createdAt)), balance: initialBalance },
+  ];
 
-      const maxDate = getMaxDate(transactions);
-      const allDates = getDateRange(start, maxDate);
-      const deltas = groupDeltasByDay(transactions);
-
-      let running = initialBalance;
-      return allDates.map((d) => {
-        const iso = toIsoDateString(d);
-        if (deltas[iso] != null) running += deltas[iso];
-        return { date: iso, balance: running };
-      });
-    },
+  // 2) ordena ascendente por data
+  const sorted = [...transactions].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
 
-  // 2) agrega ponto a ponto somando saldos
-  const map = new Map<string, number>();
-  perBankSeries.forEach((series) =>
-    series.forEach(({ date, balance }) => {
-      map.set(date, (map.get(date) || 0) + balance);
-    }),
-  );
+  // 3) vai somando/subtraindo e empurrando ponto
+  let running = initialBalance;
+  for (const tx of sorted) {
+    const delta = tx.type === "expense" ? -tx.amount : tx.amount;
+    running += delta;
+    series.push({ date: toIsoDateString(new Date(tx.date)), balance: running });
+  }
 
-  // 3) ordena e retorna
-  return Array.from(map.entries())
-    .map(([date, balance]) => ({ date, balance }))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  return series;
 }

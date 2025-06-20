@@ -1,39 +1,91 @@
-// src/hooks/useDashboardHistory.ts
-import { useEffect, useMemo } from "react";
-import { useBankStore } from "@/src/store/useBankStore";
-import { useTransactionStore } from "@/src/store/useTransactionStore";
-import { buildDashboardChartData, Point } from "@/src/utils/dashboard-chart";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
-export function useDashboardHistory(): Point[] {
-  const { banks, listBanks } = useBankStore();
-  const { transactions, listTransactions } = useTransactionStore();
+export interface Point {
+  date: string;
+  balance: number;
+}
+type Tx = {
+  bank: string;
+  type: "expense" | "income";
+  amount: number;
+  date: string;
+};
+type Bank = {
+  _id: string;
+  id: string;
+  currencyType: string;
+  currencyValue: number;
+  createdAt: string;
+};
 
-  // 1) carrega bancos → depois para cada banco carrega suas transações
+const toIso = (d: Date) => {
+  d = new Date(d);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().split("T")[0];
+};
+
+export function useDashboardHistory(
+  currencyFilter?: "BRL" | "USD" | "GBP",
+): Point[] {
+  const [banks, setBanks] = useState<Bank[]>([]);
+  const [txMap, setTxMap] = useState<Record<string, Tx[]>>({});
+
+  // fetch banks
   useEffect(() => {
-    listBanks().then(() => {
-      banks.forEach((b) => listTransactions(b.id));
-    });
-  }, [banks.length, listBanks, listTransactions]);
+    axios
+      .get<Bank[]>("/api/v1/banks")
+      .then((r) => setBanks(r.data.map((b) => ({ ...b, id: b._id }))))
+      .catch(console.error);
+  }, []);
 
-  // 2) monta array com createdAt, saldo inicial e txs ordenadas
-  const bankHistories = useMemo(() => {
-    return banks.map((b) => {
-      const txs = transactions
-        .filter((t) => t.bank === b.id)
-        .sort(
-          (a, z) => new Date(a.date).getTime() - new Date(z.date).getTime(),
+  // fetch each bank’s txs, only if currency matches
+  useEffect(() => {
+    banks
+      .filter((b) => !currencyFilter || b.currencyType === currencyFilter)
+      .forEach((b) => {
+        axios
+          .get<Tx[]>(`/api/v1/transactions/${b.id}/history`)
+          .then((r) => setTxMap((m) => ({ ...m, [b.id]: r.data })))
+          .catch(console.error);
+      });
+  }, [banks, currencyFilter]);
+
+  // build aggregated series
+  return useMemo(() => {
+    const byDay = new Map<string, number>();
+
+    banks
+      .filter((b) => !currencyFilter || b.currencyType === currencyFilter)
+      .forEach((b) => {
+        const txs = (txMap[b.id] || [])
+          .slice()
+          .sort(
+            (a, z) => new Date(a.date).getTime() - new Date(z.date).getTime(),
+          );
+
+        // net of all
+        const net = txs.reduce(
+          (s, t) => s + (t.type === "expense" ? -t.amount : t.amount),
+          0,
         );
+        // starting balance at creation
+        let running = b.currencyValue - net;
 
-      const net = txs.reduce(
-        (sum, t) => sum + (t.type === "expense" ? -t.amount : t.amount),
-        0,
-      );
-      const initialBalance = b.currencyValue - net;
+        // record initial
+        const start = toIso(new Date(b.createdAt));
+        byDay.set(start, (byDay.get(start) || 0) + running);
 
-      return { createdAt: b.createdAt, initialBalance, transactions: txs };
-    });
-  }, [banks, transactions]);
+        // step through transactions
+        txs.forEach((t) => {
+          running += t.type === "expense" ? -t.amount : t.amount;
+          const day = toIso(new Date(t.date));
+          byDay.set(day, (byDay.get(day) || 0) + running);
+        });
+      });
 
-  // 3) devolve a série agregada
-  return useMemo(() => buildDashboardChartData(bankHistories), [bankHistories]);
+    return Array.from(byDay.entries())
+      .map(([date, balance]) => ({ date, balance }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [banks, txMap, currencyFilter]);
 }

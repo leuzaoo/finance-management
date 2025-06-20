@@ -1,18 +1,17 @@
-// atualizei para receber todos os banks e uma moeda selecionada
+// src/components/ui/DashboardMoneyCard.tsx
 import { formatCurrency } from "@/src/utils/format-currency";
 import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { Bank } from "@/src/store/useBankStore";
 
 interface Props {
   banks: Bank[];
+  currency: "BRL" | "USD" | "GBP";
+  onCurrencyChange: (c: "BRL" | "USD" | "GBP") => void;
 }
 
-const DashboardMoneyCard = ({ banks }: Props) => {
-  const [currency, setCurrency] = useState<"BRL" | "USD" | "GBP">("BRL");
-
-  // soma apenas os bancos que têm a moeda selecionada
+const DashboardMoneyCard = ({ banks, currency, onCurrencyChange }: Props) => {
   const total = banks
     .filter((b) => b.currencyType === currency)
     .reduce((sum, b) => sum + b.currencyValue, 0);
@@ -27,7 +26,7 @@ const DashboardMoneyCard = ({ banks }: Props) => {
           </div>
           <select
             value={currency}
-            onChange={(e) => setCurrency(e.target.value as any)}
+            onChange={(e) => onCurrencyChange(e.target.value as any)}
             className="bg-dark/10 cursor-pointer rounded px-2 py-1"
           >
             {["BRL", "USD", "GBP"].map((c) => (
@@ -37,11 +36,13 @@ const DashboardMoneyCard = ({ banks }: Props) => {
             ))}
           </select>
         </div>
+
         <div className="mt-6">
           <span className="text-3xl font-semibold">
             {formatCurrency(total)}
           </span>
         </div>
+
         <Link
           href={"/wallets"}
           className="mt-4 flex items-center justify-end gap-1 text-sm text-blue-500 underline hover:text-blue-400"
