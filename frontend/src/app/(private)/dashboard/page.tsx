@@ -13,10 +13,12 @@ import TitlePage from "@/src/components/common/TitlePage";
 import BankModal from "@/src/components/forms/BankModal";
 import MoneyCard from "@/src/components/ui/MoneyCard";
 
-const DashboardPage = () => {
-  const [currency, setCurrency] = useState<"BRL" | "USD" | "GBP">("BRL");
+const ALL = "Todas";
 
-  const history = useDashboardHistory(currency);
+export default function DashboardPage() {
+  const [currency, setCurrency] = useState<string>(ALL);
+
+  const history = useDashboardHistory(currency !== ALL ? currency : undefined);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const { banks, isLoading, listBanks, addBank } = useBankStore();
@@ -25,7 +27,13 @@ const DashboardPage = () => {
     listBanks();
   }, [listBanks]);
 
-  const banksOfCurrency = banks.filter((b) => b.currencyType === currency);
+  const currencies = [
+    ALL,
+    ...Array.from(new Set(banks.map((b) => b.currencyType))).sort(),
+  ];
+
+  const banksOfCurrency =
+    currency === ALL ? banks : banks.filter((b) => b.currencyType === currency);
 
   const handleCreate = async (data: {
     bankName: string;
@@ -52,12 +60,13 @@ const DashboardPage = () => {
         <DashboardMoneyCard
           banks={banks}
           currency={currency}
+          currencies={currencies}
           onCurrencyChange={setCurrency}
         />
 
         <div className="bg-dark/50 mt-4 max-w-full rounded-lg p-4">
           <div className="flex items-center gap-4 overflow-auto pb-4">
-            {banksOfCurrency.map((bank: Bank) => (
+            {banksOfCurrency.map((bank) => (
               <Link href={`/wallets/${bank.id}`} key={bank.id}>
                 <MoneyCard
                   label={bank.bankName}
@@ -86,6 +95,4 @@ const DashboardPage = () => {
       </section>
     </>
   );
-};
-
-export default DashboardPage;
+}

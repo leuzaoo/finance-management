@@ -25,13 +25,10 @@ const toIso = (d: Date) => {
   return d.toISOString().split("T")[0];
 };
 
-export function useDashboardHistory(
-  currencyFilter?: "BRL" | "USD" | "GBP",
-): Point[] {
+export function useDashboardHistory(currencyFilter?: string): Point[] {
   const [banks, setBanks] = useState<Bank[]>([]);
   const [txMap, setTxMap] = useState<Record<string, Tx[]>>({});
 
-  // fetch banks
   useEffect(() => {
     axios
       .get<Bank[]>("/api/v1/banks")
@@ -39,7 +36,6 @@ export function useDashboardHistory(
       .catch(console.error);
   }, []);
 
-  // fetch each bank’s txs, only if currency matches
   useEffect(() => {
     banks
       .filter((b) => !currencyFilter || b.currencyType === currencyFilter)
@@ -51,7 +47,6 @@ export function useDashboardHistory(
       });
   }, [banks, currencyFilter]);
 
-  // build aggregated series
   return useMemo(() => {
     const byDay = new Map<string, number>();
 
@@ -64,19 +59,16 @@ export function useDashboardHistory(
             (a, z) => new Date(a.date).getTime() - new Date(z.date).getTime(),
           );
 
-        // net of all
         const net = txs.reduce(
           (s, t) => s + (t.type === "expense" ? -t.amount : t.amount),
           0,
         );
-        // starting balance at creation
+
         let running = b.currencyValue - net;
 
-        // record initial
         const start = toIso(new Date(b.createdAt));
         byDay.set(start, (byDay.get(start) || 0) + running);
 
-        // step through transactions
         txs.forEach((t) => {
           running += t.type === "expense" ? -t.amount : t.amount;
           const day = toIso(new Date(t.date));

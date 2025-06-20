@@ -1,4 +1,3 @@
-// src/components/ui/DashboardMoneyCard.tsx
 import { formatCurrency } from "@/src/utils/format-currency";
 import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -7,14 +6,23 @@ import { Bank } from "@/src/store/useBankStore";
 
 interface Props {
   banks: Bank[];
-  currency: "BRL" | "USD" | "GBP";
-  onCurrencyChange: (c: "BRL" | "USD" | "GBP") => void;
+  currency: string;
+  currencies: string[];
+  onCurrencyChange: (c: string) => void;
 }
 
-const DashboardMoneyCard = ({ banks, currency, onCurrencyChange }: Props) => {
-  const total = banks
-    .filter((b) => b.currencyType === currency)
-    .reduce((sum, b) => sum + b.currencyValue, 0);
+const DashboardMoneyCard = ({
+  banks,
+  currency,
+  currencies,
+  onCurrencyChange,
+}: Props) => {
+  const total =
+    currency === "Todas"
+      ? banks.reduce((sum, b) => sum + b.currencyValue, 0)
+      : banks
+          .filter((b) => b.currencyType === currency)
+          .reduce((sum, b) => sum + b.currencyValue, 0);
 
   return (
     <div className="space-y-6">
@@ -26,10 +34,10 @@ const DashboardMoneyCard = ({ banks, currency, onCurrencyChange }: Props) => {
           </div>
           <select
             value={currency}
-            onChange={(e) => onCurrencyChange(e.target.value as any)}
+            onChange={(e) => onCurrencyChange(e.target.value)}
             className="bg-dark/10 cursor-pointer rounded px-2 py-1"
           >
-            {["BRL", "USD", "GBP"].map((c) => (
+            {currencies.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
