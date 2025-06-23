@@ -16,6 +16,29 @@
   --color-light: #fff;
 }
 
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #42915f #1f1f1f;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: #1f1f1f;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: #46a569;
+    border-radius: 4px;
+    border: 2px solid #1f1f1f;
+    transition: background-color 0.2s ease-in-out;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #22c55e;
+  }
+}
+
 body {
   background: var(--dark);
   color: var(--light);
