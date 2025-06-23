@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   LayoutDashboardIcon,
   SettingsIcon,
-  UserSquare2Icon,
   WalletIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -20,7 +19,7 @@ import { LoaderIcon } from "../../assets/icons/LoaderCircleIcon";
 const menuItems = [
   {
     id: 0,
-    label: "Dashboard",
+    label: "Visão geral",
     href: "/dashboard",
     icon: <LayoutDashboardIcon />,
   },

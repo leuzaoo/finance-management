@@ -1,7 +1,8 @@
-import { formatCurrency } from "@/src/utils/format-currency";
-import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
+
+import { formatCurrency } from "@/src/utils/format-currency";
 import { Bank } from "@/src/store/useBankStore";
 
 interface Props {
@@ -11,18 +12,20 @@ interface Props {
   onCurrencyChange: (c: string) => void;
 }
 
+const ALL = "Todas";
+
 const DashboardMoneyCard = ({
   banks,
   currency,
   currencies,
   onCurrencyChange,
 }: Props) => {
-  const total =
-    currency === "Todas"
-      ? banks.reduce((sum, b) => sum + b.currencyValue, 0)
-      : banks
-          .filter((b) => b.currencyType === currency)
-          .reduce((sum, b) => sum + b.currencyValue, 0);
+  const totalsByCurrency = banks.reduce<Record<string, number>>((acc, b) => {
+    acc[b.currencyType] = (acc[b.currencyType] || 0) + b.currencyValue;
+    return acc;
+  }, {});
+
+  const totalSingle = currency === ALL ? 0 : (totalsByCurrency[currency] ?? 0);
 
   return (
     <div className="mt-2 space-y-6">
@@ -30,15 +33,15 @@ const DashboardMoneyCard = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Wallet2Icon className="text-light/70" width={20} />
-            <span>Total</span>
+            <span>Saldo</span>
           </div>
           <select
             value={currency}
             onChange={(e) => onCurrencyChange(e.target.value)}
-            className="bg-dark/10 cursor-pointer rounded px-2 py-1"
+            className="bg-dark/10 cursor-pointer rounded px-2 py-1 underline"
           >
             {currencies.map((c) => (
-              <option key={c} value={c}>
+              <option key={c} value={c} className="bg-dark">
                 {c}
               </option>
             ))}
@@ -46,9 +49,24 @@ const DashboardMoneyCard = ({
         </div>
 
         <div className="mt-6">
-          <span className="text-3xl font-semibold">
-            {formatCurrency(total)}
-          </span>
+          {currency === ALL ? (
+            <ul className="space-y-2">
+              {currencies
+                .filter((c) => c !== ALL)
+                .map((c) => (
+                  <li key={c} className="flex justify-between text-lg">
+                    <span className="capitalize">{c}</span>
+                    <span className="font-semibold">
+                      {formatCurrency(totalsByCurrency[c] || 0)}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          ) : (
+            <div className="text-3xl font-semibold">
+              {formatCurrency(totalSingle)}
+            </div>
+          )}
         </div>
 
         <Link

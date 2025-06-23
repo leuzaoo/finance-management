@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { Trash2Icon } from "lucide-react";
@@ -24,12 +25,9 @@ const WalletCard = ({ bank }: Props) => {
   };
 
   return (
-    <div
-      key={bank.id}
-      className="border-light/15 flex w-80 flex-col justify-between gap-8 rounded-xl border p-4"
-    >
+    <div className="border-light/15 flex aspect-video min-w-[16rem] flex-shrink-0 flex-col justify-between gap-4 rounded-lg border p-3 sm:w-80">
       <div className="flex justify-between">
-        <h2 className="font-semibold capitalize">{bank.bankName}</h2>
+        <h2 className="font-medium capitalize">{bank.bankName}</h2>
         <button
           onClick={handleDelete}
           className="text-light/60 cursor-pointer p-1 hover:text-red-500"
@@ -40,8 +38,8 @@ const WalletCard = ({ bank }: Props) => {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <span className="text-3xl font-semibold">
-          {formatCurrency(bank.currencyValue)}{" "}
+        <span className="text-xl font-semibold sm:text-3xl">
+          {formatCurrency(bank.currencyValue)}
         </span>
         <span className="text-xl font-medium">{bank.currencyType}</span>
       </div>
