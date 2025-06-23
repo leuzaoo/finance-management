@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { PlusCircleIcon } from "lucide-react";
 
-import { useDashboardHistory } from "@/src/hooks/useDashboardHistory";
-import { Bank, useBankStore } from "@/src/store/useBankStore";
+import { useBankStore } from "@/src/store/useBankStore";
 import { formatCurrency } from "@/src/utils/format-currency";
 
 import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
-import BalanceChart from "@/src/components/ui/BalanceChart";
 import TitlePage from "@/src/components/common/TitlePage";
 import BankModal from "@/src/components/forms/BankModal";
 import MoneyCard from "@/src/components/ui/MoneyCard";
@@ -17,8 +15,6 @@ const ALL = "Todas";
 
 export default function DashboardPage() {
   const [currency, setCurrency] = useState<string>(ALL);
-
-  const history = useDashboardHistory(currency !== ALL ? currency : undefined);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const { banks, isLoading, listBanks, addBank } = useBankStore();
@@ -56,7 +52,6 @@ export default function DashboardPage() {
 
       <section>
         <TitlePage text="Dashboard" />
-
         <DashboardMoneyCard
           banks={banks}
           currency={currency}
@@ -64,8 +59,9 @@ export default function DashboardPage() {
           onCurrencyChange={setCurrency}
         />
 
-        <div className="bg-dark/50 mt-4 max-w-full rounded-lg p-4">
-          <div className="flex items-center gap-4 overflow-auto pb-4">
+        <section className="max-w-max rounded-lg py-4">
+          <TitlePage text="Meus cartões" />
+          <div className="mt-2 flex items-center gap-4 overflow-auto pb-2">
             {banksOfCurrency.map((bank) => (
               <Link href={`/wallets/${bank.id}`} key={bank.id}>
                 <MoneyCard
@@ -87,11 +83,7 @@ export default function DashboardPage() {
               </div>
             </button>
           </div>
-
-          <div className="bg-dark/50 mt-6 rounded-lg p-4">
-            <BalanceChart data={history} />
-          </div>
-        </div>
+        </section>
       </section>
     </>
   );
