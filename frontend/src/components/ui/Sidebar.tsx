@@ -10,6 +10,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   LogOutIcon,
+  UserIcon,
 } from "lucide-react";
 
 import { useAuthStore } from "../../store/useAuthStore";
@@ -101,12 +102,40 @@ export default function Sidebar() {
                 <LoaderIcon />
               </div>
             ) : (
-              <button
-                onClick={handleLogout}
-                className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-600 py-2 hover:bg-red-400"
-              >
-                {!collapsed ? "Sair" : <LogOutIcon strokeWidth={1.5} />}
-              </button>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href={`/profile/${user?.id}`}
+                  className={`flex items-center gap-2 rounded-md p-2 transition-colors lg:hidden ${
+                    collapsed ? "justify-center" : ""
+                  } ${
+                    pathname.startsWith("/profile")
+                      ? "bg-light/10 text-light"
+                      : "text-light/40 hover:bg-light/10"
+                  }`}
+                >
+                  <UserIcon size={32} strokeWidth={1.5} />
+                  {!collapsed && (
+                    <div className="flex flex-col">
+                      <span
+                        className={`font-medium transition-opacity duration-300 ${
+                          collapsed
+                            ? "pointer-events-none opacity-0 delay-0"
+                            : "pointer-events-auto opacity-100 delay-300"
+                        }`}
+                      >
+                        {user?.firstName}
+                      </span>
+                      <span className="text-xs">{user?.email}</span>
+                    </div>
+                  )}
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-600 py-2 hover:bg-red-400"
+                >
+                  {!collapsed ? "Sair" : <LogOutIcon strokeWidth={1.5} />}
+                </button>
+              </div>
             )}
           </div>
         </nav>
