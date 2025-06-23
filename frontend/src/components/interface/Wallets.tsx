@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon, PlusIcon } from "lucide-react";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import { useBankStore } from "@/src/store/useBankStore";
 
 import BankModal from "../forms/BankModal";
 import WalletCard from "../ui/WalletCard";
+import TitlePage from "../common/TitlePage";
 
 export function Wallets() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,12 +33,11 @@ export function Wallets() {
   return (
     <section>
       <div className="flex max-w-80 items-center justify-between">
-        <h1 className="text-2xl font-semibold">Meus Cartões</h1>
-        <button
-          onClick={() => setModalOpen(true)}
-          className="bg-light text-dark flex cursor-pointer items-center gap-2 rounded-sm px-3 py-1 text-lg hover:opacity-60"
-        >
-          Novo <PlusCircleIcon size={20} />
+        <TitlePage text="Cartões" />
+        <button onClick={() => setModalOpen(true)} className="cursor-pointer">
+          <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
+            <PlusIcon size={20} />
+          </div>
         </button>
       </div>
       <BankModal

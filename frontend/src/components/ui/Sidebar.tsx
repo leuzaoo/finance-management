@@ -44,6 +44,7 @@ export default function Sidebar() {
       <aside
         className={`border-light/20 transition-width flex h-screen flex-col overflow-hidden border-r duration-300 ${collapsed ? "w-16" : "w-64"}`}
       >
+        <h1 className="sr-only">Menu</h1>
         <div
           className={`border-light/20 flex w-full border-b ${collapsed ? "justify-center" : "justify-end"}`}
         >
@@ -59,7 +60,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        <nav className="flex flex-1 flex-col justify-between">
+        <div className="flex flex-1 flex-col justify-between">
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const isActive =
@@ -137,7 +138,7 @@ export default function Sidebar() {
               </div>
             )}
           </div>
-        </nav>
+        </div>
       </aside>
     </>
   );
