@@ -1,6 +1,7 @@
-import { useAuthStore } from "@/src/store/useAuthStore";
-import { UserIcon } from "lucide-react";
 import React from "react";
+import { UserIcon } from "lucide-react";
+
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 const Navbar = () => {
   const { user } = useAuthStore();
