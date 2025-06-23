@@ -25,7 +25,10 @@ export function SubscriptionsSection({
     <section className="bg-dark/50 mt-6 rounded-lg p-4">
       <div className="flex items-center justify-between">
         <TitlePage text="Assinaturas" />
-        <button onClick={onAdd} className="text-light/50 hover:text-light">
+        <button
+          onClick={onAdd}
+          className="text-light/50 hover:text-light cursor-pointer"
+        >
           <PlusCircleIcon />
         </button>
       </div>
