@@ -10,7 +10,7 @@ interface Props {
 
 export default function MoneyCard({ label, value, currency }: Props) {
   return (
-    <div className="bg-dark relative h-24 min-w-[14rem] rounded-xl p-3">
+    <div className="bg-dark/50 relative h-24 min-w-[14rem] rounded-xl p-3">
       <div className="flex h-full flex-col justify-center">
         <span className="text-light/50 font-medium capitalize">{label}</span>
         <div className="mt-2 flex items-baseline justify-between gap-3 font-semibold">
