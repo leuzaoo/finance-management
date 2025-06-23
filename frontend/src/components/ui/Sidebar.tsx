@@ -42,14 +42,14 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`transition-width flex h-screen flex-col overflow-hidden duration-300 ${collapsed ? "w-16" : "w-64"}`}
+        className={`border-light/20 transition-width flex h-screen flex-col overflow-hidden border-r duration-300 ${collapsed ? "w-16" : "w-64"}`}
       >
         <div
-          className={`flex w-full ${collapsed ? "justify-center" : "justify-end"}`}
+          className={`border-light/20 flex w-full border-b ${collapsed ? "justify-center" : "justify-end"}`}
         >
           <button
             onClick={() => setCollapsed((c) => !c)}
-            className="cursor-pointer p-2"
+            className="h-20 cursor-pointer"
           >
             {collapsed ? (
               <ChevronRightIcon className="text-light" />
@@ -59,28 +59,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {!collapsed ? (
-          <div className="text-light mt-4 flex flex-col px-4">
-            <div className="flex items-end">
-              <UserSquare2Icon size={60} strokeWidth={1} />
-              <Link
-                href="/profile"
-                className="flex items-center gap-2 p-2 text-sm"
-              >
-                Ver perfil <ChevronRightIcon width={16} />
-              </Link>
-            </div>
-            <p className="mt-2">
-              Olá,{" "}
-              <span className="font-bold capitalize">{user?.firstName}</span>
-            </p>
-            <p className="text-light/60 text-xs">{user?.email}</p>
-          </div>
-        ) : (
-          ""
-        )}
-
-        <nav className="mt-6 flex flex-1 flex-col justify-between">
+        <nav className="flex flex-1 flex-col justify-between">
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const isActive =
