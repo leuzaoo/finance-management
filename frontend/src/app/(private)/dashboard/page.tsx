@@ -1,21 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { PlusCircleIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 import { useBankStore } from "@/src/store/useBankStore";
-import { formatCurrency } from "@/src/utils/format-currency";
 
 import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
 import TitlePage from "@/src/components/common/TitlePage";
 import BankModal from "@/src/components/forms/BankModal";
-import MoneyCard from "@/src/components/ui/MoneyCard";
+import WalletCard from "@/src/components/ui/WalletCard";
 
 const ALL = "Todas";
 
 export default function DashboardPage() {
   const [currency, setCurrency] = useState<string>(ALL);
-
   const [isModalOpen, setModalOpen] = useState(false);
   const { banks, isLoading, listBanks, addBank } = useBankStore();
 
@@ -51,7 +48,8 @@ export default function DashboardPage() {
       />
 
       <section>
-        <TitlePage text="Dashboard" />
+        <TitlePage text="Visão geral" />
+
         <DashboardMoneyCard
           banks={banks}
           currency={currency}
@@ -59,29 +57,23 @@ export default function DashboardPage() {
           onCurrencyChange={setCurrency}
         />
 
-        <section className="max-w-max rounded-lg py-4">
-          <TitlePage text="Meus cartões" />
-          <div className="mt-2 flex items-center gap-4 overflow-auto pb-2">
-            {banksOfCurrency.map((bank) => (
-              <Link href={`/wallets/${bank.id}`} key={bank.id}>
-                <MoneyCard
-                  label={bank.bankName}
-                  value={formatCurrency(bank.currencyValue)}
-                  currency={bank.currencyType}
-                />
-              </Link>
-            ))}
+        <section className="bg-dark/50 mt-6 max-w-max rounded-xl p-4">
+          <div className="flex items-center justify-between">
+            <TitlePage text="Cartões" />
             <button
-              className="bg-light/10 h-24 min-w-[12rem] cursor-pointer rounded-xl hover:opacity-80"
               onClick={() => setModalOpen(true)}
+              className="cursor-pointer"
             >
-              <div className="flex flex-col p-3">
-                <div className="text-light/50 mt-2 flex flex-col items-center gap-1">
-                  Adicionar cartão
-                  <PlusCircleIcon />
-                </div>
+              <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
+                <PlusIcon size={20} />
               </div>
             </button>
+          </div>
+
+          <div className="mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto pb-2">
+            {banksOfCurrency.map((bank) => (
+              <WalletCard key={bank.id} bank={bank} />
+            ))}
           </div>
         </section>
       </section>
