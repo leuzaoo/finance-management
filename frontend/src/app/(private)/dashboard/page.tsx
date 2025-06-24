@@ -100,23 +100,6 @@ export default function DashboardPage() {
         />
       </section>
 
-      <section className="bg-dark/50 mt-6 max-w-max rounded-xl p-4">
-        <div className="flex items-center justify-between">
-          <TitlePage text="Cartões" />
-          <button onClick={() => setModalOpen(true)} className="cursor-pointer">
-            <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
-              <PlusIcon size={20} />
-            </div>
-          </button>
-        </div>
-
-        <div className="mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto pb-2">
-          {banksOfCurrency.map((bank) => (
-            <WalletCard key={bank.id} bank={bank} />
-          ))}
-        </div>
-      </section>
-
       <section className="bg-dark/50 mt-6 w-full max-w-sm rounded-xl p-4">
         <div className="flex items-center justify-between">
           <TitlePage text="Lembretes" />
@@ -149,6 +132,23 @@ export default function DashboardPage() {
             ))}
           </ul>
         )}
+      </section>
+
+      <section className="bg-dark/50 mt-6 max-w-max rounded-xl p-4">
+        <div className="flex items-center justify-between">
+          <TitlePage text="Cartões" />
+          <button onClick={() => setModalOpen(true)} className="cursor-pointer">
+            <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
+              <PlusIcon size={20} />
+            </div>
+          </button>
+        </div>
+
+        <div className="mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto pb-2">
+          {banksOfCurrency.map((bank) => (
+            <WalletCard key={bank.id} bank={bank} />
+          ))}
+        </div>
       </section>
     </>
   );

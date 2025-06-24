@@ -29,7 +29,7 @@ const DashboardMoneyCard = ({
 
   return (
     <div className="mt-2 space-y-6">
-      <div className="bg-dark/50 max-w-[20rem] rounded-lg p-4">
+      <div className="bg-dark/50 max-w-sm rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Wallet2Icon className="text-light/70" width={20} />

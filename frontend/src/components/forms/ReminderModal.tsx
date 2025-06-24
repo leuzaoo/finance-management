@@ -1,13 +1,12 @@
-// src/components/forms/ReminderModal.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
+import { Reminder } from "@/src/store/useReminderStore";
 
 import TitlePage from "../common/TitlePage";
-import { Reminder } from "@/src/store/useReminderStore";
 
 interface ReminderModalProps {
   isOpen: boolean;
@@ -41,7 +40,7 @@ export default function ReminderModal({
     e.preventDefault();
     const errs: typeof errors = {};
     if (!title.trim()) errs.title = "Título é obrigatório.";
-    if (!date) errs.date = "Data é obrigatória.";
+    if (!date) errs.date = "Insira uma data.";
     if (Object.keys(errs).length) {
       setErrors(errs);
       return;
@@ -68,7 +67,7 @@ export default function ReminderModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-red-500"
+          className="absolute top-4 right-4 cursor-pointer text-red-500"
         >
           ✕
         </button>
@@ -126,7 +125,7 @@ export default function ReminderModal({
           )}
           <button
             type="submit"
-            className="flex-1 rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
+            className="flex-1 cursor-pointer rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
           >
             {reminder ? "Salvar" : "Criar"}
           </button>
