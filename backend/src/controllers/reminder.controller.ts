@@ -5,7 +5,10 @@ import { AuthRequest } from "../middlewares/authenticate";
 
 import Reminder from "../models/Reminder";
 
-export const listReminders = async (req: AuthRequest, res: Response) => {
+export const listReminders = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
   try {
     const userId = req.userId!;
     const reminders = await Reminder.find({ user: userId }).sort("date");
@@ -18,7 +21,10 @@ export const listReminders = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const addReminder = async (req: AuthRequest, res: Response) => {
+export const addReminder = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
   try {
     const userId = req.userId!;
     const { title, description, date } = req.body;
@@ -40,7 +46,10 @@ export const addReminder = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const updateReminder = async (req: AuthRequest, res: Response) => {
+export const updateReminder = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
   try {
     const userId = req.userId!;
     const { id } = req.params;
@@ -57,7 +66,7 @@ export const updateReminder = async (req: AuthRequest, res: Response) => {
     );
 
     if (!rem) {
-      return res.status(404).json({ message: "Lembrete não encontrado" });
+      res.status(404).json({ message: "Lembrete não encontrado" });
     }
     res.json(rem);
   } catch (error: any) {
@@ -68,7 +77,10 @@ export const updateReminder = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const deleteReminder = async (req: AuthRequest, res: Response) => {
+export const deleteReminder = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
   try {
     const userId = req.userId!;
     const { id } = req.params;
@@ -76,7 +88,7 @@ export const deleteReminder = async (req: AuthRequest, res: Response) => {
     const rem = await Reminder.findOneAndDelete({ _id: id, user: userId });
 
     if (!rem) {
-      return res.status(404).json({ message: "Lembrete não encontrado" });
+      res.status(404).json({ message: "Lembrete não encontrado" });
     }
     res.json({ message: "Lembrete excluído com sucesso" });
   } catch (error: any) {
