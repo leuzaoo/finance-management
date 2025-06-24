@@ -30,8 +30,8 @@ router.post(
       .isString()
       .isLength({ min: 1 })
       .withMessage("Título é obrigatório."),
-    body("message").optional().isString(),
-    body("remindAt").isISO8601().toDate().withMessage("Data inválida."),
+    body("description").optional().isString(),
+    body("date").isISO8601().toDate().withMessage("Data inválida."),
   ],
   validate,
   addReminder
@@ -41,12 +41,12 @@ router.put(
   "/:id",
   [
     param("id").isMongoId().withMessage("ID inválido."),
-    body("title")
+    body("title").optional().isString().withMessage("Título deve ser texto."),
+    body("description")
+      .optional()
       .isString()
-      .isLength({ min: 1 })
-      .withMessage("Título é obrigatório."),
-    body("message").optional().isString(),
-    body("remindAt").isISO8601().toDate().withMessage("Data inválida."),
+      .withMessage("Descrição deve ser texto."),
+    body("date").optional().isISO8601().withMessage("Data inválida.").toDate(),
   ],
   validate,
   updateReminder

@@ -29,6 +29,12 @@ export const addReminder = async (
     const userId = req.userId!;
     const { title, description, date } = req.body;
 
+    if (!title || !description || !date) {
+      res.status(400).json({
+        message: "Título, descrição e data são obrigatórios",
+      });
+    }
+
     const rem = new Reminder({
       user: new mongoose.Types.ObjectId(userId),
       title,
