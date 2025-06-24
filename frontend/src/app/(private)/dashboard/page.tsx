@@ -89,53 +89,59 @@ export default function DashboardPage() {
         }}
       />
 
-      <section>
-        <TitlePage text="Visão geral" />
+      <div className="2md:flex 2md:items-start 2md:gap-4">
+        <section>
+          <TitlePage text="Visão geral" />
 
-        <DashboardMoneyCard
-          banks={banks}
-          currency={currency}
-          currencies={currencies}
-          onCurrencyChange={setCurrency}
-        />
-      </section>
+          <DashboardMoneyCard
+            banks={banks}
+            currency={currency}
+            currencies={currencies}
+            onCurrencyChange={setCurrency}
+          />
+        </section>
 
-      <section className="bg-dark/50 mt-6 w-full max-w-sm rounded-xl p-4">
-        <div className="flex items-center justify-between">
-          <TitlePage text="Lembretes" />
-          <button
-            onClick={() => {
-              setEditingRem(undefined);
-              setRemModalOpen(true);
-            }}
-          >
-            <div className="bg-light text-dark hover:bg-light/80 flex cursor-pointer items-center gap-2 rounded-full p-1">
-              <PlusIcon size={20} />
-            </div>
-          </button>
-        </div>
-        {remLoading ? (
-          <p className="mt-4">Carregando lembretes…</p>
-        ) : reminders.length === 0 ? (
-          <p className="text-light/60 mt-4">Nenhum lembrete foi adicionado.</p>
-        ) : (
-          <ul className="mt-4 flex flex-col gap-2">
-            {reminders.map((r) => (
-              <RemindersCard
-                key={r._id}
-                reminder={r}
-                onClick={(rem) => {
-                  setEditingRem(rem);
-                  setRemModalOpen(true);
-                }}
-              />
-            ))}
-          </ul>
-        )}
-      </section>
+        <section className="2md:mt-0 mt-6 w-full max-w-sm rounded-xl">
+          <div className="flex items-center justify-between">
+            <TitlePage text="Lembretes" />
+            <button
+              onClick={() => {
+                setEditingRem(undefined);
+                setRemModalOpen(true);
+              }}
+            >
+              <div className="bg-light text-dark hover:bg-light/80 flex cursor-pointer items-center gap-2 rounded-full p-1">
+                <PlusIcon size={20} />
+              </div>
+            </button>
+          </div>
+          {remLoading ? (
+            <p className="mt-2">Carregando lembretes…</p>
+          ) : reminders.length === 0 ? (
+            <p className="text-light/40 bg-dark/50 mt-2 rounded-xl p-4">
+              Nenhum lembrete adicionado.
+            </p>
+          ) : (
+            <ul className="bg-dark/50 mt-2 flex flex-col gap-2 rounded-xl p-3">
+              {reminders.map((r) => (
+                <RemindersCard
+                  key={r._id}
+                  reminder={r}
+                  onClick={(rem) => {
+                    setEditingRem(rem);
+                    setRemModalOpen(true);
+                  }}
+                />
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
 
-      <section className="bg-dark/50 mt-6 max-w-max rounded-xl p-4">
-        <div className="flex items-center justify-between">
+      <section
+        className={`mt-6 rounded-xl pb-5 ${banks.length === 0 ? "w-full max-w-sm" : "max-w-max"}`}
+      >
+        <div className="flex w-full items-center justify-between">
           <TitlePage text="Cartões" />
           <button onClick={() => setModalOpen(true)} className="cursor-pointer">
             <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
@@ -144,10 +150,18 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        <div className="mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto pb-2">
-          {banksOfCurrency.map((bank) => (
-            <WalletCard key={bank.id} bank={bank} />
-          ))}
+        <div className="bg-dark/50 mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto rounded-xl p-3">
+          {banksOfCurrency.length === 0 ? (
+            <p className="text-light/40 mt-2">
+              Clique no ícone acima para cadastrar.
+            </p>
+          ) : (
+            <div className="bg-dark/50 mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto rounded-xl p-3">
+              {banksOfCurrency.map((bank) => (
+                <WalletCard key={bank.id} bank={bank} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
