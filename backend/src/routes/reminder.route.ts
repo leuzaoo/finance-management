@@ -25,15 +25,25 @@ router.get("/", listReminders);
 
 router.post(
   "/",
-  [
-    body("title")
-      .isString()
-      .isLength({ min: 1 })
-      .withMessage("Título é obrigatório."),
-    body("description").optional().isString(),
-    body("date").isISO8601().toDate().withMessage("Data inválida."),
-  ],
-  validate,
+  authenticate,
+  body("title")
+    .isString()
+    .withMessage("Título deve ser texto.")
+    .notEmpty()
+    .withMessage("Título é obrigatório."),
+  body("description").optional().isString(),
+  body("date")
+    .optional()
+    .isISO8601()
+    .withMessage("Data deve ser ISO8601.")
+    .toDate(),
+  (req: Request, res: Response, next: NextFunction): void => {
+    const errs = validationResult(req);
+    if (!errs.isEmpty()) {
+      res.status(400).json({ errors: errs.array() });
+    }
+    next();
+  },
   addReminder
 );
 
