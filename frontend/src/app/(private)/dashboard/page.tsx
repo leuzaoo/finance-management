@@ -156,7 +156,7 @@ export default function DashboardPage() {
               Clique no ícone acima para cadastrar.
             </p>
           ) : (
-            <div className="bg-dark/50 mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto rounded-xl p-3">
+            <div className="mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto pb-2">
               {banksOfCurrency.map((bank) => (
                 <WalletCard key={bank.id} bank={bank} />
               ))}
