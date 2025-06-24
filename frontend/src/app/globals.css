@@ -3,7 +3,7 @@
 
 :root {
   --dark: #010101;
-  --light: #fff;
+  --light: #eee;
   --dark-light: #1a1e23;
 }
 
@@ -13,7 +13,7 @@
   --breakpoint-2md: 54rem;
   --color-dark: #010101;
   --color-dark-light: #1a1e23;
-  --color-light: #fff;
+  --color-light: #eee;
 }
 
 @layer base {
