@@ -62,7 +62,7 @@ export default function ReminderModal({
       />
       <form
         onSubmit={handleSubmit}
-        className="bg-light text-dark relative z-10 w-full max-w-md rounded-lg border p-6"
+        className="bg-light text-dark relative z-10 w-full max-w-md rounded-2xl border p-4"
       >
         <button
           type="button"
@@ -71,15 +71,14 @@ export default function ReminderModal({
         >
           ✕
         </button>
-        <TitlePage text={reminder ? "Editar Lembrete" : "Novo Lembrete"} />
+        <TitlePage text={reminder ? "" : "Novo Lembrete"} />
         <div className="mt-4 space-y-4">
           <div>
-            <label className="block font-medium">Título *</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="text-dark mt-1 w-full rounded border px-3 py-2 outline-none"
+              className="text-dark border-dark/20 mt-1 w-full border-b text-2xl font-bold outline-none placeholder:text-base placeholder:font-normal"
               placeholder="Ex: Pagar fatura"
             />
             {errors.title && (
@@ -87,11 +86,10 @@ export default function ReminderModal({
             )}
           </div>
           <div>
-            <label className="block font-medium">Data *</label>
             <DatePicker
               selected={date}
               onChange={(d: Date | null) => d && setDate(d)}
-              className="text-dark mt-1 w-full rounded border px-3 py-2 outline-none"
+              className="text-dark border-dark/20 mt-2 w-24 border-b text-lg font-medium outline-none"
               dateFormat="dd/MM/yyyy"
             />
             {errors.date && (
@@ -99,13 +97,12 @@ export default function ReminderModal({
             )}
           </div>
           <div>
-            <label className="block font-medium">Descrição</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="text-dark mt-1 w-full rounded border px-3 py-2 outline-none"
+              className="text-dark border-dark/20 bg-dark/10 mt-1 w-full rounded border p-2 outline-none"
               placeholder="Observações (opcional)"
-              rows={3}
+              rows={2}
             />
           </div>
         </div>
@@ -118,16 +115,16 @@ export default function ReminderModal({
                 onDelete(reminder._id);
                 onClose();
               }}
-              className="flex-1 rounded border border-red-500 py-2 text-red-500 hover:bg-red-500 hover:text-white"
+              className="flex-1 cursor-pointer rounded border border-red-500 py-2 text-red-500 transition-all duration-200 hover:bg-red-500 hover:text-white"
             >
-              Excluir
+              Finalizar & Excluir
             </button>
           )}
           <button
             type="submit"
-            className="flex-1 cursor-pointer rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
+            className="bg-dark flex-1 cursor-pointer rounded py-2 text-white transition-all duration-200 hover:opacity-80"
           >
-            {reminder ? "Salvar" : "Criar"}
+            {reminder ? "Atualizar" : "Criar"}
           </button>
         </div>
       </form>
