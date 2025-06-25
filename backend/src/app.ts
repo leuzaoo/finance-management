@@ -27,7 +27,7 @@ app.use(
 );
 
 app.use("/api/v1", authRoutes);
-app.use("/api/v1", userRoutes);
+app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/banks", banksRouter);
 app.use("/api/v1/reminders", reminderRoutes);
 app.use("/api/v1/transactions", transactionRoute);

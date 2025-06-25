@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   LayoutDashboardIcon,
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { useAuthStore } from "../../store/useAuthStore";
+import { useUserStore } from "@/src/store/useUserStore";
 
 import { LoaderIcon } from "../../assets/icons/LoaderCircleIcon";
 
@@ -30,9 +31,13 @@ const menuItems = [
 export default function Sidebar() {
   const pathname = usePathname() || "/";
   const router = useRouter();
-  const { user, logout, isLoading } = useAuthStore();
-
+  const { logout, isLoading } = useAuthStore();
+  const { profile: user, getProfile } = useUserStore();
   const [collapsed, setCollapsed] = useState(true);
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
 
   const handleLogout = async () => {
     await logout();
@@ -104,7 +109,7 @@ export default function Sidebar() {
             ) : (
               <div className="flex flex-col gap-2">
                 <Link
-                  href={`/profile/${user?.id}`}
+                  href="/profile"
                   className={`flex items-center gap-2 rounded-md p-2 transition-colors lg:hidden ${
                     collapsed ? "justify-center" : ""
                   } ${
