@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 import { useUserStore } from "@/src/store/useUserStore";
 
@@ -12,8 +13,11 @@ import InputField from "@/src/components/ui/InputField";
 export default function ProfilePage() {
   const router = useRouter();
   const { profile, isLoading, getProfile, updateProfile } = useUserStore();
+
   const [firstName, setFirstName] = useState("");
   const [password, setPassword] = useState("");
+  const [originalFirstName, setOriginalFirstName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     getProfile().then(() => {
@@ -22,27 +26,31 @@ export default function ProfilePage() {
         router.push("/login");
       } else {
         setFirstName(p.firstName);
+        setOriginalFirstName(p.firstName);
       }
     });
   }, [getProfile, router]);
 
-  console.log(profile)
-  
+  const isDirty = useMemo(() => {
+    return firstName.trim() !== originalFirstName.trim() || password.length > 0;
+  }, [firstName, originalFirstName, password]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await updateProfile({ firstName, password: password || undefined });
-    setPassword("");
-
-    setTimeout(() => {
-      getProfile();
-    }, 1500);
+    if (!isDirty) return;
+    await updateProfile({
+      firstName: firstName.trim(),
+      password: password || undefined,
+    });
+    toast.success("Perfil atualizado com sucesso!");
+    setOriginalFirstName(firstName.trim());
   };
 
   if (isLoading || !profile) return <p>Carregando…</p>;
 
   return (
     <>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={1500} position="top-left" />
       <div className="mx-auto max-w-md">
         <TitlePage text="Meu Perfil" />
 
@@ -68,19 +76,44 @@ export default function ProfilePage() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block font-medium">Nova senha</label>
             <InputField
-              type="password"
+              placeholder="•••••••••"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="•••••••••"
             />
+            <button
+              type="button"
+              onClick={() => {
+                if (!showPassword) {
+                  if (
+                    confirm(
+                      "Você tem certeza que deseja exibir sua senha? Mantenha-a visível somente em ambiente seguro.",
+                    )
+                  ) {
+                    setShowPassword(true);
+                  }
+                } else {
+                  setShowPassword(false);
+                }
+              }}
+              className="absolute -inset-y-6 top-0 right-0 cursor-pointer pr-4 text-blue-600"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+            </button>
           </div>
 
           <button
             type="submit"
-            className="w-full rounded bg-blue-600 py-2 text-white hover:bg-blue-700"
+            disabled={!isDirty}
+            className={`w-full rounded py-2 text-white transition ${
+              isDirty
+                ? "cursor-pointer bg-blue-600 hover:bg-blue-700"
+                : "cursor-not-allowed bg-blue-700 opacity-30"
+            } `}
           >
             Salvar alterações
           </button>
