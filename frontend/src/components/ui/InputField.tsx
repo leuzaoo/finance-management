@@ -8,6 +8,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   image?: ReactNode;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
 function InputField({

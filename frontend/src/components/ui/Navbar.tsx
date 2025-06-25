@@ -1,10 +1,16 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { UserIcon } from "lucide-react";
 
-import { useAuthStore } from "@/src/store/useAuthStore";
+import { useUserStore } from "@/src/store/useUserStore";
 
 const Navbar = () => {
-  const { user } = useAuthStore();
+  const { profile: user, getProfile } = useUserStore();
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
 
   return (
     <header className="bg-dark hidden h-20 w-full justify-end p-4 lg:flex">
