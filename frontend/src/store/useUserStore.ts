@@ -49,7 +49,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     try {
       const res = await axios.put<UserProfile>(`${API_URL}/me`, data);
       set({ profile: res.data, isLoading: false });
-      toast.success("Perfil atualizado com sucesso!");
+      toast.success("Perfil atualizado com sucesso.");
     } catch (err: any) {
       const msg = err.response?.data?.message || "Erro ao atualizar perfil.";
       set({ error: msg, isLoading: false });
