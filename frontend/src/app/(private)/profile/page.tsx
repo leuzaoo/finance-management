@@ -1,52 +1,44 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { PencilLineIcon, UserCircle2 } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
 
 import { useUserStore } from "@/src/store/useUserStore";
 
+import PersonalDataModal from "@/src/components/forms/PersonalDataModal";
 import TitlePage from "@/src/components/common/TitlePage";
-import InputField from "@/src/components/ui/InputField";
+import AuthModal from "@/src/components/forms/AuthModal";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { profile, isLoading, getProfile, updateProfile } = useUserStore();
 
-  const [firstName, setFirstName] = useState("");
-  const [password, setPassword] = useState("");
-  const [originalFirstName, setOriginalFirstName] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [pdModalOpen, setPdModalOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   useEffect(() => {
     getProfile().then(() => {
-      const p = useUserStore.getState().profile;
-      if (!p) {
+      if (!useUserStore.getState().profile) {
         router.push("/login");
-      } else {
-        setFirstName(p.firstName);
-        setOriginalFirstName(p.firstName);
       }
     });
   }, [getProfile, router]);
 
-  const isDirty = useMemo(() => {
-    return firstName.trim() !== originalFirstName.trim() || password.length > 0;
-  }, [firstName, originalFirstName, password]);
+  if (isLoading || !profile) return <p>Carregando…</p>;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isDirty) return;
-    await updateProfile({
-      firstName: firstName.trim(),
-      password: password || undefined,
-    });
-    toast.success("Perfil atualizado com sucesso!");
-    setOriginalFirstName(firstName.trim());
+  const handlePersonalSubmit = async (data: { firstName: string }) => {
+    await updateProfile({ firstName: data.firstName });
+    toast.success("Dados pessoais atualizados!");
+    setPdModalOpen(false);
   };
 
-  if (isLoading || !profile) return <p>Carregando…</p>;
+  const handleAuthSubmit = async (data: { password: string }) => {
+    await updateProfile({ password: data.password });
+    toast.success("Senha atualizada!");
+    setAuthModalOpen(false);
+  };
 
   return (
     <>
@@ -54,71 +46,79 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-md">
         <TitlePage text="Meu Perfil" />
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block font-medium">Email</label>
-            <InputField
-              disabled
-              placeholder="Email"
-              type="email"
-              value={profile.email}
-              onChange={() => {}}
-            />
+        <div className="border-light/10 mt-4 rounded-xl border p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <UserCircle2 size={40} strokeWidth={1} />
+              <div>
+                <p className="font-medium">{profile.firstName}</p>
+                <p className="text-sm font-light">{profile.email}</p>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <div>
-            <label className="block font-medium">Primeiro nome</label>
-            <InputField
-              placeholder="José"
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-
-          <div className="relative">
-            <label className="block font-medium">Nova senha</label>
-            <InputField
-              placeholder="•••••••••"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+        <div className="border-light/10 mt-4 rounded-xl border p-4">
+          <div className="flex items-center justify-between">
+            <h2 className="2md:text-xl font-semibold">Dados Pessoais</h2>
             <button
-              type="button"
-              onClick={() => {
-                if (!showPassword) {
-                  if (
-                    confirm(
-                      "Você tem certeza que deseja exibir sua senha? Mantenha-a visível somente em ambiente seguro.",
-                    )
-                  ) {
-                    setShowPassword(true);
-                  }
-                } else {
-                  setShowPassword(false);
-                }
-              }}
-              className="absolute -inset-y-6 top-0 right-0 cursor-pointer pr-4 text-blue-600"
-              tabIndex={-1}
+              onClick={() => setPdModalOpen(true)}
+              title="Editar Dados Pessoais"
+              className="border-light/20 cursor-pointer rounded-lg border px-2 py-1"
             >
-              {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+              <PencilLineIcon size={16} className="text-light/50" />
             </button>
           </div>
 
-          <button
-            type="submit"
-            disabled={!isDirty}
-            className={`w-full rounded py-2 text-white transition ${
-              isDirty
-                ? "cursor-pointer bg-blue-600 hover:bg-blue-700"
-                : "cursor-not-allowed bg-blue-700 opacity-30"
-            } `}
-          >
-            Salvar alterações
-          </button>
-        </form>
+          <div className="mt-3">
+            <label className="text-light/50 2md:text-base block text-sm">
+              Primeiro nome
+            </label>
+            <p className="text-light 2md:text-lg">{profile.firstName}</p>
+          </div>
+
+          <div className="mt-3">
+            <label className="text-light/50 2md:text-base block text-sm">
+              Email
+            </label>
+            <p className="text-light 2md:text-lg">{profile.email}</p>
+          </div>
+        </div>
+
+        <div className="border-light/10 mt-4 rounded-xl border p-4">
+          <div className="flex items-center justify-between">
+            <h2 className="2md:text-xl font-semibold">Autenticação</h2>
+            <button
+              onClick={() => setAuthModalOpen(true)}
+              title="Editar Senha"
+              className="border-light/20 cursor-pointer rounded-lg border px-2 py-1"
+            >
+              <PencilLineIcon size={16} className="text-light/50" />
+            </button>
+          </div>
+
+          <div className="mt-3">
+            <label className="text-light/50 2md:text-base block text-sm">
+              Senha
+            </label>
+            <p className="text-light 2md:text-lg">••••••••••••</p>
+          </div>
+        </div>
       </div>
+
+      <PersonalDataModal
+        isOpen={pdModalOpen}
+        firstName={profile.firstName}
+        email={profile.email}
+        onClose={() => setPdModalOpen(false)}
+        onSubmit={handlePersonalSubmit}
+      />
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSubmit={handleAuthSubmit}
+      />
     </>
   );
 }
