@@ -33,7 +33,12 @@ router.get("/me", getMe);
 router.put(
   "/me",
   [
-    body("name").optional().isString().withMessage("Nome inválido."),
+    body("firstName")
+      .optional()
+      .isString()
+      .withMessage("Nome inválido.")
+      .isLength({ min: 2 })
+      .withMessage("Nome não pode ser vazio."),
     body("password")
       .optional()
       .isLength({ min: 6 })
