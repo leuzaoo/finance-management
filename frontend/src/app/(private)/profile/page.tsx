@@ -6,11 +6,11 @@ import { PencilLineIcon, UserCircle2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { useUserStore } from "@/src/store/useUserStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 import PersonalDataModal from "@/src/components/forms/PersonalDataModal";
 import TitlePage from "@/src/components/common/TitlePage";
 import AuthModal from "@/src/components/forms/AuthModal";
-import { useAuthStore } from "@/src/store/useAuthStore";
 
 export default function ProfilePage() {
   const router = useRouter();
