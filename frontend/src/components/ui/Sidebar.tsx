@@ -47,7 +47,7 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`border-light/20 transition-width flex h-screen flex-col overflow-hidden border-r duration-300 ${collapsed ? "w-16" : "w-64"}`}
+        className={`border-light/20 transition-width 2md:flex hidden h-screen flex-col overflow-hidden border-r duration-300 ${collapsed ? "w-16" : "w-64"}`}
       >
         <h1 className="sr-only">Menu</h1>
         <div
@@ -135,6 +135,7 @@ export default function Sidebar() {
                   )}
                 </Link>
                 <button
+                  title="Sair da conta"
                   onClick={handleLogout}
                   className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-600 py-2 hover:bg-red-400"
                 >
