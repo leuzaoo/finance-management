@@ -25,7 +25,7 @@ const WalletCard = ({ bank }: Props) => {
   };
 
   return (
-    <div className="border-light/15 flex aspect-video min-w-[16rem] flex-shrink-0 flex-col justify-between gap-4 rounded-lg border p-3 sm:w-80">
+    <div className="border-light/15 flex aspect-video w-full max-w-96 min-w-[16rem] flex-shrink-0 flex-col justify-between gap-4 rounded-lg border p-3">
       <div className="flex justify-between">
         <h2 className="font-medium capitalize">{bank.bankName}</h2>
         <button
@@ -38,7 +38,7 @@ const WalletCard = ({ bank }: Props) => {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <span className="text-xl font-semibold sm:text-3xl">
+        <span className="font-semibold text-3xl">
           {formatCurrency(bank.currencyValue)}
         </span>
         <span className="text-xl font-medium">{bank.currencyType}</span>
