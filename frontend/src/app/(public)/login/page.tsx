@@ -120,7 +120,7 @@ export default function LoginPage() {
               </div>
               <button
                 type="submit"
-                className="mx-auto my-5 w-full rounded-md bg-blue-600 py-2 text-xl"
+                className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-lg transition-all duration-200 hover:bg-blue-500"
               >
                 Entrar
               </button>

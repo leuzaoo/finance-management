@@ -1,5 +1,6 @@
 "use client";
 
+import BottomNav from "@/src/components/ui/BottomNav";
 import Sidebar from "@/src/components/ui/Sidebar";
 import Navbar from "@/src/components/ui/Navbar";
 
@@ -14,10 +15,11 @@ export default function Layout({
           <Navbar />
         </header>
 
-        <main className="bg-light/10 border-light/10 flex-1 overflow-y-auto border-t p-4">
+        <main className="bg-light/10 border-light/10 2md:pb-0 flex-1 overflow-y-auto border-t p-4 pb-20">
           {children}
         </main>
       </div>
+      <BottomNav />
     </main>
   );
 }

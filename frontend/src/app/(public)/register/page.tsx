@@ -140,13 +140,16 @@ export default function RegisterPage() {
               </div>
               <div className="mt-5 text-sm">
                 Já tem uma conta?{" "}
-                <Link href="/login" className="text-sky-300 underline">
+                <Link
+                  href="/login"
+                  className="text-sky-500 underline hover:text-sky-600"
+                >
                   Fazer login.
                 </Link>
               </div>
               <button
                 type="submit"
-                className="mx-auto my-5 w-full rounded-md bg-blue-600 py-2 text-xl"
+                className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-lg transition-all duration-200 hover:bg-blue-500"
               >
                 Finalizar
               </button>

@@ -32,7 +32,7 @@ export function Wallets() {
 
   return (
     <section>
-      <div className="flex max-w-80 items-center justify-between">
+      <div className="flex max-w-96 items-center justify-between">
         <TitlePage text="Cartões" />
         <button onClick={() => setModalOpen(true)} className="cursor-pointer">
           <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
@@ -45,7 +45,7 @@ export function Wallets() {
         onClose={() => setModalOpen(false)}
         onSubmit={handleCreate}
       />
-      <div className="mt-2 flex w-full flex-wrap gap-4">
+      <div className="mt-5 flex w-full flex-wrap gap-4">
         {banks.map((bank) => (
           <WalletCard key={bank.id} bank={bank} />
         ))}

@@ -6,6 +6,7 @@ import { PencilLineIcon, UserCircle2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { useUserStore } from "@/src/store/useUserStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
 import PersonalDataModal from "@/src/components/forms/PersonalDataModal";
 import TitlePage from "@/src/components/common/TitlePage";
@@ -14,6 +15,7 @@ import AuthModal from "@/src/components/forms/AuthModal";
 export default function ProfilePage() {
   const router = useRouter();
   const { profile, isLoading, getProfile, updateProfile } = useUserStore();
+  const { logout, isLoading: logoutLoading } = useAuthStore();
 
   const [pdModalOpen, setPdModalOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -25,6 +27,13 @@ export default function ProfilePage() {
       }
     });
   }, [getProfile, router]);
+
+  const handleLogout = async () => {
+    await logout();
+    setTimeout(() => {
+      router.push("/login");
+    }, 1500);
+  };
 
   if (isLoading || !profile) return <p>Carregando…</p>;
 
@@ -104,6 +113,12 @@ export default function ProfilePage() {
             <p className="text-light 2md:text-lg">••••••••••••</p>
           </div>
         </div>
+        <button
+          onClick={handleLogout}
+          className="mt-4 w-full cursor-pointer rounded-xl bg-red-600 py-3 text-center text-lg font-medium transition-all duration-200 hover:bg-red-400"
+        >
+          Sair da conta
+        </button>
       </div>
 
       <PersonalDataModal
