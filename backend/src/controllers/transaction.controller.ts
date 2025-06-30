@@ -102,13 +102,6 @@ export const categorySummary = async (
     const fromDate = rawFrom ? new Date(rawFrom) : undefined;
     const toDate = rawTo ? new Date(rawTo) : undefined;
 
-    console.log("→ categorySummary inputs:", {
-      rawFrom,
-      rawTo,
-      fromDate,
-      toDate,
-    });
-
     const match: any = {
       bank: new mongoose.Types.ObjectId(bankId),
       type: "expense",
@@ -119,8 +112,6 @@ export const categorySummary = async (
       if (fromDate) match.date.$gte = fromDate;
       if (toDate) match.date.$lte = toDate;
     }
-
-    console.log("→ categorySummary match:", JSON.stringify(match, null, 2));
 
     const summary = await Transaction.aggregate([
       { $match: match },
