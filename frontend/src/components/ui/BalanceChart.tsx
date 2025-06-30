@@ -39,7 +39,7 @@ export default function BalanceChart({
   };
 
   return (
-    <div className="bg-dark/50 mt-2 h-64 w-full rounded-lg p-4">
+    <div className="bg-dark/50 2md:mt-0 mt-2 h-64 w-full rounded-lg p-4">
       <TitlePage text="Histórico" />
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
