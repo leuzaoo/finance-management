@@ -89,17 +89,51 @@ export default function DashboardPage() {
         }}
       />
 
-      <div className="2md:flex 2md:items-start 2md:gap-4">
-        <section>
-          <TitlePage text="Visão geral" />
+      <div className="w-full gap-10 lg:grid lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <section>
+            <TitlePage text="Visão geral" />
 
-          <DashboardMoneyCard
-            banks={banks}
-            currency={currency}
-            currencies={currencies}
-            onCurrencyChange={setCurrency}
-          />
-        </section>
+            <DashboardMoneyCard
+              banks={banks}
+              currency={currency}
+              currencies={currencies}
+              onCurrencyChange={setCurrency}
+            />
+          </section>
+
+          <section
+            className={`mt-6 rounded-xl pb-5 ${banksOfCurrency.length === 0 ? "max-w-sm" : "w-full"}`}
+          >
+            <div className="flex w-full items-center justify-between">
+              <TitlePage text="Cartões" />
+              <button
+                onClick={() => setModalOpen(true)}
+                className="cursor-pointer"
+              >
+                <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
+                  <PlusIcon size={20} />
+                </div>
+              </button>
+            </div>
+
+            <div
+              className={`bg-dark/50 mt-2 rounded-xl p-3 ${banksOfCurrency.length === 0 ? "" : "w-full"}`}
+            >
+              {banksOfCurrency.length === 0 ? (
+                <p className="text-light/40 mt-2 max-w-max">
+                  Clique no ícone acima para cadastrar.
+                </p>
+              ) : (
+                <div className="flex w-full items-start gap-4 overflow-x-auto pb-2">
+                  {banksOfCurrency.map((bank) => (
+                    <WalletCard key={bank.id} bank={bank} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
 
         <section className="2md:mt-0 mt-6 w-full max-w-sm rounded-xl">
           <div className="flex items-center justify-between">
@@ -137,33 +171,6 @@ export default function DashboardPage() {
           )}
         </section>
       </div>
-
-      <section
-        className={`mt-6 rounded-xl pb-5 ${banks.length === 0 ? "w-full max-w-sm" : "max-w-max"}`}
-      >
-        <div className="flex w-full items-center justify-between">
-          <TitlePage text="Cartões" />
-          <button onClick={() => setModalOpen(true)} className="cursor-pointer">
-            <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
-              <PlusIcon size={20} />
-            </div>
-          </button>
-        </div>
-
-        <div className="bg-dark/50 mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto rounded-xl p-3">
-          {banksOfCurrency.length === 0 ? (
-            <p className="text-light/40 mt-2">
-              Clique no ícone acima para cadastrar.
-            </p>
-          ) : (
-            <div className="mt-2 flex flex-nowrap items-start gap-4 overflow-x-auto pb-2">
-              {banksOfCurrency.map((bank) => (
-                <WalletCard key={bank.id} bank={bank} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
     </>
   );
 }
