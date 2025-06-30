@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={` ${archivo.className} ${inter.variable} antialiased`}>
+      <body className={`${archivo.className} ${inter.variable} antialiased`}>
         <h1 className="sr-only">Gerenciador de Finanças</h1>
         {children}
       </body>
