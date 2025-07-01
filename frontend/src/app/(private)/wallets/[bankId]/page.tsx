@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+
 import WalletDetailsClient from "./WalletsDetailsClient";
 
 export default async function WalletDetailsPage({
