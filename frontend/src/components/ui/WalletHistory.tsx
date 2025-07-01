@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
@@ -17,7 +18,7 @@ export interface WalletHistoryProps {
   onDelete: (txId: string) => Promise<void>;
 }
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 20;
 
 export default function WalletHistory({
   bankId,
@@ -47,7 +48,7 @@ export default function WalletHistory({
   );
 
   return (
-    <div className="mt-4 space-y-4">
+    <div className="2md:mt-0 mt-4 space-y-4">
       <DateFilters
         fromDate={fromDate}
         toDate={toDate}

@@ -16,7 +16,7 @@ export function ChartsSection({
 }) {
   return (
     <div>
-      <section className="2md:mt-0 mt-6">
+      <section className="mt-6">
         <BalanceChart data={balanceData} />
       </section>
       <CategoryBarChart
