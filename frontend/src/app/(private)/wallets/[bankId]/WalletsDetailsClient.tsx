@@ -2,15 +2,16 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
 
-import type { Subscription } from "@/src/store/useSubscriptionStore";
+import { Subscription } from "@/src/store/useSubscriptionStore";
 import { useWalletDetails } from "@/src/hooks/useWalletDetails";
 
 import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSection";
 import { TransactionsSection } from "@/src/components/wallets/TransactionsSection";
-import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
-import TransactionModal from "@/src/components/forms/TransactionModal";
 import { ChartsSection } from "@/src/components/wallets/ChartsSection";
 import { WalletHeader } from "@/src/components/wallets/WalletHeader";
+
+import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
+import TransactionModal from "@/src/components/forms/TransactionModal";
 
 export default function WalletDetailsClient({ bankId }: { bankId: string }) {
   const {
@@ -95,17 +96,6 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
             onOpenModal={() => setTxModalOpen(true)}
           />
 
-          <TransactionsSection
-            bankId={bankId}
-            fromDate={fromDate}
-            toDate={toDate}
-            setFromDate={setFromDate}
-            setToDate={setToDate}
-            onDelete={handleDeleteTx}
-          />
-        </div>
-
-        <div>
           <ChartsSection
             balanceData={filteredChartData}
             categoryData={categorySummary}
@@ -119,6 +109,17 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
             onAdd={handleAdd}
             onEdit={handleEdit}
             onDelete={handleDeleteSub}
+          />
+        </div>
+
+        <div>
+          <TransactionsSection
+            bankId={bankId}
+            fromDate={fromDate}
+            toDate={toDate}
+            setFromDate={setFromDate}
+            setToDate={setToDate}
+            onDelete={handleDeleteTx}
           />
         </div>
       </div>
