@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useUserStore } from "@/src/store/useUserStore";
 import { useAuthStore } from "@/src/store/useAuthStore";
 
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import PersonalDataModal from "@/src/components/forms/PersonalDataModal";
 import TitlePage from "@/src/components/common/TitlePage";
 import AuthModal from "@/src/components/forms/AuthModal";
@@ -35,7 +36,7 @@ export default function ProfilePage() {
     }, 1500);
   };
 
-  if (isLoading || !profile) return <p>Carregando…</p>;
+  if (isLoading || !profile) return <LoaderIcon />;
 
   const handlePersonalSubmit = async (data: { firstName: string }) => {
     await updateProfile({ firstName: data.firstName });
@@ -115,9 +116,11 @@ export default function ProfilePage() {
         </div>
         <button
           onClick={handleLogout}
-          className="mt-4 w-full cursor-pointer rounded-xl bg-red-600 py-3 text-center text-lg font-medium transition-all duration-200 hover:bg-red-400"
+          className={`mt-4 w-full cursor-pointer rounded-xl bg-red-600 py-3 text-center font-medium transition-all duration-200 hover:bg-red-400 ${
+            logoutLoading && "cursor-not-allowed opacity-50"
+          }`}
         >
-          Sair da conta
+          {logoutLoading ? <LoaderIcon /> : "Sair da conta"}
         </button>
       </div>
 

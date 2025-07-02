@@ -21,7 +21,7 @@ export default function LoginPage() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [callbackUrl, setCallbackUrl] = useState("/dashboard");
 
-  const { login, isLoading } = useAuthStore();
+  const { login, isLoading: loginLoading } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -47,7 +47,9 @@ export default function LoginPage() {
     if (!validateFields()) return;
     const success = await login(email, password);
     if (success) {
-      setTimeout(() => void router.push(callbackUrl), 1500);
+      setTimeout(() => {
+        router.push(callbackUrl);
+      }, 1000);
     }
   };
 
@@ -72,8 +74,8 @@ export default function LoginPage() {
             </Link>
           </h1>
 
-          {isLoading ? (
-            <div className="flex justify-center rounded-lg bg-white py-4 text-black">
+          {loginLoading ? (
+            <div className="mt-8 flex justify-center rounded-lg bg-white py-4 text-black">
               <LoaderIcon />
             </div>
           ) : (
