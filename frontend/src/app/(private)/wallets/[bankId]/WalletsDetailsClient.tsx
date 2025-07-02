@@ -9,14 +9,14 @@ import { SubscriptionsSection } from "@/src/components/wallets/SubscriptionsSect
 import { TransactionsSection } from "@/src/components/wallets/TransactionsSection";
 import { ChartsSection } from "@/src/components/wallets/ChartsSection";
 import { WalletHeader } from "@/src/components/wallets/WalletHeader";
-
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import SubscriptionModal from "@/src/components/forms/SubscriptionModal";
 import TransactionModal from "@/src/components/forms/TransactionModal";
 
 export default function WalletDetailsClient({ bankId }: { bankId: string }) {
   const {
     bank,
-    loading,
+    loading: loadingBank,
     isBankLoading,
     fromDate,
     toDate,
@@ -28,7 +28,6 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
     setSubModalOpen,
     editingSub,
     setEditingSub,
-    transactions,
     categorySummary,
     filteredChartData,
     isCategoryLoading,
@@ -40,8 +39,14 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
     handleDeleteSub,
   } = useWalletDetails(bankId);
 
-  if (loading || isBankLoading) return <p>Carregando…</p>;
-  if (!bank) return <p>Banco não encontrado.</p>;
+  if (loadingBank || isBankLoading) return <LoaderIcon />;
+
+  if (!bank)
+    return (
+      <p className="flex h-full w-full items-center justify-center">
+        Banco não encontrado.
+      </p>
+    );
 
   const handleAdd = () => {
     setEditingSub(null);

@@ -5,6 +5,7 @@ import { PlusIcon } from "lucide-react";
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
 import { useBankStore } from "@/src/store/useBankStore";
 
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
 import ReminderModal from "@/src/components/forms/ReminderModal";
 import RemindersCard from "@/src/components/ui/RemindersCard";
@@ -56,7 +57,7 @@ export default function DashboardPage() {
     setModalOpen(false);
   };
 
-  if (banksLoading) return <p>Carregando seus bancos…</p>;
+  if (banksLoading) return <LoaderIcon />;
 
   return (
     <>
