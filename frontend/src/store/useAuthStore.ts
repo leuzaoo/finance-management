@@ -123,7 +123,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    set({ isLoading: false });
+    set({ isLoading: true });
 
     try {
       await axios.post(`${AUTH_PATH}/logout`);
