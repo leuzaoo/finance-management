@@ -5,12 +5,12 @@ import localFont from "next/font/local";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
-const myFont = localFont({
+const zonaProBold = localFont({
   src: "../fonts/ZonaPro-Bold.otf",
   variable: "--font-zona-pro",
 });
 
-const myFontLight = localFont({
+const zonaProLight = localFont({
   src: "../fonts/ZonaPro-ExtraLight.otf",
   variable: "--font-zona-pro-light",
 });
