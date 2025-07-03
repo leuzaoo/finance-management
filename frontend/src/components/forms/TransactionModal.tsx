@@ -135,13 +135,14 @@ export default function TransactionModal({
           <div>
             <label className="block text-sm font-medium">Valor *</label>
             <NumericFormat
+              type="tel"
               thousandSeparator="."
               decimalSeparator=","
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="font-inter mt-1 w-full rounded border px-3 py-2 outline-none"
-              placeholder={`1.00 ${currencyType}`}
+              className="font-zona-pro mt-1 w-full rounded border px-3 py-2 outline-none"
+              placeholder="1.000,00"
               required
               value={amount}
               onValueChange={(values) => {
