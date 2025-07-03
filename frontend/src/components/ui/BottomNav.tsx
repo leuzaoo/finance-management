@@ -38,9 +38,7 @@ export default function BottomNav() {
             key={item.id}
             href={item.href}
             className={`flex flex-col items-center justify-center rounded-lg p-1 transition-colors ${
-              isActive
-                ? "text-light bg-green-800"
-                : "hover:bg-light/10 text-green-700"
+              isActive ? "text-dark bg-light" : "hover:bg-light/10 text-light"
             } `}
           >
             {item.icon}

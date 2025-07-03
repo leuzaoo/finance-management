@@ -28,7 +28,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
           <div className="flex w-full justify-between">
             <span
               className={`font-zona-pro text-xl ${
-                tx.type === "expense" ? "text-red-500" : "text-green-600"
+                tx.type === "expense" ? "text-[#d48e62]" : "text-green-600"
               }`}
             >
               {tx.type === "expense" ? "-" : "+"}
