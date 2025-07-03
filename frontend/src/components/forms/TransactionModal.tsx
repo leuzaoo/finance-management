@@ -135,7 +135,7 @@ export default function TransactionModal({
           <div>
             <label className="block text-sm font-medium">Valor *</label>
             <NumericFormat
-              type="tel"
+              displayType="input"
               thousandSeparator="."
               decimalSeparator=","
               decimalScale={2}

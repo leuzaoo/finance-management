@@ -9,13 +9,13 @@ const menuItems = [
     id: 0,
     href: "/dashboard",
     icon: <LayoutDashboardIcon size={32} strokeWidth={1.5} />,
-    label: "Dashboard",
+    label: "Início",
   },
   {
     id: 1,
     href: "/wallets",
     icon: <WalletIcon size={32} strokeWidth={1.5} />,
-    label: "Carteiras",
+    label: "Cartões",
   },
   {
     id: 2,
@@ -42,6 +42,9 @@ export default function BottomNav() {
             } `}
           >
             {item.icon}
+            <span className={`text-xs ${isActive && "font-bold"}`}>
+              {item.label}
+            </span>
           </Link>
         );
       })}
