@@ -51,7 +51,7 @@ export default function BalanceChart({
             dataKey="date"
             tickFormatter={dateFormatter || defaultDateFormatter}
             stroke="#aaa"
-            fontSize={"12px"}
+            fontSize={"10px"}
           />
           <YAxis
             tickFormatter={(value) =>
@@ -59,7 +59,8 @@ export default function BalanceChart({
             }
             stroke="#aaa"
             width={80}
-            fontSize={"12px"}
+            fontSize={"10px"}
+            className="font-zona-pro"
           />
           <Tooltip
             labelFormatter={dateFormatter || defaultDateFormatter}

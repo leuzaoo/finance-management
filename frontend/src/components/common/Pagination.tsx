@@ -22,7 +22,7 @@ export default function Pagination({
   return (
     <div className="mt-4">
       <div className="overflow-x-auto pb-1">
-        <div className="inline-flex items-center space-x-2 px-2 whitespace-nowrap">
+        <div className="font-zona-pro inline-flex items-center space-x-2 px-2 whitespace-nowrap">
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
