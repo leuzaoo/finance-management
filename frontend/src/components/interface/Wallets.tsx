@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { PlusCircleIcon, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import { useBankStore } from "@/src/store/useBankStore";
@@ -45,7 +45,7 @@ export function Wallets() {
         onClose={() => setModalOpen(false)}
         onSubmit={handleCreate}
       />
-      <div className="mt-5 flex w-full flex-wrap gap-4">
+      <div className="mt-2 flex w-full flex-wrap gap-4">
         {banks.map((bank) => (
           <WalletCard key={bank.id} bank={bank} />
         ))}
