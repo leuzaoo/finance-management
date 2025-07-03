@@ -27,7 +27,7 @@ const WalletCard = ({ bank }: Props) => {
   return (
     <div className="border-light/15 flex aspect-video w-full max-w-96 min-w-[16rem] flex-shrink-0 flex-col justify-between gap-4 rounded-lg border p-3">
       <div className="flex justify-between">
-        <h2 className="font-medium capitalize">{bank.bankName}</h2>
+        <h2 className="text-lg font-medium capitalize">{bank.bankName}</h2>
         <button
           onClick={handleDelete}
           className="text-light/60 cursor-pointer p-1 hover:text-red-500"
@@ -38,7 +38,7 @@ const WalletCard = ({ bank }: Props) => {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <span className="text-3xl font-semibold">
+        <span className="font-zona-pro text-3xl">
           {formatCurrency(bank.currencyValue)}
         </span>
         <span className="text-xl font-medium">{bank.currencyType}</span>

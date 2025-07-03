@@ -21,7 +21,7 @@ export function WalletHeader({
       <div className="flex items-center justify-between">
         <TitlePage text={bankName} />
         <div>
-          <span className="text-2xl font-semibold sm:text-3xl">
+          <span className="font-zona-pro text-2xl sm:text-3xl">
             {formatCurrency(balance)}
           </span>{" "}
           <span className="text-lg opacity-60">({currency})</span>

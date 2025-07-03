@@ -66,14 +66,14 @@ const DashboardMoneyCard = ({
                 .map((c) => (
                   <li key={c} className="flex justify-between text-lg">
                     <span className="capitalize">{c}</span>
-                    <span className="font-semibold">
+                    <span className="font-zona-pro font-semibold">
                       {formatCurrency(totalsByCurrency[c] || 0)}
                     </span>
                   </li>
                 ))}
             </ul>
           ) : (
-            <div className="text-3xl font-semibold">
+            <div className="font-zona-pro text-3xl">
               {formatCurrency(totalSingle)}
             </div>
           )}

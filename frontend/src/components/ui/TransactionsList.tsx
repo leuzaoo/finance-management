@@ -27,7 +27,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
         >
           <div className="flex w-full justify-between">
             <span
-              className={`text-xl font-semibold ${
+              className={`font-zona-pro text-xl ${
                 tx.type === "expense" ? "text-red-500" : "text-green-600"
               }`}
             >
@@ -61,7 +61,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
             </p>
           )}
 
-          <span className="text-light/50 absolute right-4 bottom-4 text-xs font-medium">
+          <span className="text-light/50 absolute right-4 bottom-4 text-xs">
             {format(new Date(tx.date), "dd/MM/yyyy")}
           </span>
         </li>

@@ -1,8 +1,19 @@
 import { Archivo, Inter } from "next/font/google";
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+
+const zonaProBold = localFont({
+  src: "../fonts/ZonaPro-Bold.otf",
+  variable: "--font-zona-pro",
+});
+
+const zonaProLight = localFont({
+  src: "../fonts/ZonaPro-ExtraLight.otf",
+  variable: "--font-zona-pro-light",
+});
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${archivo.className} ${inter.variable} antialiased`}>
+      <body
+        className={`${archivo.className} ${zonaProBold.variable} ${zonaProLight.variable} ${inter.variable} antialiased`}
+      >
         <h1 className="sr-only">Gerenciador de Finanças</h1>
         {children}
       </body>
