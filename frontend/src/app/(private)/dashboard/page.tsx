@@ -90,7 +90,7 @@ export default function DashboardPage() {
         }}
       />
 
-      <div className="w-full gap-10 lg:grid lg:grid-cols-3">
+      <div className="w-full gap-10 lg:grid lg:grid-cols-3 pb-5">
         <div className="lg:col-span-2">
           <section>
             <TitlePage text="Visão geral" />
@@ -104,7 +104,7 @@ export default function DashboardPage() {
           </section>
 
           <section
-            className={`mt-6 rounded-xl pb-5 ${banksOfCurrency.length === 0 ? "max-w-sm" : "w-full"}`}
+            className={`mt-6 rounded-xl ${banksOfCurrency.length === 0 ? "max-w-sm" : "w-full"}`}
           >
             <div className="flex w-full items-center justify-between">
               <TitlePage text="Cartões" />

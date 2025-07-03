@@ -31,7 +31,7 @@ export function Wallets() {
   }
 
   return (
-    <section>
+    <section className="pb-5">
       <div className="flex max-w-96 items-center justify-between">
         <TitlePage text="Cartões" />
         <button onClick={() => setModalOpen(true)} className="cursor-pointer">

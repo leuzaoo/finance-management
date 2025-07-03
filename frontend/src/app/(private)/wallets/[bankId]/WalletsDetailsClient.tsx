@@ -92,7 +92,7 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
         }}
       />
 
-      <div className="2md:grid grid-cols-2 gap-8">
+      <div className="2md:grid grid-cols-2 gap-8 pb-5">
         <div>
           <WalletHeader
             bankName={bank.bankName}
