@@ -60,7 +60,7 @@ export default function WalletDetailsClient({ bankId }: { bankId: string }) {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer autoClose={1500} />
 
       <TransactionModal
         bankId={bankId}
