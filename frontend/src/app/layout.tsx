@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${archivo.className} ${myFont.variable} ${myFontLight.variable} ${inter.variable} antialiased`}
+        className={`${archivo.className} ${zonaProBold.variable} ${zonaProLight.variable} ${inter.variable} antialiased`}
       >
         <h1 className="sr-only">Gerenciador de Finanças</h1>
         {children}
