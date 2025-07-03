@@ -10,6 +10,8 @@
 @theme {
   --font-archivo: var(--font-archivo);
   --font-inter: var(--font-inter);
+  --font-zona-pro: var(--font-zona-pro);
+  --font-zona-pro-light: var(--font-zona-pro-light);
   --breakpoint-2md: 54rem;
   --color-dark: #010101;
   --color-dark-light: #1a1e23;
