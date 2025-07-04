@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { MenuIcon, XIcon } from "lucide-react";
 
 import TitlePage from "../../common/TitlePage";
-import Link from "next/link";
-import { MenuIcon, XIcon } from "lucide-react";
 
 const menuItems = [
   {
