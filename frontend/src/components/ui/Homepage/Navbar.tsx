@@ -42,24 +42,34 @@ const MobileNavbar = () => {
         className={`fixed top-0 right-0 h-full w-64 transform bg-white transition-transform duration-300 ${open ? "translate-x-0" : "translate-x-full"} `}
         style={{ zIndex: 45 }}
       >
-        <div className="mt-14 space-y-4 p-4">
-          {menuItems.map((item) => {
-            const isActive =
-              pathname === item.href || pathname.startsWith(item.href + "/");
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={`text-dark block rounded-xl px-4 py-2 text-lg font-medium transition-colors ${
-                  isActive
-                    ? "bg-green-dark text-white shadow-md"
-                    : "hover:bg-dark/10 text-dark/30 hover:text-dark"
-                }`}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
+        <div className="mt-14 flex flex-col p-4">
+          <div className="space-y-4">
+            {menuItems.map((item) => {
+              const isActive =
+                pathname === item.href || pathname.startsWith(item.href + "/");
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className={`text-dark block rounded-xl px-4 py-2 text-lg font-medium transition-colors ${
+                    isActive
+                      ? "bg-green-dark text-white shadow-md"
+                      : "hover:bg-dark/10 text-dark/30 hover:text-dark"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mt-6 flex gap-4">
+            <Link
+              href="/login"
+              className="bg-green-dark/20 text-dark w-full rounded-lg px-5 py-2 text-center text-sm font-semibold transition-all duration-300 hover:opacity-50"
+            >
+              Minha conta
+            </Link>
+          </div>
         </div>
       </nav>
     </div>
