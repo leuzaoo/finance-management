@@ -37,7 +37,7 @@ export default function BottomNav() {
           <Link
             key={item.id}
             href={item.href}
-            className={`flex flex-col items-center justify-center rounded-lg p-1 transition-colors ${
+            className={`flex w-16 flex-col items-center justify-center rounded-lg py-1 transition-colors ${
               isActive ? "text-dark bg-light" : "hover:bg-light/10 text-light"
             } `}
           >
