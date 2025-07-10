@@ -17,7 +17,7 @@ const HeroSection = () => {
         </p>
 
         <Link
-          className="bg-green-dark text-light mx-auto mt-4 flex max-w-max items-center justify-center gap-2 rounded-xl px-4 py-2 font-light sm:text-xl"
+          className="bg-green-dark text-light mx-auto mt-10 flex max-w-max items-center justify-center gap-2 rounded-xl px-4 py-2 font-light sm:text-xl"
           href="/register"
         >
           Comece agora
