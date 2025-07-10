@@ -7,6 +7,8 @@ import {
 const publicRoutes = [
   { path: "/login", whenAuthenticated: "redirect" },
   { path: "/register", whenAuthenticated: "redirect" },
+  { path: "/about", whenAuthenticated: "redirect" },
+  { path: "/resources", whenAuthenticated: "redirect" },
   { path: "/", whenAuthenticated: "next" },
 ] as const;
 
