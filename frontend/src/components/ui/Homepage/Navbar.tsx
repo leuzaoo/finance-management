@@ -23,10 +23,12 @@ const MobileNavbar = () => {
   return (
     <div className="md:hidden">
       <div className="text-dark flex items-center justify-between p-4">
-        <TitlePage text="FinSafe" />
+        <Link href="/">
+          <TitlePage text="FinSafe" />
+        </Link>
         <button
           onClick={() => setOpen((o) => !o)}
-          className={`p- z-50 cursor-pointer rounded-xl p-2 ${open ? "bg-green-dark/30" : "bg-gray-100"}`}
+          className={`z-50 cursor-pointer rounded-xl p-2 shadow-sm ${open ? "bg-green-dark/30" : "bg-gray-100"}`}
           aria-label={open ? "Fechar menu" : "Abrir menu"}
         >
           {open ? <XIcon size={24} /> : <MenuIcon size={24} />}
@@ -69,10 +71,12 @@ const MobileNavbar = () => {
 const DesktopNavbar = () => {
   const pathname = usePathname() || "/";
   return (
-    <header className="text-dark hidden bg-white md:block">
+    <header className="text-dark hidden md:block">
       <nav className="p-4">
         <div className="container mx-auto flex items-center justify-between">
-          <TitlePage text="FinSafe" />
+          <Link href="/">
+            <TitlePage text="FinSafe" />
+          </Link>
           <div className="flex space-x-4">
             {menuItems.map((item) => {
               const isActive =
@@ -93,13 +97,13 @@ const DesktopNavbar = () => {
           <div className="flex items-center gap-4">
             <Link
               href="/register"
-              className="bg-green-dark/20 rounded-lg px-5 py-2 text-sm"
+              className="rounded-lg bg-white px-5 py-2 text-sm shadow-sm"
             >
               Registrar
             </Link>
             <Link
               href="/login"
-              className="bg-green-dark rounded-lg px-5 py-2 text-sm text-white"
+              className="bg-green-dark rounded-lg px-5 py-2 text-sm text-white shadow-sm"
             >
               Entrar
             </Link>
