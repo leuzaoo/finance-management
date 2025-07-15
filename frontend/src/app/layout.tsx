@@ -1,9 +1,13 @@
+"use client";
+import { useEffect } from "react";
 import { Archivo, Inter } from "next/font/google";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+
+import { useTheme } from "../hooks/useTheme";
 
 const zonaProBold = localFont({
   src: "../fonts/ZonaPro-Bold.otf",
@@ -27,21 +31,28 @@ const archivo = Archivo({
   weight: ["200", "400", "500", "600", "700", "900"],
 });
 
-export const metadata: Metadata = {
-  title: "Gerenciador de Finanças",
-  description:
-    "Administre suas finanças de forma fácil e simples. O resto deixe conosco.",
-};
+// todo
+// export const metadata: Metadata = {
+//   title: "Gerenciador de Finanças",
+//   description:
+//     "Administre suas finanças de forma fácil e simples. O resto deixe conosco.",
+// };
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
-        className={`${archivo.className} ${zonaProBold.variable} ${zonaProLight.variable} ${inter.variable} antialiased`}
+        className={`${archivo.className} ${zonaProBold.variable} ${zonaProLight.variable} ${inter.variable} bg-light text-dark dark:bg-dark-light dark:text-light antialiased`}
       >
         <h1 className="sr-only">Gerenciador de Finanças</h1>
         {children}

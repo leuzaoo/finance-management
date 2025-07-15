@@ -136,7 +136,7 @@ export default function DashboardPage() {
           </section>
         </div>
 
-        <section className="2md:mt-0 mt-6 w-full max-w-sm rounded-xl">
+        <section className="lg:mt-0 mt-6 w-full max-w-sm rounded-xl">
           <div className="flex items-center justify-between">
             <TitlePage text="Lembretes" />
             <button

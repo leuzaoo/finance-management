@@ -1,10 +1,20 @@
+"use client";
+import { useEffect } from "react";
+
+import { useTheme } from "../hooks/useTheme";
 import HeroSection from "../components/ui/Homepage/HeroSection";
 import Navbar from "../components/ui/Homepage/Navbar";
 
 export default function Home() {
+  const { theme } = useTheme();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
   return (
     <>
-      <main className="h-screen w-full bg-gray-200">
+      <main className="bg-light text-dark dark:bg-dark-light dark:text-light h-screen w-full">
         <Navbar />
         <HeroSection />
       </main>
