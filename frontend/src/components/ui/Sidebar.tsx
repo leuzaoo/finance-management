@@ -12,10 +12,12 @@ import {
   UserIcon,
 } from "lucide-react";
 
-import { useAuthStore } from "../../store/useAuthStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 import { useUserStore } from "@/src/store/useUserStore";
 
-import { LoaderIcon } from "../../assets/icons/LoaderCircleIcon";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
+
+import ThemeToggle from "./ThemeToggle";
 
 const menuItems = [
   {
@@ -99,6 +101,7 @@ export default function Sidebar() {
                 </li>
               );
             })}
+            <ThemeToggle />
           </ul>
 
           <div className="mb-4 px-2">

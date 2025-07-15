@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 
+import ThemeToggle from "../ThemeToggle";
+
 const HeroSection = () => {
   return (
     <section className="text-dark mt-20 px-4">
@@ -23,6 +25,7 @@ const HeroSection = () => {
           Comece agora
           <ArrowRightIcon size={20} />
         </Link>
+        <ThemeToggle />
       </div>
     </section>
   );
