@@ -51,6 +51,17 @@ export default function RootLayout({
 
   return (
     <html lang="pt-BR">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+              if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark')
+              } else {
+                document.documentElement.classList.remove('dark')
+              }
+        `,
+        }}
+      />
       <body
         className={`${archivo.className} ${zonaProBold.variable} ${zonaProLight.variable} ${inter.variable} bg-light text-dark dark:bg-dark-light dark:text-light antialiased`}
       >
