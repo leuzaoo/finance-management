@@ -17,7 +17,7 @@ import { useUserStore } from "@/src/store/useUserStore";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "./ThemeSwitch";
 
 const menuItems = [
   {

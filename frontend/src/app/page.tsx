@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 
 import { useTheme } from "../hooks/useTheme";
+
 import HeroSection from "../components/ui/Homepage/HeroSection";
 import Navbar from "../components/ui/Homepage/Navbar";
 
@@ -14,7 +15,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="bg-light text-dark dark:bg-dark-light dark:text-light h-screen w-full">
+      <main className="text-black bg-white dark:text-white dark:bg-black h-screen w-full">
         <Navbar />
         <HeroSection />
       </main>

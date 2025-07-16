@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 
-import ThemeToggle from "../ThemeToggle";
+import ThemeToggle from "../ThemeSwitch";
 
 const HeroSection = () => {
   return (

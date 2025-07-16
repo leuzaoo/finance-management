@@ -6,7 +6,7 @@ import { UserIcon } from "lucide-react";
 
 import { useUserStore } from "@/src/store/useUserStore";
 
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "./ThemeSwitch";
 
 const Navbar = () => {
   const { profile: user, getProfile } = useUserStore();
