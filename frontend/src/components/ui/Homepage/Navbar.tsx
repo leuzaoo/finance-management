@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { MenuIcon, XIcon } from "lucide-react";
 
 import TitlePage from "../../common/TitlePage";
+import ThemeToggle from "../ThemeSwitch";
 
 const menuItems = [
   { id: 0, name: "Início", href: "/" },
@@ -22,13 +23,13 @@ const MobileNavbar = () => {
 
   return (
     <div className="md:hidden">
-      <div className="text-dark flex items-center justify-between p-4">
-        <Link href="/">
+      <div className="flex items-center justify-between p-4 text-dark">
+        <Link href="/" className="dark:text-light">
           <TitlePage text="FinSafe" />
         </Link>
         <button
           onClick={() => setOpen((o) => !o)}
-          className={`z-50 cursor-pointer rounded-xl p-2 shadow-sm ${open ? "bg-green-dark/30" : "bg-gray-100"}`}
+          className={`z-50 cursor-pointer rounded-xl p-2 shadow-sm ${open ? "bg-green-dark/30 dark:bg-light" : "bg-gray-100"}`}
           aria-label={open ? "Fechar menu" : "Abrir menu"}
         >
           {open ? <XIcon size={24} /> : <MenuIcon size={24} />}
@@ -41,7 +42,7 @@ const MobileNavbar = () => {
       />
 
       <nav
-        className={`fixed top-0 right-0 h-full w-64 transform bg-white transition-transform duration-300 ${open ? "translate-x-0" : "translate-x-full"} `}
+        className={`fixed right-0 top-0 h-full w-64 transform bg-white transition-transform duration-300 dark:bg-dark ${open ? "translate-x-0" : "translate-x-full"} `}
         style={{ zIndex: 45 }}
       >
         <div className="mt-14 flex flex-col p-4">
@@ -53,10 +54,10 @@ const MobileNavbar = () => {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className={`text-dark block rounded-xl px-4 py-2 text-lg font-medium transition-colors ${
+                  className={`block rounded-xl px-4 py-2 text-lg font-medium text-dark transition-colors ${
                     isActive
-                      ? "bg-green-dark text-white shadow-md"
-                      : "hover:bg-dark/10 text-dark/30 hover:text-dark"
+                      ? "bg-green-dark text-light shadow-md dark:bg-light dark:text-dark"
+                      : "hover:bg-dark/10 text-dark/30 dark:text-light/50 hover:text-dark"
                   }`}
                 >
                   {item.name}
@@ -64,13 +65,14 @@ const MobileNavbar = () => {
               );
             })}
           </div>
-          <div className="mt-6 flex gap-4">
+          <div className="mt-6 flex flex-col gap-4">
             <Link
               href="/login"
-              className="bg-green-dark/20 text-dark w-full rounded-lg px-5 py-2 text-center text-sm font-semibold transition-all duration-300 hover:opacity-50"
+              className="w-full rounded-lg bg-green-dark px-5 py-2 text-center text-sm font-semibold text-light transition-all duration-300 hover:opacity-50 dark:bg-light dark:text-dark"
             >
               Minha conta
             </Link>
+            <ThemeToggle />
           </div>
         </div>
       </nav>
@@ -81,10 +83,10 @@ const MobileNavbar = () => {
 const DesktopNavbar = () => {
   const pathname = usePathname() || "/";
   return (
-    <header className="text-dark hidden md:block">
+    <header className="mx-auto hidden max-w-7xl text-dark md:block">
       <nav className="p-4">
-        <div className="container mx-auto flex items-center justify-between">
-          <Link href="/">
+        <div className="mx-auto flex items-center justify-between">
+          <Link href="/" className="dark:text-light">
             <TitlePage text="FinSafe" />
           </Link>
           <div className="flex space-x-4">
@@ -95,7 +97,7 @@ const DesktopNavbar = () => {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className={`rounded px-4 py-2 transition-colors ${
+                  className={`rounded px-4 py-2 transition-colors dark:text-light ${
                     isActive ? "font-bold" : "opacity-50 hover:opacity-100"
                   }`}
                 >
@@ -105,6 +107,7 @@ const DesktopNavbar = () => {
             })}
           </div>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <Link
               href="/register"
               className="rounded-lg bg-white px-5 py-2 text-sm shadow-sm"
@@ -113,7 +116,7 @@ const DesktopNavbar = () => {
             </Link>
             <Link
               href="/login"
-              className="bg-green-dark rounded-lg px-5 py-2 text-sm text-white shadow-sm"
+              className="rounded-lg bg-green-dark px-5 py-2 text-sm text-white shadow-sm"
             >
               Entrar
             </Link>
