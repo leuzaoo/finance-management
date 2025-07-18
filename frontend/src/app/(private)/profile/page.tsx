@@ -11,6 +11,7 @@ import { useAuthStore } from "@/src/store/useAuthStore";
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import PersonalDataModal from "@/src/components/forms/PersonalDataModal";
 import TitlePage from "@/src/components/common/TitlePage";
+import ThemeSwitch from "@/src/components/ui/ThemeSwitch";
 import AuthModal from "@/src/components/forms/AuthModal";
 
 export default function ProfilePage() {
@@ -54,7 +55,10 @@ export default function ProfilePage() {
     <>
       <ToastContainer autoClose={1500} position="top-left" />
       <div className="mx-auto max-w-md">
-        <TitlePage text="Meu Perfil" />
+        <div className="flex items-center justify-between">
+          <TitlePage text="Meu Perfil" />
+          <ThemeSwitch />
+        </div>
 
         <div className="border-light/10 mt-4 rounded-xl border p-4">
           <div className="flex items-center justify-between">

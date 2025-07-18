@@ -90,11 +90,10 @@ export default function DashboardPage() {
         }}
       />
 
-      <div className="w-full gap-10 lg:grid lg:grid-cols-3 pb-5">
+      <div className="w-full gap-10 pb-5 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-2">
           <section>
             <TitlePage text="Visão geral" />
-
             <DashboardMoneyCard
               banks={banks}
               currency={currency}
@@ -104,7 +103,7 @@ export default function DashboardPage() {
           </section>
 
           <section
-            className={`mt-6 rounded-xl ${banksOfCurrency.length === 0 ? "max-w-sm" : "w-full"}`}
+            className={`mt-6 rounded-xl ${banksOfCurrency.length === 0 ? "max-w-sm" : "max-w-max"}`}
           >
             <div className="flex w-full items-center justify-between">
               <TitlePage text="Cartões" />
@@ -112,17 +111,17 @@ export default function DashboardPage() {
                 onClick={() => setModalOpen(true)}
                 className="cursor-pointer"
               >
-                <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
+                <div className="flex cursor-pointer items-center gap-2 rounded-full bg-dark p-1 text-light transition-all duration-1000 hover:opacity-60 dark:bg-light dark:text-dark">
                   <PlusIcon size={20} />
                 </div>
               </button>
             </div>
 
             <div
-              className={`bg-dark/50 mt-2 rounded-xl p-3 ${banksOfCurrency.length === 0 ? "" : "w-full"}`}
+              className={`dark:bg-dark/50 mt-2 rounded-xl bg-white p-3 shadow-md transition-all duration-1000 ${banksOfCurrency.length === 0 ? "" : "w-full"}`}
             >
               {banksOfCurrency.length === 0 ? (
-                <p className="text-light/40 mt-2 max-w-max">
+                <p className="text-dark/50 dark:text-light/40 max-w-max transition-all duration-1000">
                   Clique no ícone acima para cadastrar.
                 </p>
               ) : (
@@ -136,7 +135,7 @@ export default function DashboardPage() {
           </section>
         </div>
 
-        <section className="lg:mt-0 mt-6 w-full max-w-sm rounded-xl">
+        <section className="mt-6 w-full max-w-sm rounded-xl lg:mt-0">
           <div className="flex items-center justify-between">
             <TitlePage text="Lembretes" />
             <button
@@ -145,7 +144,7 @@ export default function DashboardPage() {
                 setRemModalOpen(true);
               }}
             >
-              <div className="bg-light text-dark hover:bg-light/80 flex cursor-pointer items-center gap-2 rounded-full p-1">
+              <div className="flex cursor-pointer items-center gap-2 rounded-full bg-dark p-1 text-light transition-all duration-1000 hover:opacity-60 dark:bg-light dark:text-dark">
                 <PlusIcon size={20} />
               </div>
             </button>
@@ -153,11 +152,11 @@ export default function DashboardPage() {
           {remLoading ? (
             <p className="mt-2">Carregando lembretes…</p>
           ) : reminders.length === 0 ? (
-            <p className="text-light/40 bg-dark/50 mt-2 rounded-xl p-4">
+            <p className="dark:text-light/40 dark:bg-dark/50 text-dark/50 mt-2 rounded-xl bg-white p-3 shadow-md transition-all duration-1000">
               Nenhum lembrete adicionado.
             </p>
           ) : (
-            <ul className="bg-dark/50 mt-2 flex flex-col gap-2 rounded-xl p-3">
+            <ul className="dark:bg-dark/50 mt-2 flex flex-col gap-2 rounded-xl bg-white p-3 transition-all duration-1000">
               {reminders.map((r) => (
                 <RemindersCard
                   key={r._id}

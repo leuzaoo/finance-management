@@ -23,7 +23,7 @@ const DashboardMoneyCard = ({
   if (banks.length === 0) {
     return (
       <div className="mt-2">
-        <div className="bg-dark/50 2md:w-sm text-light/40 max-w-sm rounded-lg p-3">
+        <div className="dark:bg-dark/50 2md:w-sm dark:text-light/40 text-dark/50 max-w-sm rounded-xl bg-white p-3 shadow-md transition-all duration-1000">
           Registre um cartão para exibir informações.
         </div>
       </div>
@@ -39,19 +39,22 @@ const DashboardMoneyCard = ({
 
   return (
     <div className="mt-2 space-y-6">
-      <div className="bg-dark/50 2md:w-sm max-w-sm rounded-lg p-3">
+      <div className="2md:w-sm dark:bg-dark/70 max-w-sm rounded-lg bg-white p-3 transition-all duration-1000">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Wallet2Icon className="text-light/70" width={20} />
+            <Wallet2Icon
+              className="text-dark/40 dark:text-light/40 transition-all duration-1000"
+              width={20}
+            />
             <span>Saldo</span>
           </div>
           <select
             value={currency}
             onChange={(e) => onCurrencyChange(e.target.value)}
-            className="bg-dark/10 cursor-pointer rounded px-2 py-1 underline"
+            className="bg-dark/10 dark:bg-light/10 cursor-pointer rounded px-2 py-1 underline"
           >
             {currencies.map((c) => (
-              <option key={c} value={c} className="bg-dark">
+              <option key={c} value={c} className="bg-light dark:bg-dark">
                 {c}
               </option>
             ))}

@@ -58,7 +58,7 @@ export default function Sidebar() {
             className="h-20 cursor-pointer"
           >
             <ChevronRightIcon
-              className={`text-dark transition-all duration-300 dark:text-light ${!collapsed && "rotate-180"}`}
+              className={`text-dark transition-all duration-1000 dark:text-light ${!collapsed && "rotate-180"}`}
             />
           </button>
         </div>
@@ -84,7 +84,7 @@ export default function Sidebar() {
                     {item.icon}
                     {!collapsed && (
                       <span
-                        className={`font-medium transition-opacity duration-300 ${
+                        className={`font-medium transition-all duration-1000 ${
                           collapsed
                             ? "pointer-events-none opacity-0 delay-0"
                             : "pointer-events-auto opacity-100 delay-300"
@@ -108,7 +108,7 @@ export default function Sidebar() {
               <div className="flex flex-col gap-2">
                 <Link
                   href="/profile"
-                  className={`flex items-center gap-2 rounded-md p-2 transition-colors ${
+                  className={`flex items-center gap-2 rounded-md p-2 transition-all duration-1000 ${
                     collapsed ? "justify-center" : ""
                   } ${
                     pathname.startsWith("/profile")
@@ -120,7 +120,7 @@ export default function Sidebar() {
                   {!collapsed && (
                     <div className="flex flex-col">
                       <span
-                        className={`font-medium transition-opacity duration-300 ${
+                        className={`font-medium transition-all duration-1000 ${
                           collapsed
                             ? "pointer-events-none opacity-0 delay-0"
                             : "pointer-events-auto opacity-100 delay-300"
