@@ -84,14 +84,14 @@ export default function ProfilePage() {
             <label className="text-light/50 2md:text-base block text-sm">
               Primeiro nome
             </label>
-            <p className="text-light 2md:text-lg">{profile.firstName}</p>
+            <p className="2md:text-lg text-light">{profile.firstName}</p>
           </div>
 
           <div className="mt-3">
             <label className="text-light/50 2md:text-base block text-sm">
               Email
             </label>
-            <p className="text-light 2md:text-lg">{profile.email}</p>
+            <p className="2md:text-lg text-light">{profile.email}</p>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ export default function ProfilePage() {
             <label className="text-light/50 2md:text-base block text-sm">
               Senha
             </label>
-            <p className="text-light 2md:text-lg">••••••••••••</p>
+            <p className="2md:text-lg text-light">••••••••••••</p>
           </div>
         </div>
         <button

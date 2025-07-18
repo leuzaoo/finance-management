@@ -15,7 +15,7 @@ export default function Layout({
           <Navbar />
         </header>
 
-        <main className="bg-light/10 border-light/10 2md:pb-0 flex-1 overflow-y-auto border-t p-4 pb-20">
+        <main className="border-dark/20 2md:pb-0 dark:bg-light/10 dark:border-light/10 flex-1 overflow-y-auto border-t bg-light p-4 pb-20 text-dark transition-all duration-1000 dark:text-light">
           {children}
         </main>
       </div>
