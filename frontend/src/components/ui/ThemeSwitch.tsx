@@ -6,8 +6,13 @@ type Theme = "dark" | "light";
 
 export default function ThemeSwitch() {
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem("theme") as Theme | null;
-    return stored === "dark" || stored === "light" ? stored : "light";
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("theme") as Theme | null;
+      if (stored === "dark" || stored === "light") {
+        return stored;
+      }
+    }
+    return "light";
   });
 
   useEffect(() => {
