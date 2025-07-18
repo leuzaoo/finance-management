@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 type Theme = "dark" | "light";
 
 export default function ThemeSwitch() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(() => {
+    const stored = localStorage.getItem("theme") as Theme | null;
+    return stored === "dark" || stored === "light" ? stored : "light";
+  });
 
   useEffect(() => {
     const stored = localStorage.getItem("theme") as Theme | null;
