@@ -25,11 +25,7 @@ export default function ThemeSwitch() {
   }
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="bg-light/20 dark:bg-dark-light/20 rounded"
-      aria-label="Alternar tema claro/escuro"
-    >
+    <button onClick={toggleTheme} aria-label="Alternar tema claro/escuro">
       {theme === "dark" ? "🌙" : "☀️"}
     </button>
   );

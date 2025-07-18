@@ -17,8 +17,6 @@ import { useUserStore } from "@/src/store/useUserStore";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 
-import ThemeToggle from "./ThemeSwitch";
-
 const menuItems = [
   {
     id: 0,
@@ -49,21 +47,19 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`border-light/20 transition-width 2md:flex hidden h-screen flex-col overflow-hidden border-r duration-300 ${collapsed ? "w-16" : "w-64"}`}
+        className={`border-dark/20 dark:border-light/20 transition-width 2md:flex hidden h-screen flex-col overflow-hidden border-r bg-light text-dark transition-all duration-1000 dark:bg-dark dark:text-light ${collapsed ? "w-16" : "w-64"}`}
       >
         <h1 className="sr-only">Menu</h1>
         <div
-          className={`border-light/20 flex w-full border-b ${collapsed ? "justify-center" : "justify-end"}`}
+          className={`border-dark/20 dark:border-light/20 flex w-full border-b ${collapsed ? "justify-center" : "justify-end"}`}
         >
           <button
             onClick={() => setCollapsed((c) => !c)}
             className="h-20 cursor-pointer"
           >
-            {collapsed ? (
-              <ChevronRightIcon className="text-light" />
-            ) : (
-              <ChevronLeftIcon className="text-light" />
-            )}
+            <ChevronRightIcon
+              className={`text-dark transition-all duration-300 dark:text-light ${!collapsed && "rotate-180"}`}
+            />
           </button>
         </div>
 
@@ -81,8 +77,8 @@ export default function Sidebar() {
                       collapsed ? "justify-center" : ""
                     } ${
                       isActive
-                        ? "bg-light/10 text-light"
-                        : "text-light/40 hover:bg-light/5"
+                        ? "bg-dark/10 dark:bg-light/10 text-dark dark:text-light"
+                        : "text-dark/40 hover:bg-dark/5 dark:text-light/40 hover:dark:bg-light/5"
                     }`}
                   >
                     {item.icon}
@@ -101,7 +97,6 @@ export default function Sidebar() {
                 </li>
               );
             })}
-            <ThemeToggle />
           </ul>
 
           <div className="mb-4 px-2">
@@ -113,12 +108,12 @@ export default function Sidebar() {
               <div className="flex flex-col gap-2">
                 <Link
                   href="/profile"
-                  className={`flex items-center gap-2 rounded-md p-2 transition-colors lg:hidden ${
+                  className={`flex items-center gap-2 rounded-md p-2 transition-colors ${
                     collapsed ? "justify-center" : ""
                   } ${
                     pathname.startsWith("/profile")
-                      ? "bg-light/10 text-light"
-                      : "text-light/40 hover:bg-light/10"
+                      ? "bg-dark/10 dark:bg-light/10 dark:text-light"
+                      : "hover:bg-dark/10 text-dark/40 dark:text-light/40 hover:dark:bg-light/10"
                   }`}
                 >
                   <UserIcon size={32} strokeWidth={1.5} />
@@ -140,7 +135,7 @@ export default function Sidebar() {
                 <button
                   title="Sair da conta"
                   onClick={handleLogout}
-                  className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-600 py-2 hover:bg-red-400"
+                  className="flex w-full cursor-pointer items-center justify-center rounded-md bg-red-600 py-2 text-light hover:bg-red-400"
                 >
                   {!collapsed ? "Sair" : <LogOutIcon strokeWidth={1.5} />}
                 </button>

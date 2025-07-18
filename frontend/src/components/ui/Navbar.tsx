@@ -16,9 +16,9 @@ const Navbar = () => {
   }, [getProfile]);
 
   return (
-    <header className="bg-dark hidden h-20 w-full justify-end p-4 lg:flex">
+    <header className="2md:flex hidden h-20 w-full justify-end bg-light p-4 text-dark transition-all duration-1000 dark:bg-dark dark:text-light">
+      <ThemeToggle />
       <Link href="/profile" className="flex items-center gap-2">
-        <ThemeToggle />
         <UserIcon size={36} strokeWidth={1.5} />
         <div className="flex flex-col">
           <span>{user?.firstName}</span>
