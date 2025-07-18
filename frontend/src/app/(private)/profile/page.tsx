@@ -11,6 +11,7 @@ import { useAuthStore } from "@/src/store/useAuthStore";
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import PersonalDataModal from "@/src/components/forms/PersonalDataModal";
 import TitlePage from "@/src/components/common/TitlePage";
+import ThemeSwitch from "@/src/components/ui/ThemeSwitch";
 import AuthModal from "@/src/components/forms/AuthModal";
 
 export default function ProfilePage() {
@@ -54,7 +55,10 @@ export default function ProfilePage() {
     <>
       <ToastContainer autoClose={1500} position="top-left" />
       <div className="mx-auto max-w-md">
-        <TitlePage text="Meu Perfil" />
+        <div className="flex items-center justify-between">
+          <TitlePage text="Meu Perfil" />
+          <ThemeSwitch />
+        </div>
 
         <div className="border-light/10 mt-4 rounded-xl border p-4">
           <div className="flex items-center justify-between">
@@ -84,14 +88,14 @@ export default function ProfilePage() {
             <label className="text-light/50 2md:text-base block text-sm">
               Primeiro nome
             </label>
-            <p className="text-light 2md:text-lg">{profile.firstName}</p>
+            <p className="2md:text-lg text-light">{profile.firstName}</p>
           </div>
 
           <div className="mt-3">
             <label className="text-light/50 2md:text-base block text-sm">
               Email
             </label>
-            <p className="text-light 2md:text-lg">{profile.email}</p>
+            <p className="2md:text-lg text-light">{profile.email}</p>
           </div>
         </div>
 
@@ -111,7 +115,7 @@ export default function ProfilePage() {
             <label className="text-light/50 2md:text-base block text-sm">
               Senha
             </label>
-            <p className="text-light 2md:text-lg">••••••••••••</p>
+            <p className="2md:text-lg text-light">••••••••••••</p>
           </div>
         </div>
         <button

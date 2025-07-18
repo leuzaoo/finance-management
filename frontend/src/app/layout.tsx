@@ -28,7 +28,7 @@ const archivo = Archivo({
 });
 
 export const metadata: Metadata = {
-  title: "Gerenciador de Finanças",
+  title: "FinSafe | Gerenciador de Finanças",
   description:
     "Administre suas finanças de forma fácil e simples. O resto deixe conosco.",
 };
@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${archivo.className} ${zonaProBold.variable} ${zonaProLight.variable} ${inter.variable} antialiased`}
       >
