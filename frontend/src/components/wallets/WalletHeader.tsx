@@ -21,7 +21,7 @@ export function WalletHeader({
       <div className="flex items-center justify-between">
         <TitlePage text={bankName} />
         <div>
-          <span className="font-zona-pro text-2xl sm:text-3xl">
+          <span className="font-zona-pro text-2xl font-bold sm:text-3xl">
             {formatCurrency(balance)}
           </span>{" "}
           <span className="text-lg opacity-60">({currency})</span>
@@ -29,10 +29,10 @@ export function WalletHeader({
       </div>
 
       <div className="mt-4 flex items-end justify-between">
-        <span className="text-light/50 font-light sm:text-lg">Transações</span>
+        <span className="font-light text-light/50 sm:text-lg">Transações</span>
         <button
           onClick={onOpenModal}
-          className="bg-light text-dark flex cursor-pointer items-center justify-end gap-2 rounded px-3 py-1 transition-all duration-200 hover:opacity-60"
+          className="flex cursor-pointer items-center justify-end gap-2 rounded bg-light px-3 py-1 text-dark transition-all duration-200 hover:opacity-60"
         >
           Adicionar <PlusCircleIcon size={20} />
         </button>

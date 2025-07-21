@@ -24,7 +24,7 @@ export default function CategoryBarChart({
 }: Props) {
   if (isLoading) {
     return (
-      <section className="bg-dark/50 mt-6 space-y-4 rounded-lg p-4">
+      <section className="mt-6 space-y-4 rounded-lg bg-dark/50 p-4">
         <TitlePage text="Gastos por Categoria" />
         <p className="text-light/60">Carregando resumo por categoria…</p>
       </section>
@@ -33,7 +33,7 @@ export default function CategoryBarChart({
 
   if (data.length === 0) {
     return (
-      <section className="bg-dark/50 mt-6 space-y-4 rounded-lg p-4">
+      <section className="mt-6 space-y-4 rounded-lg bg-dark/50 p-4">
         <TitlePage text="Gastos por Categoria" />
         <p className="text-light/60">Nenhuma despesa neste período.</p>
       </section>
@@ -46,7 +46,7 @@ export default function CategoryBarChart({
   );
 
   return (
-    <section className="bg-dark/50 mt-6 space-y-4 rounded-lg p-4">
+    <section className="mt-6 space-y-4 rounded-lg bg-dark/50 p-4">
       <TitlePage text="Gastos por Categoria" />
       <ul className="space-y-2 text-sm">
         {data.map((d) => {
@@ -57,23 +57,23 @@ export default function CategoryBarChart({
               <span className="w-20 font-medium capitalize">
                 {getCategoryLabel(d.category)}
               </span>
-              <div className="bg-light/10 relative h-3 flex-1 overflow-hidden rounded-full">
+              <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-light/10">
                 <div
-                  className="absolute top-0 left-0 h-full bg-green-500"
+                  className="absolute left-0 top-0 h-full bg-green-500"
                   style={{ width: widthPct }}
                 />
               </div>
-              <span className="font-zona-pro w-20 text-right text-xs">
+              <span className="w-20 text-right font-zona-pro text-xs font-bold">
                 {formatCurrency(d.total)}
               </span>
             </li>
           );
         })}
       </ul>
-      <div className="text-light/50 flex items-center justify-end text-sm font-light">
+      <div className="flex items-center justify-end text-sm font-light text-light/50">
         <p>
           Total:{" "}
-          <span className="font-zona-pro text-base font-medium">
+          <span className="font-zona-pro text-base font-bold">
             {formatCurrency(sumTotal)}
           </span>
         </p>

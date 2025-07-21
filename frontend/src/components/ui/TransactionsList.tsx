@@ -23,11 +23,11 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
       {transactions.map((tx) => (
         <li
           key={tx._id}
-          className="bg-dark/50 relative flex flex-col justify-between rounded-lg px-4 py-2"
+          className="relative flex flex-col justify-between rounded-lg bg-dark/50 px-4 py-2"
         >
           <div className="flex w-full justify-between">
             <span
-              className={`font-zona-pro text-xl ${
+              className={`font-zona-pro text-xl font-bold ${
                 tx.type === "expense" ? "text-[#d48e62]" : "text-green-600"
               }`}
             >
@@ -45,7 +45,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
                   await onDelete(tx._id);
                 }
               }}
-              className="text-light/60 cursor-pointer p-1 hover:text-red-500"
+              className="cursor-pointer p-1 text-light/60 hover:text-red-500"
               title="Deletar transação"
             >
               <Trash2Icon size={16} strokeWidth={1.5} />
@@ -56,12 +56,12 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
             {getCategoryLabel(tx.category)}
           </p>
           {tx.description && (
-            <p className="text-light/60 text-sm font-light first-letter:capitalize">
+            <p className="text-sm font-light text-light/60 first-letter:capitalize">
               {tx.description}
             </p>
           )}
 
-          <span className="text-light/50 absolute right-4 bottom-4 text-xs">
+          <span className="absolute bottom-4 right-4 text-xs text-light/50">
             {format(new Date(tx.date), "dd/MM/yyyy")}
           </span>
         </li>
