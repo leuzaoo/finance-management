@@ -60,7 +60,7 @@ export default function ProfilePage() {
           <ThemeSwitch />
         </div>
 
-        <div className="border-light/10 mt-4 rounded-xl border p-4">
+        <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <UserCircle2 size={40} strokeWidth={1} />
@@ -72,55 +72,64 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="border-light/10 mt-4 rounded-xl border p-4">
+        <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
           <div className="flex items-center justify-between">
-            <h2 className="2md:text-xl font-semibold">Dados Pessoais</h2>
+            <h2 className="font-semibold 2md:text-xl">Dados Pessoais</h2>
             <button
               onClick={() => setPdModalOpen(true)}
               title="Editar Dados Pessoais"
-              className="border-light/20 cursor-pointer rounded-lg border px-2 py-1"
+              className="cursor-pointer rounded-lg border border-dark/20 px-2 py-1 transition-all duration-1000 dark:border-light/20"
             >
-              <PencilLineIcon size={16} className="text-light/50" />
+              <PencilLineIcon
+                size={16}
+                className="text-dark/50 transition-all duration-1000 dark:text-light/50"
+              />
             </button>
           </div>
 
           <div className="mt-3">
-            <label className="text-light/50 2md:text-base block text-sm">
+            <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
               Primeiro nome
             </label>
-            <p className="2md:text-lg text-light">{profile.firstName}</p>
+            <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
+              {profile.firstName}
+            </p>
           </div>
 
           <div className="mt-3">
-            <label className="text-light/50 2md:text-base block text-sm">
+            <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
               Email
             </label>
-            <p className="2md:text-lg text-light">{profile.email}</p>
+            <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
+              {profile.email}
+            </p>
           </div>
         </div>
 
-        <div className="border-light/10 mt-4 rounded-xl border p-4">
+        <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
           <div className="flex items-center justify-between">
-            <h2 className="2md:text-xl font-semibold">Autenticação</h2>
+            <h2 className="font-semibold 2md:text-xl">Autenticação</h2>
             <button
               onClick={() => setAuthModalOpen(true)}
               title="Editar Senha"
-              className="border-light/20 cursor-pointer rounded-lg border px-2 py-1"
+              className="cursor-pointer rounded-lg border border-light/20 px-2 py-1"
             >
               <PencilLineIcon size={16} className="text-light/50" />
             </button>
           </div>
 
           <div className="mt-3">
-            <label className="text-light/50 2md:text-base block text-sm">
+            <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
               Senha
             </label>
-            <p className="2md:text-lg text-light">••••••••••••</p>
+            <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
+              ••••••••••••
+            </p>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className={`mt-4 w-full cursor-pointer rounded-xl bg-red-600 py-3 text-center font-medium transition-all duration-200 hover:bg-red-400 ${
+          className={`mt-4 w-full cursor-pointer rounded-xl bg-red-600 py-3 text-center font-medium text-white transition-all duration-200 hover:bg-red-400 ${
             logoutLoading && "cursor-not-allowed opacity-50"
           }`}
         >
