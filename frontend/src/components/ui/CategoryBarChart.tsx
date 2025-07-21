@@ -46,7 +46,7 @@ export default function CategoryBarChart({
   );
 
   return (
-    <section className="mt-6 space-y-4 rounded-lg bg-dark/50 p-4">
+    <section className="mt-6 space-y-4 rounded-lg bg-white p-4 shadow-md transition-all duration-1000 dark:bg-dark/50">
       <TitlePage text="Gastos por Categoria" />
       <ul className="space-y-2 text-sm">
         {data.map((d) => {
@@ -57,7 +57,7 @@ export default function CategoryBarChart({
               <span className="w-20 font-medium capitalize">
                 {getCategoryLabel(d.category)}
               </span>
-              <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-light/10">
+              <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-dark/10 transition-all duration-1000 dark:bg-light/10">
                 <div
                   className="absolute left-0 top-0 h-full bg-green-500"
                   style={{ width: widthPct }}
@@ -70,7 +70,7 @@ export default function CategoryBarChart({
           );
         })}
       </ul>
-      <div className="flex items-center justify-end text-sm font-light text-light/50">
+      <div className="flex items-center justify-end text-sm font-light text-dark/50 transition-all duration-1000 dark:text-light/70">
         <p>
           Total:{" "}
           <span className="font-zona-pro text-base font-bold">

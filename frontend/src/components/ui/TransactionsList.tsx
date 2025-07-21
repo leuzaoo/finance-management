@@ -23,7 +23,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
       {transactions.map((tx) => (
         <li
           key={tx._id}
-          className="relative flex flex-col justify-between rounded-lg bg-dark/50 px-4 py-2"
+          className="relative flex flex-col justify-between rounded-lg bg-white px-4 py-2 shadow-sm transition-all duration-1000 dark:bg-dark/50"
         >
           <div className="flex w-full justify-between">
             <span
@@ -45,7 +45,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
                   await onDelete(tx._id);
                 }
               }}
-              className="cursor-pointer p-1 text-light/60 hover:text-red-500"
+              className="cursor-pointer p-1 text-dark/60 transition-all duration-1000 hover:text-red-500 dark:text-light/60"
               title="Deletar transação"
             >
               <Trash2Icon size={16} strokeWidth={1.5} />
@@ -56,12 +56,12 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
             {getCategoryLabel(tx.category)}
           </p>
           {tx.description && (
-            <p className="text-sm font-light text-light/60 first-letter:capitalize">
+            <p className="text-sm font-light text-dark/60 transition-all duration-1000 first-letter:capitalize dark:text-light/60">
               {tx.description}
             </p>
           )}
 
-          <span className="absolute bottom-4 right-4 text-xs text-light/50">
+          <span className="absolute bottom-4 right-4 text-xs text-dark/50 transition-all duration-1000 dark:text-light/50">
             {format(new Date(tx.date), "dd/MM/yyyy")}
           </span>
         </li>

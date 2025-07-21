@@ -39,14 +39,14 @@ export default function BalanceChart({
   };
 
   return (
-    <div className="mt-2 h-64 w-full rounded-lg bg-dark/50 p-4 2md:mt-0">
+    <div className="mt-2 h-64 w-full rounded-lg bg-white p-4 shadow-md transition-all duration-1000 dark:bg-dark/50 2md:mt-0">
       <TitlePage text="Histórico" />
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={data}
           margin={{ top: 24, right: 40, left: 0, bottom: 16 }}
         >
-          <CartesianGrid stroke="#202020" strokeDasharray="8 8" />
+          <CartesianGrid stroke="#202020" strokeDasharray="2 12" />
           <XAxis
             dataKey="date"
             tickFormatter={dateFormatter || defaultDateFormatter}

@@ -9,7 +9,7 @@ type Props = {
 };
 
 const mainInputStyle =
-  "border-light/30 w-full rounded border p-1 text-sm bg-dark/50";
+  "border-light/30 w-full transition-all duration-1000 rounded border p-1 text-sm bg-white border-dark/10 shadow-sm dark:bg-dark/50";
 const dateInputFormat = "dd/MM/yy";
 
 export default function DateFilters({
