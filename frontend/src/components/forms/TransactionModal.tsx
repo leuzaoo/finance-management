@@ -97,24 +97,24 @@ export default function TransactionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-black/50 backdrop-blur-xs"
+        className="absolute inset-0 bg-dark/50 backdrop-blur-sm"
       />
 
       <form
         onSubmit={handleSubmit}
-        className="bg-dark relative z-10 w-full max-w-md rounded-lg border border-white/30 p-4 text-white"
+        className="relative z-10 w-full max-w-md rounded-lg border border-white/30 bg-dark p-4 text-white"
       >
         <button
           onClick={onClose}
           type="button"
-          className="absolute top-4 right-4 cursor-pointer text-gray-400 hover:text-red-600"
+          className="absolute right-4 top-4 cursor-pointer text-gray-400 hover:text-red-600"
         >
           ✕
         </button>
 
         <TitlePage text="Nova transação" />
 
-        <div className="bg-dark-light my-4 flex space-x-2 rounded-full p-1">
+        <div className="my-4 flex space-x-2 rounded-full bg-dark-light p-1">
           {(["expense", "income"] as TransactionType[]).map((opt) => (
             <button
               key={opt}
@@ -122,7 +122,7 @@ export default function TransactionModal({
               onClick={() => setType(opt)}
               className={`flex-1 cursor-pointer rounded-full py-2 text-center transition-all duration-200 ${
                 type === opt
-                  ? "text-dark bg-white text-xl font-semibold"
+                  ? "bg-white text-xl font-semibold text-dark"
                   : "text-light/50 hover:bg-light/10"
               }`}
             >
@@ -141,8 +141,7 @@ export default function TransactionModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="font-zona-pro mt-1 w-full rounded border px-3 py-2 outline-none"
-              placeholder="1.000,00"
+              className="mt-1 w-full rounded border border-light/10 bg-dark-light px-3 py-2 font-zona-pro font-bold outline-none"
               required
               value={amount}
               onValueChange={(values) => {
@@ -170,7 +169,7 @@ export default function TransactionModal({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={`bg-dark-light border-light/10 mt-1 w-full rounded border px-3 py-2 text-white ${
+            className={`mt-1 w-full rounded border border-light/10 bg-dark-light px-3 py-2 text-white ${
               errors.category ? "border-red-500" : ""
             }`}
           >
@@ -191,7 +190,7 @@ export default function TransactionModal({
           <DatePicker
             selected={date}
             onChange={(d) => setDate(d)}
-            className="bg-dark-light border-light/10 mt-1 w-full rounded border px-3 py-2 text-white"
+            className="mt-1 w-full rounded border border-light/10 bg-dark-light px-3 py-2 text-white"
             dateFormat="dd/MM/yyyy"
           />
           {errors.date && (

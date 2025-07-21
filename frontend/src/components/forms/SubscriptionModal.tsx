@@ -92,17 +92,17 @@ export default function SubscriptionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-black/50 backdrop-blur-xs"
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
       />
 
       <form
         onSubmit={handleSubmit}
-        className="bg-dark relative z-10 w-full max-w-md rounded-lg border border-white/30 p-4 text-white"
+        className="relative z-10 w-full max-w-md rounded-lg border border-white/30 bg-dark p-4 text-white"
       >
         <button
           onClick={onClose}
           type="button"
-          className="absolute top-4 right-4 cursor-pointer text-gray-400 hover:text-red-600"
+          className="absolute right-4 top-4 cursor-pointer text-gray-400 hover:text-red-600"
         >
           ✕
         </button>
@@ -120,7 +120,7 @@ export default function SubscriptionModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="font-inter mt-1 w-full rounded border px-3 py-2 outline-none"
+              className="mt-1 w-full rounded border px-3 py-2 font-inter outline-none"
               placeholder={`1.00 ${currencyType}`}
               required
               value={amount}
