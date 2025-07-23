@@ -62,12 +62,12 @@ export default function ReminderModal({
       />
       <form
         onSubmit={handleSubmit}
-        className="bg-light text-dark relative z-10 w-full max-w-md rounded-2xl border p-4"
+        className="relative z-10 w-full max-w-md rounded-2xl border bg-light p-4 text-dark dark:border-light/20 dark:bg-dark dark:text-light"
       >
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 cursor-pointer text-red-500"
+          className="absolute right-4 top-2 cursor-pointer text-red-500"
         >
           ✕
         </button>
@@ -78,8 +78,8 @@ export default function ReminderModal({
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="text-dark border-dark/20 mt-1 w-full border-b text-2xl font-bold outline-none placeholder:text-base placeholder:font-normal"
-              placeholder="Ex: Pagar fatura"
+              className="mt-1 flex w-full flex-col items-center justify-center rounded-lg border-b border-dark/20 py-1 pl-2 text-2xl font-bold text-dark shadow-md outline-none placeholder:text-base placeholder:font-normal dark:border-light/20 dark:bg-dark-light dark:text-light"
+              placeholder="Título do lembrete"
             />
             {errors.title && (
               <p className="mt-1 text-xs text-red-500">{errors.title}</p>
@@ -89,7 +89,7 @@ export default function ReminderModal({
             <DatePicker
               selected={date}
               onChange={(d: Date | null) => d && setDate(d)}
-              className="text-dark border-dark/20 mt-2 w-24 border-b text-lg font-medium outline-none"
+              className="mt-2 w-28 rounded-lg border-b border-dark/20 px-2 py-1 text-lg font-medium text-dark shadow-md outline-none dark:border-light/20 dark:bg-dark-light dark:text-light"
               dateFormat="dd/MM/yyyy"
             />
             {errors.date && (
@@ -100,7 +100,7 @@ export default function ReminderModal({
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="text-dark border-dark/20 bg-dark/10 mt-1 w-full rounded border p-2 outline-none"
+              className="mt-1 w-full rounded-lg border border-dark/20 bg-dark/10 p-2 text-dark shadow-md outline-none dark:border-light/20 dark:bg-dark-light dark:text-light"
               placeholder="Observações (opcional)"
               rows={2}
             />
@@ -122,7 +122,7 @@ export default function ReminderModal({
           )}
           <button
             type="submit"
-            className="bg-dark flex-1 cursor-pointer rounded py-2 text-white transition-all duration-200 hover:opacity-80"
+            className="flex-1 cursor-pointer rounded-lg bg-dark py-2 text-white transition-all duration-200 hover:opacity-80 dark:bg-white dark:text-dark"
           >
             {reminder ? "Atualizar" : "Criar"}
           </button>
