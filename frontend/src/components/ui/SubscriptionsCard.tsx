@@ -43,7 +43,11 @@ export default function SubscriptionsCard({
     return <p>Carregando assinaturas…</p>;
   }
   if (subscriptions.length === 0) {
-    return <p className="text-light/60">Nenhuma assinatura cadastrada.</p>;
+    return (
+      <p className="text-dark/60 transition-all duration-1000 dark:text-light/60">
+        Nenhuma assinatura cadastrada.
+      </p>
+    );
   }
 
   const handleMenuOpen = (event: MouseEvent<HTMLElement>, subId: string) => {

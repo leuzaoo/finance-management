@@ -14,7 +14,7 @@ export interface BankModalProps {
 }
 
 const inputStyle =
-  "bg-dark-light border-light/10 text-light w-full rounded-md border py-2 pl-2 shadow-sm outline-none";
+  "bg-white border-dark-20 dark:text-dark dark:bg-dark-light max-w-max pr-2 dark:border-light/10 dark:text-light w-full rounded-md shadow-md border py-2 pl-2 outline-none";
 
 export default function BankModal({
   isOpen,
@@ -49,10 +49,9 @@ export default function BankModal({
 
       <form
         onSubmit={handleSubmit}
-        className="bg-dark text-light relative w-full max-w-md rounded-lg border border-white/30 p-4 shadow-xl"
+        className="relative w-full max-w-md rounded-lg border border-white/30 bg-light p-4 shadow-xl dark:bg-dark dark:text-light"
       >
         <h3 className="text-2xl font-medium">Cadastrar Banco</h3>
-
         <div className="mt-4 space-y-4">
           <div>
             <label className="block text-sm font-medium">Nome</label>
@@ -104,7 +103,7 @@ export default function BankModal({
         <div className="mt-6 flex w-full justify-end space-x-2">
           <button
             type="submit"
-            className="bg-light hover:bg-light/80 text-dark w-full cursor-pointer rounded px-4 py-2 font-semibold"
+            className="w-full cursor-pointer rounded bg-dark px-4 py-2 font-semibold text-white hover:opacity-80 dark:bg-light dark:text-dark"
           >
             Salvar
           </button>
