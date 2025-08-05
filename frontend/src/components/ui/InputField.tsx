@@ -28,7 +28,7 @@ function InputField({
         type={type}
         disabled={disabled}
         placeholder={placeholder}
-        className={`w-full rounded-md border border-dark/20 bg-white py-2 pl-2 text-light shadow-md outline-none dark:border-light/10 dark:bg-dark-light ${image && "pl-10"} ${disabled ? "cursor-not-allowed opacity-50" : "hover:border-light/20 focus:border-light/20"}`}
+        className={`w-full rounded-md border border-light/10 bg-dark-light py-2 pl-2 text-light shadow-md outline-none dark:border-light/10 dark:bg-dark-light ${image && "pl-10"} ${disabled ? "cursor-not-allowed opacity-50" : "hover:border-light/20 focus:border-light/20"}`}
       />
       {image && (
         <span className="absolute left-2 top-1/2 -translate-y-1/2 opacity-50">

@@ -33,9 +33,11 @@ export default function CategoryBarChart({
 
   if (data.length === 0) {
     return (
-      <section className="mt-6 space-y-4 rounded-lg bg-dark/50 p-4">
+      <section className="mt-6 rounded-lg bg-white p-4 shadow-md transition-all duration-1000 dark:bg-dark/50">
         <TitlePage text="Gastos por Categoria" />
-        <p className="text-light/60">Nenhuma despesa neste período.</p>
+        <p className="text-dark/60 transition-all duration-1000 dark:text-light/60">
+          Nenhuma despesa neste período.
+        </p>
       </section>
     );
   }
