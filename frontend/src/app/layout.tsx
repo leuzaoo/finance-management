@@ -2,9 +2,9 @@ import { Archivo, Inter } from "next/font/google";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
+import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-datepicker/dist/react-datepicker.css";
-import "./globals.css";
 
 const zonaProBold = localFont({
   src: "../fonts/ZonaPro-Bold.otf",
