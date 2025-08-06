@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import "react-toastify/dist/ReactToastify.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "./globals.css";
 
 const zonaProBold = localFont({
