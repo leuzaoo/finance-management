@@ -64,7 +64,7 @@ export default function LoginPage() {
               novamente!
             </span>
           </p>
-          <h1 className="text-light/50 mt-3">
+          <h1 className="mt-3 text-light/50">
             Faça login em sua conta. Não possui?{" "}
             <Link
               href="/register"
@@ -82,10 +82,10 @@ export default function LoginPage() {
             <form onSubmit={handleLogin} className="mt-8 flex flex-col">
               <div className="space-y-3">
                 <div className="space-y-1">
+                  <label>Email</label>
                   <InputField
                     type="email"
                     placeholder="johndoe@mail.com"
-                    image={<EmailIcon style={{ fontSize: 20 }} />}
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                   />
@@ -94,10 +94,10 @@ export default function LoginPage() {
                   )}
                 </div>
                 <div className="space-y-1">
+                  <label>Senha</label>
                   <InputField
                     type="password"
                     placeholder="••••••••••••"
-                    image={<LockIcon style={{ fontSize: 20 }} />}
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                   />

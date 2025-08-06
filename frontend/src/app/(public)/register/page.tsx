@@ -80,7 +80,7 @@ export default function RegisterPage() {
                 </span>
                 a sua conta!
               </p>
-              <h1 className="text-light/30 mt-3">
+              <h1 className="mt-3 text-light/30">
                 Cadastre-se abaixo. Já possui uma conta?{" "}
                 <Link href="/login" className="text-sky-300 underline">
                   Fazer login
@@ -98,12 +98,12 @@ export default function RegisterPage() {
             <form onSubmit={handleRegister} className="mt-10 flex flex-col">
               <div className="space-y-3">
                 <div className="space-y-1">
+                  <label>Primeiro nome</label>
                   <InputField
                     onChange={(e) => setFirstName(e.target.value)}
                     value={firstName}
                     type="text"
-                    placeholder="Primeiro nome"
-                    image={<BadgeIcon style={{ fontSize: 20 }} />}
+                    placeholder="José"
                   />
                   {fieldErrors.firstName && (
                     <p className="text-xs text-red-500">
@@ -112,24 +112,24 @@ export default function RegisterPage() {
                   )}
                 </div>
                 <div className="space-y-1">
+                  <label>Email</label>
                   <InputField
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                     type="email"
-                    placeholder="Email"
-                    image={<EmailIcon style={{ fontSize: 20 }} />}
+                    placeholder="johndoe@mail.com"
                   />
                   {fieldErrors.email && (
                     <p className="text-xs text-red-500">{fieldErrors.email}</p>
                   )}
                 </div>
                 <div className="space-y-1">
+                  <label>Senha</label>
                   <InputField
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     type="password"
                     placeholder="Senha"
-                    image={<LockIcon style={{ fontSize: 20 }} />}
                   />
                   {fieldErrors.password && (
                     <p className="text-xs text-red-500">
