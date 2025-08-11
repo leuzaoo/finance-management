@@ -57,7 +57,9 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-md">
         <div className="flex items-center justify-between">
           <TitlePage text="Meu Perfil" />
+          <button className="2md:hidden">
           <ThemeSwitch />
+          </button>
         </div>
 
         <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
@@ -82,7 +84,7 @@ export default function ProfilePage() {
             >
               <PencilLineIcon
                 size={16}
-                className="text-dark/50 transition-all duration-1000 dark:text-light/50"
+                className="md:text-dark/50 transition-all duration-1000 dark:text-light/50"
               />
             </button>
           </div>
@@ -112,9 +114,9 @@ export default function ProfilePage() {
             <button
               onClick={() => setAuthModalOpen(true)}
               title="Editar Senha"
-              className="cursor-pointer rounded-lg border border-light/20 px-2 py-1"
+              className="cursor-pointer rounded-lg border dark:border-light/20 border-dark/20 px-2 py-1"
             >
-              <PencilLineIcon size={16} className="text-light/50" />
+              <PencilLineIcon size={16} className="dark:text-light/50 text-dark/50" />
             </button>
           </div>
 
