@@ -61,12 +61,12 @@ export default function AuthModal({
 
       <form
         onSubmit={handleSubmit}
-        className="bg-dark text-light relative w-full max-w-md rounded-lg border border-white/30 p-6 shadow-xl"
+        className="dark:bg-dark bg-white text-dark dark:text-light relative w-full max-w-md rounded-lg border border-white/30 p-6 shadow-xl"
       >
-        <h3 className="text-2xl font-medium">Atualizar Senha</h3>
+        <h3 className="text-2xl font-bold">Atualizar Senha</h3>
 
         <div className="mt-4">
-          <label className="mb-1 block text-sm opacity-50">Nova senha *</label>
+          <label className="mb-1 block text-sm opacity-70">Nova senha *</label>
           <div className="relative">
             <InputField
               type={show ? "text" : "password"}
@@ -81,7 +81,7 @@ export default function AuthModal({
             <button
               type="button"
               onClick={toggleShow}
-              className="text-light/60 absolute inset-y-0 right-0 flex items-center pr-3"
+              className="text-dark/60 dark:text-light/60 absolute inset-y-0 right-0 flex items-center pr-3"
             >
               {show ? <EyeOffIcon /> : <EyeIcon />}
             </button>
@@ -93,13 +93,13 @@ export default function AuthModal({
           <button
             type="button"
             onClick={onClose}
-            className="border-light/20 cursor-pointer rounded border px-4 py-2 hover:bg-white/10"
+            className="border-red-500 text-red-500 cursor-pointer rounded border px-4 py-2 hover:bg-red-500 hover:text-white"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            className="bg-light text-dark hover:bg-light/80 cursor-pointer rounded px-4 py-2 font-semibold"
+            className="dark:bg-light bg-dark text-white dark:text-dark hover:bg-opacity-70 dark:hover:bg-blue-500 dark:hover:text-white cursor-pointer rounded px-4 py-2 font-semibold"
           >
             Salvar
           </button>
