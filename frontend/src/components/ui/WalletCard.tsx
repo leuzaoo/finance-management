@@ -30,8 +30,8 @@ const WalletCard = ({ bank }: Props) => {
         <h2 className="text-lg font-medium capitalize">{bank.bankName}</h2>
         <button
           onClick={handleDelete}
-          className="text-light/60 cursor-pointer p-1 hover:text-red-500"
-          title="Deletar banco"
+          className="text-dark/60 transition-all duration-1000 dark:text-light/60 cursor-pointer p-1 hover:text-red-500 dark:hover:text-red-500"
+          title="Excluir"
         >
           <Trash2Icon size={16} strokeWidth={1.5} />
         </button>
