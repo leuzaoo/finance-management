@@ -35,7 +35,7 @@ export function Wallets() {
       <div className="flex max-w-96 items-center justify-between">
         <TitlePage text="Cartões" />
         <button onClick={() => setModalOpen(true)} className="cursor-pointer">
-          <div className="bg-light text-dark hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
+          <div className="bg-dark text-light dark:bg-light dark:text-dark hover:bg-dark/60 dark:hover:bg-light/80 flex items-center gap-2 rounded-full p-1">
             <PlusIcon size={20} />
           </div>
         </button>
