@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, UserCircle2Icon } from "lucide-react";
 
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
+import { useUserStore } from "@/src/store/useUserStore";
 import { useBankStore } from "@/src/store/useBankStore";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
@@ -22,6 +23,7 @@ export default function DashboardPage() {
   const [editingRem, setEditingRem] = useState<Reminder | undefined>(undefined);
 
   const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
+  const { profile: user } = useUserStore();
 
   useEffect(() => {
     listBanks();
@@ -93,45 +95,20 @@ export default function DashboardPage() {
       <div className="w-full gap-10 pb-5 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-2">
           <section>
-            <TitlePage text="Visão geral" />
+            <div className="mb-5 flex w-full items-end justify-between">
+              <p className="text-lg">
+                Olá, <span className="font-bold">{user?.firstName}</span>.
+              </p>
+              <UserCircle2Icon size={60} strokeWidth={1} />
+            </div>
+
             <DashboardMoneyCard
               banks={banks}
               currency={currency}
               currencies={currencies}
               onCurrencyChange={setCurrency}
+              onOpenAdd={() => setModalOpen(true)}
             />
-          </section>
-
-          <section
-            className={`mt-6 rounded-xl ${banksOfCurrency.length === 0 ? "max-w-sm" : "max-w-max"}`}
-          >
-            <div className="flex w-full items-center justify-between">
-              <TitlePage text="Cartões" />
-              <button
-                onClick={() => setModalOpen(true)}
-                className="cursor-pointer"
-              >
-                <div className="flex cursor-pointer items-center gap-2 rounded-full bg-dark p-1 text-light transition-all duration-1000 hover:opacity-60 dark:bg-light dark:text-dark">
-                  <PlusIcon size={20} />
-                </div>
-              </button>
-            </div>
-
-            <div
-              className={`dark:bg-dark/50 mt-2 rounded-xl bg-white p-3 shadow-md transition-all duration-1000 ${banksOfCurrency.length === 0 ? "" : "w-full"}`}
-            >
-              {banksOfCurrency.length === 0 ? (
-                <p className="text-dark/50 dark:text-light/40 max-w-max transition-all duration-1000">
-                  Clique no ícone acima para cadastrar.
-                </p>
-              ) : (
-                <div className="flex w-full items-start gap-4 overflow-x-auto pb-2">
-                  {banksOfCurrency.map((bank) => (
-                    <WalletCard key={bank.id} bank={bank} />
-                  ))}
-                </div>
-              )}
-            </div>
           </section>
         </div>
 
@@ -152,11 +129,11 @@ export default function DashboardPage() {
           {remLoading ? (
             <p className="mt-2">Carregando lembretes…</p>
           ) : reminders.length === 0 ? (
-            <p className="dark:text-light/40 dark:bg-dark/50 text-dark/50 mt-2 rounded-xl bg-white p-3 shadow-md transition-all duration-1000">
+            <p className="mt-2 rounded-xl bg-white p-3 text-dark/50 shadow-md transition-all duration-1000 dark:bg-dark/50 dark:text-light/40">
               Nenhum lembrete adicionado.
             </p>
           ) : (
-            <ul className="dark:bg-dark/50 mt-2 flex flex-col gap-2 rounded-xl bg-white p-3 transition-all duration-1000">
+            <ul className="mt-2 flex flex-col gap-2 rounded-xl bg-white p-3 transition-all duration-1000 dark:bg-dark/50">
               {reminders.map((r) => (
                 <RemindersCard
                   key={r._id}
