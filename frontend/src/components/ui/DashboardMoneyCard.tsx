@@ -1,32 +1,52 @@
-import Link from "next/link";
 import React from "react";
-import { Wallet2Icon, ChevronRightIcon } from "lucide-react";
+import Image from "next/image";
+
+import { CircleFadingPlusIcon } from "lucide-react";
 
 import { formatCurrency } from "@/src/utils/format-currency";
 import { Bank } from "@/src/store/useBankStore";
 
+import TitlePage from "../common/TitlePage";
+
 interface Props {
   banks: Bank[];
-  currency: string;
-  currencies: string[];
-  onCurrencyChange: (c: string) => void;
+  currency?: string;
+  currencies?: string[];
+  onCurrencyChange?: (c: string) => void;
+  onOpenAdd?: () => void;
 }
 
 const ALL = "Todas";
 
-const DashboardMoneyCard = ({
+const flagMap: Record<string, string> = {
+  BRL: "/brazil-flag.png",
+  GBP: "/uk-flag.png",
+  USD: "/usa-flag.png",
+  EUR: "/euro-flag.png",
+};
+
+export default function DashboardMoneyCard({
   banks,
-  currency,
-  currencies,
-  onCurrencyChange,
-}: Props) => {
-  if (banks.length === 0) {
+  currencies = [ALL],
+  onOpenAdd,
+}: Props) {
+  if (!banks || banks.length === 0) {
     return (
-      <div className="mt-2">
-        <div className="dark:bg-dark/50 2md:w-sm dark:text-light/40 text-dark/50 max-w-sm rounded-xl bg-white p-3 shadow-md transition-all duration-1000">
-          Registre um cartão para exibir informações.
+      <>
+        <TitlePage text="Banco" />
+        <div className="mt-2 h-32 w-full cursor-pointer rounded-lg border border-dashed border-neutral-300 bg-white p-4 text-center shadow-sm transition-all duration-200 hover:opacity-50 dark:border-neutral-700 dark:bg-dark/60">
+          <button
+            type="button"
+            onClick={() => onOpenAdd?.()}
+            className="flex h-full w-full flex-col items-center justify-center gap-2"
+          >
+            <div>
+              <CircleFadingPlusIcon size={32} />
+            </div>
+            <span className="font-semibold">Adicionar banco</span>
+          </button>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -35,62 +55,61 @@ const DashboardMoneyCard = ({
     return acc;
   }, {});
 
-  const totalSingle = currency === ALL ? 0 : (totalsByCurrency[currency] ?? 0);
+  const currencyList = (currencies ?? []).filter((c) => c !== ALL);
 
   return (
-    <div className="mt-2 space-y-6">
-      <div className="2md:w-sm dark:bg-dark/70 max-w-sm rounded-lg bg-white p-3 transition-all duration-1000">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wallet2Icon
-              className="text-dark/40 dark:text-light/40 transition-all duration-1000"
-              width={20}
-            />
-            <span>Saldo</span>
+    <>
+      <section className="mt-4">
+        <div className="flex gap-3 overflow-x-auto pb-3">
+          {currencyList.map((c) => {
+            const amount = totalsByCurrency[c] ?? 0;
+            const flag = flagMap[c];
+
+            return (
+              <div
+                key={c}
+                className="flex h-32 min-w-[9rem] flex-col justify-between rounded-lg bg-white p-3 shadow-sm dark:bg-dark/70"
+              >
+                <div className="flex items-end justify-between">
+                  <div className="flex items-center gap-3">
+                    {flag ? (
+                      <Image
+                        src={flag}
+                        alt={`${c} flag`}
+                        width={36}
+                        height={24}
+                        className="rounded-sm"
+                      />
+                    ) : (
+                      <div className="h-9 w-12 rounded-sm bg-neutral-300 dark:bg-neutral-800" />
+                    )}
+                    <span className="font-medium">{c}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="font-zona-pro text-xl font-bold">
+                    {formatCurrency(amount)}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="h-32 min-w-[9rem] rounded-lg border border-dashed border-neutral-300 bg-white p-4 text-center shadow-sm dark:border-neutral-700 dark:bg-dark/60">
+            <button
+              type="button"
+              onClick={() => onOpenAdd?.()}
+              className="flex h-full w-full flex-col items-center justify-center gap-2"
+            >
+              <div>
+                <CircleFadingPlusIcon size={32} />
+              </div>
+              <span className="font-semibold">Novo</span>
+            </button>
           </div>
-          <select
-            value={currency}
-            onChange={(e) => onCurrencyChange(e.target.value)}
-            className="bg-dark/10 dark:bg-light/10 cursor-pointer rounded px-2 py-1 underline"
-          >
-            {currencies.map((c) => (
-              <option key={c} value={c} className="bg-light dark:bg-dark">
-                {c}
-              </option>
-            ))}
-          </select>
         </div>
-
-        <div className="mt-6">
-          {currency === ALL ? (
-            <ul className="space-y-2">
-              {currencies
-                .filter((c) => c !== ALL)
-                .map((c) => (
-                  <li key={c} className="flex justify-between text-lg">
-                    <span className="capitalize">{c}</span>
-                    <span className="font-zona-pro font-semibold">
-                      {formatCurrency(totalsByCurrency[c] || 0)}
-                    </span>
-                  </li>
-                ))}
-            </ul>
-          ) : (
-            <div className="font-zona-pro text-3xl">
-              {formatCurrency(totalSingle)}
-            </div>
-          )}
-        </div>
-
-        <Link
-          href={"/wallets"}
-          className="mt-4 flex items-center justify-end gap-1 text-sm text-blue-500 underline hover:text-blue-400"
-        >
-          Carteira <ChevronRightIcon size={16} />
-        </Link>
-      </div>
-    </div>
+      </section>
+    </>
   );
-};
-
-export default DashboardMoneyCard;
+}
