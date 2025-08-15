@@ -13,6 +13,7 @@ import {
   deleteTransaction,
   listTransactions,
   categorySummary,
+  getRecentTransactions,
 } from "../controllers/transaction.controller";
 
 const router = Router();
@@ -53,6 +54,8 @@ router.get(
   validate,
   listTransactions
 );
+
+router.get("/recent", authenticate, getRecentTransactions);
 
 router.get(
   "/:bankId/summary/categories",
