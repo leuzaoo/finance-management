@@ -1,8 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PlusIcon, UserCircle2Icon } from "lucide-react";
+import { format } from "date-fns";
 
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
+import { useTransactionStore } from "@/src/store/useTransactionStore";
+import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
+import { formatCurrency } from "@/src/utils/format-currency";
 import { useUserStore } from "@/src/store/useUserStore";
 import { useBankStore } from "@/src/store/useBankStore";
 
@@ -12,7 +16,6 @@ import ReminderModal from "@/src/components/forms/ReminderModal";
 import RemindersCard from "@/src/components/ui/RemindersCard";
 import TitlePage from "@/src/components/common/TitlePage";
 import BankModal from "@/src/components/forms/BankModal";
-import WalletCard from "@/src/components/ui/WalletCard";
 
 const ALL = "Todas";
 
@@ -21,9 +24,15 @@ export default function DashboardPage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isRemModalOpen, setRemModalOpen] = useState(false);
   const [editingRem, setEditingRem] = useState<Reminder | undefined>(undefined);
+  const { recentTransactions, listRecentTransactions, isRecentLoading } =
+    useTransactionStore();
 
   const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
   const { profile: user } = useUserStore();
+
+  useEffect(() => {
+    listRecentTransactions();
+  }, [listRecentTransactions]);
 
   useEffect(() => {
     listBanks();
@@ -33,9 +42,6 @@ export default function DashboardPage() {
     ALL,
     ...Array.from(new Set(banks.map((b) => b.currencyType))).sort(),
   ];
-
-  const banksOfCurrency =
-    currency === ALL ? banks : banks.filter((b) => b.currencyType === currency);
 
   const {
     reminders,
@@ -113,6 +119,54 @@ export default function DashboardPage() {
         </div>
 
         <section className="mt-6 w-full max-w-sm rounded-xl lg:mt-0">
+          <TitlePage text="Transações" />
+
+          {isRecentLoading ? (
+            <p className="my-5">Carregando transações…</p>
+          ) : recentTransactions.length === 0 ? (
+            <p className="my-5 text-dark/50">Nenhuma transação recente.</p>
+          ) : (
+            <ul className="my-5 space-y-3">
+              {recentTransactions.map((tx) => {
+                let bankCurrency: string | undefined;
+
+                if (tx.bank && typeof tx.bank === "object") {
+                  bankCurrency = (tx.bank as any).currencyType;
+                } else if (typeof tx.bank === "string") {
+                  const b = banks.find(
+                    (bb) => bb.id === tx.bank || bb.id === tx.bank,
+                  );
+                  bankCurrency = b?.currencyType;
+                }
+
+                return (
+                  <li key={tx._id} className="py-2">
+                    <div className="flex w-full justify-between font-inter">
+                      <span className="font-semibold">
+                        {getCategoryLabel(tx.category)}
+                      </span>
+                      <span className="font-semibold">
+                        <span className="font-zona-pro font-bold">
+                          {formatCurrency(tx.amount)}
+                        </span>{" "}
+                        {bankCurrency ?? ""}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center space-x-1">
+                      <span className="text-xs font-light">
+                        {tx.type === "expense" ? "Saiu" : "Entrou"}
+                      </span>
+                      <span className="text-xs font-light">
+                        • {format(new Date(tx.date), "dd/MM/yyyy")}
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
           <div className="flex items-center justify-between">
             <TitlePage text="Lembretes" />
             <button
