@@ -153,12 +153,17 @@ export default function DashboardPage() {
                       </span>
                     </div>
 
-                    <div className="flex items-center space-x-1">
-                      <span className="text-xs font-light">
-                        {tx.type === "expense" ? "Saiu" : "Entrou"}
-                      </span>
-                      <span className="text-xs font-light">
-                        • {format(new Date(tx.date), "dd/MM/yyyy")}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-1">
+                        <span className="text-xs font-light">
+                          {tx.type === "expense" ? "Saiu" : "Entrou"}
+                        </span>
+                        <span className="text-xs font-light">
+                          • {format(new Date(tx.date), "dd/MM/yyyy")}
+                        </span>
+                      </div>
+                      <span className="text-xs">
+                        {(tx.bank as any)?.bankName ?? "—"}
                       </span>
                     </div>
                   </li>

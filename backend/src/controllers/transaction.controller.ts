@@ -104,17 +104,7 @@ export const getRecentTransactions = async (
       .populate({ path: "bank", select: "currencyType bankName" })
       .lean();
 
-    const out = txs.map((t: any) => {
-      const bankObj = t.bank && typeof t.bank === "object" ? t.bank : null;
-      return {
-        ...t,
-        bank: bankObj
-          ? { _id: bankObj._id, currencyType: bankObj.currencyType }
-          : null,
-      };
-    });
-
-    res.json(out);
+    res.json(txs);
   } catch (err: any) {
     console.error("getRecentTransactions error:", err);
     res.status(500).json({

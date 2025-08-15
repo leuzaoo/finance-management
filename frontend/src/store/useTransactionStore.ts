@@ -11,10 +11,7 @@ const API_URL =
 
 export type Transaction = {
   _id: string;
-  bank:
-    | string
-    | { _id: string; currencyType?: string; bankName?: string }
-    | null;
+  bank: string | { _id: string; currencyType?: string; bankName?: string };
   type: "expense" | "income";
   amount: number;
   category: string;
