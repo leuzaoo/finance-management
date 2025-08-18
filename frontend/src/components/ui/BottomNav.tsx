@@ -29,7 +29,8 @@ export default function BottomNav() {
   const pathname = usePathname() || "/dashboard";
 
   return (
-    <nav className="bg-dark/10 2md:hidden fixed right-0 bottom-0 left-0 z-50 flex items-center justify-around p-2 backdrop-blur-sm">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around bg-dark/10 p-2 backdrop-blur-sm 2md:hidden">
+      <h1 className="sr-only">Navbar inferior</h1>
       {menuItems.map((item) => {
         const isActive =
           pathname === item.href || pathname.startsWith(item.href + "/");
@@ -38,7 +39,7 @@ export default function BottomNav() {
             key={item.id}
             href={item.href}
             className={`flex w-16 flex-col items-center justify-center rounded-lg py-1 transition-colors ${
-              isActive ? "text-dark bg-light" : "hover:bg-light/10 text-light"
+              isActive ? "bg-light text-dark" : "text-light hover:bg-light/10"
             } `}
           >
             {item.icon}
