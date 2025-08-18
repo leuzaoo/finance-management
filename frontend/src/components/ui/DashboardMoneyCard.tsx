@@ -59,7 +59,7 @@ export default function DashboardMoneyCard({
 
   return (
     <>
-      <section className="mt-4">
+      <div className="mt-4">
         <div className="flex gap-3 overflow-x-auto pb-3">
           {currencyList.map((c) => {
             const amount = totalsByCurrency[c] ?? 0;
@@ -109,7 +109,7 @@ export default function DashboardMoneyCard({
             </button>
           </div>
         </div>
-      </section>
+      </div>
     </>
   );
 }
