@@ -1,4 +1,4 @@
-import { model, Schema, type Types } from "mongoose";
+import mongoose, { model, Schema, type Types } from "mongoose";
 
 export type TransactionType = "expense" | "income";
 
@@ -15,7 +15,7 @@ export interface ITransaction extends Document {
 
 const TransactionSchema = new Schema<ITransaction>(
   {
-    bank: { type: Schema.Types.ObjectId, ref: "Bank", required: true },
+    bank: { type: mongoose.Schema.Types.ObjectId, ref: "Bank", required: true },
     type: {
       type: String,
       required: true,

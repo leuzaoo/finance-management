@@ -11,7 +11,7 @@ const API_URL =
 
 export type Transaction = {
   _id: string;
-  bank: string;
+  bank: string | { _id: string; currencyType?: string; bankName?: string };
   type: "expense" | "income";
   amount: number;
   category: string;
@@ -28,11 +28,14 @@ interface TransactionState {
   transactions: Transaction[];
   isLoading: boolean;
   error: string | null;
+  recentTransactions: Transaction[];
+  isRecentLoading: boolean;
 
   listTransactions: (
     bankId: string,
     opts?: { from?: Date; to?: Date },
   ) => Promise<void>;
+  listRecentTransactions: () => Promise<void>;
 
   addTransaction: (bankId: string, data: any) => Promise<void>;
   deleteTransaction: (
@@ -51,7 +54,9 @@ interface TransactionState {
 
 export const useTransactionStore = create<TransactionState>((set, get) => ({
   transactions: [],
+  recentTransactions: [],
   isLoading: false,
+  isRecentLoading: false,
   error: null,
 
   categorySummary: [],
@@ -81,6 +86,21 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       const e = err as AxiosError<{ message: string }>;
       const msg = e.response?.data.message || "Erro ao buscar histórico.";
       set({ error: msg, isLoading: false });
+      toast.error(msg);
+    }
+  },
+
+  listRecentTransactions: async () => {
+    set({ isRecentLoading: true, error: null });
+    try {
+      const url = `${API_URL}/recent`;
+      const res: AxiosResponse<Transaction[]> = await axios.get(url);
+      set({ recentTransactions: res.data, isRecentLoading: false });
+    } catch (error) {
+      const e = error as AxiosError<{ message?: string }>;
+      const msg =
+        e.response?.data?.message || "Erro ao buscar transações recentes.";
+      set({ error: msg, isRecentLoading: false });
       toast.error(msg);
     }
   },

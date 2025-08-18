@@ -83,6 +83,37 @@ export const listTransactions = async (
   }
 };
 
+export const getRecentTransactions = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.userId!;
+
+    const banks = await Bank.find({ user: userId }).select("_id").lean();
+    const bankIds = banks.map((b) => b._id);
+
+    if (bankIds.length === 0) {
+      res.json([]);
+      return;
+    }
+
+    const txs = await Transaction.find({ bank: { $in: bankIds } })
+      .sort({ date: -1 })
+      .limit(5)
+      .populate({ path: "bank", select: "currencyType bankName" })
+      .lean();
+
+    res.json(txs);
+  } catch (err: any) {
+    console.error("getRecentTransactions error:", err);
+    res.status(500).json({
+      message: "Erro ao buscar transações recentes",
+      error: err.message,
+    });
+  }
+};
+
 export const categorySummary = async (
   req: AuthRequest,
   res: Response
