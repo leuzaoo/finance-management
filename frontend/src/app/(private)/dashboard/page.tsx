@@ -102,11 +102,11 @@ export default function DashboardPage() {
         <div className="lg:col-span-2">
           <section>
             <h1 className="sr-only">Moeda</h1>
-            <div className="mb-5 flex w-full items-end justify-between">
+            <div className="mb-5 flex w-full items-end gap-2">
+              <UserCircle2Icon size={60} strokeWidth={1} />
               <p className="text-lg">
                 Olá, <span className="font-bold">{user?.firstName}</span>.
               </p>
-              <UserCircle2Icon size={60} strokeWidth={1} />
             </div>
 
             <DashboardMoneyCard
