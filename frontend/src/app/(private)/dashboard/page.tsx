@@ -98,9 +98,10 @@ export default function DashboardPage() {
         }}
       />
 
-      <div className="w-full gap-10 pb-5 lg:grid lg:grid-cols-3">
+      <div className="mx-auto w-full max-w-5xl gap-10 pb-5 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-2">
           <section>
+            <h1 className="sr-only">Moeda</h1>
             <div className="mb-5 flex w-full items-end justify-between">
               <p className="text-lg">
                 Olá, <span className="font-bold">{user?.firstName}</span>.
@@ -116,62 +117,63 @@ export default function DashboardPage() {
               onOpenAdd={() => setModalOpen(true)}
             />
           </section>
+
+          <section className="mt-5">
+            <TitlePage text="Transações" />
+            {isRecentLoading ? (
+              <p className="my-5">Carregando transações…</p>
+            ) : recentTransactions.length === 0 ? (
+              <p className="my-5 text-dark/50">Nenhuma transação recente.</p>
+            ) : (
+              <ul className="my-5 space-y-3">
+                {recentTransactions.map((tx) => {
+                  let bankCurrency: string | undefined;
+
+                  if (tx.bank && typeof tx.bank === "object") {
+                    bankCurrency = (tx.bank as any).currencyType;
+                  } else if (typeof tx.bank === "string") {
+                    const b = banks.find(
+                      (bb) => bb.id === tx.bank || bb.id === tx.bank,
+                    );
+                    bankCurrency = b?.currencyType;
+                  }
+
+                  return (
+                    <li key={tx._id} className="py-2">
+                      <div className="flex w-full justify-between font-inter">
+                        <span className="font-semibold">
+                          {getCategoryLabel(tx.category)}
+                        </span>
+                        <span className="font-semibold">
+                          <span className="font-zona-pro font-bold">
+                            {formatCurrency(tx.amount)}
+                          </span>{" "}
+                          {bankCurrency ?? ""}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-1">
+                          <span className="text-xs font-light">
+                            {tx.type === "expense" ? "Saiu" : "Entrou"}
+                          </span>
+                          <span className="text-xs font-light">
+                            • {format(new Date(tx.date), "dd/MM/yyyy")}
+                          </span>
+                        </div>
+                        <span className="text-xs">
+                          {(tx.bank as any)?.bankName ?? "—"}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
         </div>
 
         <section className="mt-6 w-full max-w-sm rounded-xl lg:mt-0">
-          <TitlePage text="Transações" />
-
-          {isRecentLoading ? (
-            <p className="my-5">Carregando transações…</p>
-          ) : recentTransactions.length === 0 ? (
-            <p className="my-5 text-dark/50">Nenhuma transação recente.</p>
-          ) : (
-            <ul className="my-5 space-y-3">
-              {recentTransactions.map((tx) => {
-                let bankCurrency: string | undefined;
-
-                if (tx.bank && typeof tx.bank === "object") {
-                  bankCurrency = (tx.bank as any).currencyType;
-                } else if (typeof tx.bank === "string") {
-                  const b = banks.find(
-                    (bb) => bb.id === tx.bank || bb.id === tx.bank,
-                  );
-                  bankCurrency = b?.currencyType;
-                }
-
-                return (
-                  <li key={tx._id} className="py-2">
-                    <div className="flex w-full justify-between font-inter">
-                      <span className="font-semibold">
-                        {getCategoryLabel(tx.category)}
-                      </span>
-                      <span className="font-semibold">
-                        <span className="font-zona-pro font-bold">
-                          {formatCurrency(tx.amount)}
-                        </span>{" "}
-                        {bankCurrency ?? ""}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-1">
-                        <span className="text-xs font-light">
-                          {tx.type === "expense" ? "Saiu" : "Entrou"}
-                        </span>
-                        <span className="text-xs font-light">
-                          • {format(new Date(tx.date), "dd/MM/yyyy")}
-                        </span>
-                      </div>
-                      <span className="text-xs">
-                        {(tx.bank as any)?.bankName ?? "—"}
-                      </span>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-
           <div className="flex items-center justify-between">
             <TitlePage text="Lembretes" />
             <button
