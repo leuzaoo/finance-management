@@ -11,6 +11,7 @@ import { useUserStore } from "@/src/store/useUserStore";
 import { useBankStore } from "@/src/store/useBankStore";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
+import TransactionInfoCard from "@/src/components/ui/TransactionInfoCard";
 import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
 import ReminderModal from "@/src/components/forms/ReminderModal";
 import RemindersCard from "@/src/components/ui/RemindersCard";
@@ -140,7 +141,7 @@ export default function DashboardPage() {
 
                   return (
                     <li key={tx._id} className="py-2">
-                      <div className="flex w-full justify-between font-inter">
+                      <div className="flex w-full justify-between">
                         <span className="font-semibold">
                           {getCategoryLabel(tx.category)}
                         </span>
@@ -208,6 +209,8 @@ export default function DashboardPage() {
             </ul>
           )}
         </section>
+
+        <TransactionInfoCard />
       </div>
     </>
   );
