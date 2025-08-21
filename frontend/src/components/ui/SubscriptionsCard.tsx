@@ -123,7 +123,7 @@ export default function SubscriptionsCard({
             <PencilIcon size={16} className="text-dark/70" />
           </ListItemIcon>
           <ListItemText>
-            <span className="font-inter! text-sm font-light">Editar</span>
+            <span className="text-sm font-light">Editar</span>
           </ListItemText>
         </MenuItem>
         <MenuItem onClick={handleDelete}>
@@ -131,7 +131,7 @@ export default function SubscriptionsCard({
             <Trash2Icon size={16} className="text-dark/70" />
           </ListItemIcon>
           <ListItemText>
-            <span className="font-inter! text-sm font-light">Deletar</span>
+            <span className="text-sm font-light">Deletar</span>
           </ListItemText>
         </MenuItem>
       </Menu>
