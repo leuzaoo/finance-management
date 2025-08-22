@@ -4,7 +4,10 @@ import { PlusIcon, UserCircle2Icon } from "lucide-react";
 import { format } from "date-fns";
 
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
-import { useTransactionStore } from "@/src/store/useTransactionStore";
+import {
+  useTransactionStore,
+  type Transaction,
+} from "@/src/store/useTransactionStore";
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 import { formatCurrency } from "@/src/utils/format-currency";
 import { useUserStore } from "@/src/store/useUserStore";
@@ -30,6 +33,9 @@ export default function DashboardPage() {
 
   const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
   const { profile: user } = useUserStore();
+
+  const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
+  const [txModalOpen, setTxModalOpen] = useState(false);
 
   useEffect(() => {
     listRecentTransactions();
@@ -68,6 +74,24 @@ export default function DashboardPage() {
 
   if (banksLoading) return <LoaderIcon />;
 
+  const resolveBankInfo = (tx: Transaction) => {
+    if (tx.bank && typeof tx.bank === "object") {
+      const b = tx.bank as any;
+      return {
+        bankName: b.bankName ?? null,
+        bankCurrency: b.currencyType ?? null,
+      };
+    }
+
+    const bankId =
+      typeof tx.bank === "string" ? tx.bank : (tx.bank as any)?._id;
+    const found = banks.find((bb) => String(bb.id) === String(bankId));
+    return {
+      bankName: found?.bankName ?? null,
+      bankCurrency: found?.currencyType ?? null,
+    };
+  };
+
   return (
     <>
       <BankModal
@@ -99,6 +123,17 @@ export default function DashboardPage() {
         }}
       />
 
+      {txModalOpen && selectedTx && (
+        <TransactionInfoCard
+          transaction={selectedTx}
+          onClose={() => {
+            setSelectedTx(null);
+            setTxModalOpen(false);
+          }}
+          resolveBankInfo={resolveBankInfo}
+        />
+      )}
+
       <div className="mx-auto w-full max-w-5xl gap-10 pb-5 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-2">
           <section>
@@ -128,19 +163,25 @@ export default function DashboardPage() {
             ) : (
               <ul className="my-5 space-y-3">
                 {recentTransactions.map((tx) => {
-                  let bankCurrency: string | undefined;
-
-                  if (tx.bank && typeof tx.bank === "object") {
-                    bankCurrency = (tx.bank as any).currencyType;
-                  } else if (typeof tx.bank === "string") {
-                    const b = banks.find(
-                      (bb) => bb.id === tx.bank || bb.id === tx.bank,
-                    );
-                    bankCurrency = b?.currencyType;
-                  }
+                  const { bankName, bankCurrency } = resolveBankInfo(tx);
 
                   return (
-                    <li key={tx._id} className="py-2">
+                    <li
+                      key={tx._id}
+                      className="cursor-pointer py-2"
+                      onClick={() => {
+                        setSelectedTx(tx);
+                        setTxModalOpen(true);
+                      }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setSelectedTx(tx);
+                          setTxModalOpen(true);
+                        }
+                      }}
+                    >
                       <div className="flex w-full justify-between">
                         <span className="font-semibold">
                           {getCategoryLabel(tx.category)}
@@ -162,9 +203,7 @@ export default function DashboardPage() {
                             • {format(new Date(tx.date), "dd/MM/yyyy")}
                           </span>
                         </div>
-                        <span className="text-xs">
-                          {(tx.bank as any)?.bankName ?? "—"}
-                        </span>
+                        <span className="text-xs">{bankName ?? "—"}</span>
                       </div>
                     </li>
                   );
@@ -209,8 +248,6 @@ export default function DashboardPage() {
             </ul>
           )}
         </section>
-
-        <TransactionInfoCard />
       </div>
     </>
   );
