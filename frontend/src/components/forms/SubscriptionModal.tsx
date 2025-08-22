@@ -120,7 +120,7 @@ export default function SubscriptionModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="mt-1 w-full rounded border px-3 py-2 font-inter outline-none"
+              className="mt-1 w-full rounded border px-3 py-2 outline-none"
               placeholder={`1.00 ${currencyType}`}
               required
               value={amount}
