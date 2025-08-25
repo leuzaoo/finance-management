@@ -168,7 +168,7 @@ export default function DashboardPage() {
                   return (
                     <li
                       key={tx._id}
-                      className="cursor-pointer py-2"
+                      className="cursor-pointer py-2 transition-all duration-200 hover:rounded-xl hover:bg-dark/5 hover:px-3 dark:hover:bg-white/5"
                       onClick={() => {
                         setSelectedTx(tx);
                         setTxModalOpen(true);
