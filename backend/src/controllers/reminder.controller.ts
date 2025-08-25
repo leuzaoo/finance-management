@@ -28,19 +28,17 @@ export const addReminder = async (
     const userId = req.userId!;
     const { title, description, date } = req.body;
 
-    // título continua sendo obrigatório
     if (!title || typeof title !== "string" || !title.trim()) {
       res.status(400).json({ message: "Título é obrigatório." });
       return;
     }
 
-    // monta o objeto; description e date podem ser omitidos
     const rem = new Reminder({
       user: new mongoose.Types.ObjectId(userId),
       title: title.trim(),
-      // só inclui description se houver sido passado
+
       ...(description ? { description: description.trim() } : {}),
-      // só inclui date se for uma string válida
+
       ...(date ? { date: new Date(date) } : {}),
     });
 

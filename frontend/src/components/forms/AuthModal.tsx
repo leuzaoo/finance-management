@@ -31,7 +31,6 @@ export default function AuthModal({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // front-end: senha mínima de 6
     if (password.length < 6) {
       setError("Senha deve ter ao menos 6 caracteres.");
       return;
@@ -61,7 +60,7 @@ export default function AuthModal({
 
       <form
         onSubmit={handleSubmit}
-        className="dark:bg-dark bg-white text-dark dark:text-light relative w-full max-w-md rounded-lg border border-white/30 p-6 shadow-xl"
+        className="relative w-full max-w-md rounded-lg border border-white/30 bg-white p-6 text-dark shadow-xl dark:bg-dark dark:text-light"
       >
         <h3 className="text-2xl font-bold">Atualizar Senha</h3>
 
@@ -76,12 +75,12 @@ export default function AuthModal({
                 setPassword(e.target.value);
                 setError(null);
               }}
-              className="bg-dark-light border-light/10 text-light w-full rounded-md border py-2 pl-2 shadow-sm outline-none"
+              className="w-full rounded-md border border-light/10 bg-dark-light py-2 pl-2 text-light shadow-sm outline-none"
             />
             <button
               type="button"
               onClick={toggleShow}
-              className="text-dark/60 dark:text-light/60 absolute inset-y-0 right-0 flex items-center pr-3"
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-dark/60 dark:text-light/60"
             >
               {show ? <EyeOffIcon /> : <EyeIcon />}
             </button>
@@ -93,13 +92,13 @@ export default function AuthModal({
           <button
             type="button"
             onClick={onClose}
-            className="border-red-500 text-red-500 cursor-pointer rounded border px-4 py-2 hover:bg-red-500 hover:text-white"
+            className="cursor-pointer rounded border border-red-500 px-4 py-2 text-red-500 hover:bg-red-500 hover:text-white"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            className="dark:bg-light bg-dark text-white dark:text-dark hover:bg-opacity-70 dark:hover:bg-blue-500 dark:hover:text-white cursor-pointer rounded px-4 py-2 font-semibold"
+            className="cursor-pointer rounded bg-dark px-4 py-2 font-semibold text-white hover:bg-opacity-70 dark:bg-light dark:text-dark dark:hover:bg-blue-500 dark:hover:text-white"
           >
             Salvar
           </button>

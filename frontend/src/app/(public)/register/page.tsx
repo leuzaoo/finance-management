@@ -22,7 +22,7 @@ export default function RegisterPage() {
   const [callbackUrl, setCallbackUrl] = useState("/dashboard");
 
   const { register, isLoading: registerLoading } = useAuthStore();
-  const [btnLoading, setBtnLoading] = useState(false); // loading local do botão
+  const [btnLoading, setBtnLoading] = useState(false);
   const loading = useMemo(
     () => registerLoading || btnLoading,
     [registerLoading, btnLoading],
@@ -54,7 +54,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return; // evita duplo submit
+    if (loading) return;
     if (!validateFields()) return;
 
     try {
@@ -62,12 +62,10 @@ export default function RegisterPage() {
 
       const success = await register(firstName, email, password);
       if (success) {
-        await sleep(2000); // mantém o loading durante o delay artificial
+        await sleep(2000);
         router.push(callbackUrl);
-        // componente deve desmontar; não precisa setBtnLoading(false)
       }
     } finally {
-      // se der erro, garantimos que o botão libera
       setBtnLoading(false);
     }
   };
