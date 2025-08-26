@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PlusIcon, UserCircle2Icon } from "lucide-react";
 import { format } from "date-fns";
 
@@ -10,8 +10,10 @@ import {
 } from "@/src/store/useTransactionStore";
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 import { formatCurrency } from "@/src/utils/format-currency";
+import { useRatesStore } from "@/src/store/useRatesStore";
 import { useUserStore } from "@/src/store/useUserStore";
 import { useBankStore } from "@/src/store/useBankStore";
+import { sumToBase } from "@/src/utils/sumToBase";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import TransactionInfoCard from "@/src/components/ui/TransactionInfoCard";
@@ -23,6 +25,9 @@ import BankModal from "@/src/components/forms/BankModal";
 
 const ALL = "Todas";
 
+const fmt = (n: number, c = "BRL") =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: c }).format(n);
+
 export default function DashboardPage() {
   const [currency, setCurrency] = useState<string>(ALL);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -30,12 +35,43 @@ export default function DashboardPage() {
   const [editingRem, setEditingRem] = useState<Reminder | undefined>(undefined);
   const { recentTransactions, listRecentTransactions, isRecentLoading } =
     useTransactionStore();
+  const {
+    base,
+    rates,
+    updatedAt,
+    isLoading: fxLoading,
+    error: fxError,
+    fetchRates,
+  } = useRatesStore();
 
   const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
   const { profile: user } = useUserStore();
 
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [txModalOpen, setTxModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchRates("BRL");
+    const id = setInterval(() => fetchRates("BRL"), 15 * 60 * 1000);
+    return () => clearInterval(id);
+  }, [fetchRates]);
+
+  const balancesByCurrency = useMemo(() => {
+    const acc: Record<string, number> = {};
+    for (const b of banks) {
+      const code = (b.currencyType || "").toUpperCase();
+      const val = Number(b.currencyValue || 0);
+      if (!code) continue;
+      acc[code] = (acc[code] || 0) + val;
+    }
+    return acc;
+  }, [banks]);
+
+  // 3) Calcular total em BRL
+  const totalBRL = useMemo(
+    () => sumToBase(balancesByCurrency, "BRL", rates),
+    [balancesByCurrency, rates],
+  );
 
   useEffect(() => {
     listRecentTransactions();
@@ -143,6 +179,22 @@ export default function DashboardPage() {
               <p className="text-lg">
                 Olá, <span className="font-bold">{user?.firstName}</span>.
               </p>
+            </div>
+
+            <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+              <div className="text-sm opacity-70">Total (BRL)</div>
+              <div className="mt-1 text-3xl font-semibold">
+                {fmt(totalBRL, "BRL")}
+              </div>
+              <div className="mt-2 text-xs opacity-60">
+                {fxError
+                  ? "Erro ao atualizar cotações"
+                  : fxLoading
+                    ? "Atualizando cotações..."
+                    : updatedAt
+                      ? `Cotação de ${new Date(updatedAt).toLocaleString("pt-BR")}`
+                      : "—"}
+              </div>
             </div>
 
             <DashboardMoneyCard
