@@ -22,7 +22,7 @@ export default function Pagination({
   return (
     <div className="mt-4">
       <div className="overflow-x-auto pb-1">
-        <div className="font-zona-pro inline-flex items-center space-x-2 px-2 whitespace-nowrap">
+        <div className="font-dm_sans inline-flex items-center space-x-2 whitespace-nowrap px-2">
           <button
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
@@ -38,7 +38,7 @@ export default function Pagination({
               disabled={num === currentPage}
               className={`inline-block min-w-[2.5rem] rounded border px-3 py-1 text-center transition-all duration-200 ${
                 num === currentPage
-                  ? "text-dark cursor-default bg-white font-semibold"
+                  ? "cursor-default bg-white font-semibold text-dark"
                   : enabledStyle
               } hover:opacity-80`}
             >

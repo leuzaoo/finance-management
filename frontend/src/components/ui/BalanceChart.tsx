@@ -60,7 +60,7 @@ export default function BalanceChart({
             stroke="#aaa"
             width={80}
             fontSize={"10px"}
-            className="font-zona-pro font-bold"
+            className="font-dm_sans font-bold"
           />
           <Tooltip
             labelFormatter={dateFormatter || defaultDateFormatter}

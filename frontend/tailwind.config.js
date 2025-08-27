@@ -18,6 +18,7 @@ export const theme = {
     inter: ["Inter"],
     "zona-pro": ["Zona Pro"],
     "zona-pro-light": ["Zona Pro Light"],
+    dm_sans: ["DM Sans"],
   },
   extend: {
     colors: {

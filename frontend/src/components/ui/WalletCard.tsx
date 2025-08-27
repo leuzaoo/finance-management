@@ -38,7 +38,7 @@ const WalletCard = ({ bank }: Props) => {
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <span className="font-zona-pro text-3xl font-medium">
+        <span className="font-dm_sans text-3xl font-medium">
           {formatCurrency(bank.currencyValue)}
         </span>
         <span className="text-xl font-medium">{bank.currencyType}</span>

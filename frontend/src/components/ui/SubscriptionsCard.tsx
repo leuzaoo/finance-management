@@ -85,7 +85,7 @@ export default function SubscriptionsCard({
 
             <div className="flex items-center gap-2">
               <div className="flex gap-1 text-sm">
-                <span className="font-zona-pro font-bold">
+                <span className="font-dm_sans font-bold">
                   {formatCurrency(item.amount)}
                 </span>
                 <span className="font-light">{currencyType}</span>

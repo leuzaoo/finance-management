@@ -88,7 +88,7 @@ export default function DashboardMoneyCard({
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="font-zona-pro text-xl font-bold">
+                  <span className="font-dm_sans text-xl font-bold">
                     {formatCurrency(amount)}
                   </span>
                 </div>

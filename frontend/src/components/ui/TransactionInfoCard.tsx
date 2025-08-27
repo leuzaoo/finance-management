@@ -74,7 +74,7 @@ export default function TransactionInfoCard({
         </div>
 
         <div className="mt-6 flex items-center justify-between">
-          <div className="font-zona-pro text-2xl font-bold">
+          <div className="font-dm_sans text-2xl font-bold">
             {sign} {amountFormatted} {bankCurrency ?? ""}
           </div>
           <div className="text-sm text-neutral-500">{bankName ?? "—"}</div>

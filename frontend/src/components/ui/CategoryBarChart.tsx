@@ -65,7 +65,7 @@ export default function CategoryBarChart({
                   style={{ width: widthPct }}
                 />
               </div>
-              <span className="w-20 text-right font-zona-pro text-xs font-bold">
+              <span className="font-dm_sans w-20 text-right text-xs font-bold">
                 {formatCurrency(d.total)}
               </span>
             </li>
@@ -75,7 +75,7 @@ export default function CategoryBarChart({
       <div className="flex items-center justify-end text-sm font-light text-dark/50 transition-all duration-1000 dark:text-light/70">
         <p>
           Total:{" "}
-          <span className="font-zona-pro text-base font-bold">
+          <span className="font-dm_sans text-base font-bold">
             {formatCurrency(sumTotal)}
           </span>
         </p>

@@ -19,7 +19,7 @@ export default function RemindersCard({
       onClick={() => onClick(reminder)}
       className="flex max-w-max cursor-pointer flex-col gap-1 rounded-md bg-light px-3 py-2 shadow-md transition-all duration-1000 hover:opacity-60 dark:bg-light/10 hover:dark:bg-light/20"
     >
-      <span className="font-zona-pro font-medium md:text-lg">
+      <span className="font-dm_sans font-medium md:text-lg">
         {reminder.title}
       </span>
       {reminder.description && (

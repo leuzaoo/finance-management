@@ -27,7 +27,7 @@ export default function TransactionsList({ transactions, onDelete }: Props) {
         >
           <div className="flex w-full justify-between">
             <span
-              className={`font-zona-pro text-xl font-bold ${
+              className={`font-dm_sans text-xl font-bold ${
                 tx.type === "expense" ? "text-[#d48e62]" : "text-green-600"
               }`}
             >

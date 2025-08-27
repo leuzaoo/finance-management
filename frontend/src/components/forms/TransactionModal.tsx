@@ -141,7 +141,7 @@ export default function TransactionModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="mt-1 w-full rounded border px-3 py-2 font-zona-pro font-bold outline-none dark:border-light/10 dark:bg-dark-light"
+              className="font-dm_sans mt-1 w-full rounded border px-3 py-2 font-bold outline-none dark:border-light/10 dark:bg-dark-light"
               required
               value={amount}
               onValueChange={(values) => {
