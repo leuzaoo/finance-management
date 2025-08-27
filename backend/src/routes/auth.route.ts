@@ -1,9 +1,9 @@
 import { Router, NextFunction, Request, Response } from "express";
 import { validationResult, body } from "express-validator";
 
-import { authenticate } from "../middlewares/authenticate";
-
 import { register, login, logout } from "../controllers/auth.controller";
+import { authenticate } from "../middlewares/authenticate";
+import { allowedCurrencies } from "../models/User";
 
 const router = Router();
 
@@ -28,6 +28,12 @@ router.post(
     body("password")
       .isLength({ min: 6 })
       .withMessage("A senha deve ter ao menos 6 caracteres"),
+    body("primaryCurrency")
+      .optional()
+      .isString()
+      .toUpperCase()
+      .isIn(allowedCurrencies as unknown as string[])
+      .withMessage(`Moeda inválida. Use: ${allowedCurrencies.join(", ")}`),
   ],
   validate,
   register

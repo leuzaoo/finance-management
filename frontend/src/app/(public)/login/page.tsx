@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2Icon } from "lucide-react";
-
 import { ToastContainer } from "react-toastify";
 
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
@@ -41,14 +39,20 @@ export default function LoginPage() {
     return Object.keys(errs).length === 0;
   };
 
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFields()) return;
 
-    const success = await login(email, password);
-    if (success) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      router.push(callbackUrl);
+    const result = await login(email, password);
+    if (result.ok) {
+      await sleep(2000);
+      if (result.requirePrimaryCurrency) {
+        router.push("/onboarding/currency");
+      } else {
+        router.push(callbackUrl);
+      }
     }
   };
 
@@ -82,6 +86,7 @@ export default function LoginPage() {
                   placeholder="johndoe@mail.com"
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
+                  disabled={loginLoading}
                 />
                 {fieldErrors.email && (
                   <p className="text-xs text-red-500">{fieldErrors.email}</p>
@@ -94,23 +99,30 @@ export default function LoginPage() {
                   placeholder="••••••••••••"
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
+                  disabled={loginLoading}
                 />
                 {fieldErrors.password && (
                   <p className="text-xs text-red-500">{fieldErrors.password}</p>
                 )}
               </div>
             </div>
+
             <div className="mt-5 flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
-                <input type="checkbox" className="size-4" />
+                <input
+                  type="checkbox"
+                  className="size-4"
+                  disabled={loginLoading}
+                />
                 Salvar dados?
               </div>
               <Link href="/recover-password" className="text-sky-300 underline">
                 Esqueceu sua senha?
               </Link>
             </div>
+
             {loginLoading ? (
-              <div className="mx-auto my-5 w-full cursor-pointer rounded-md bg-blue-600 py-2 text-lg transition-all duration-200 hover:bg-blue-500">
+              <div className="mx-auto my-5 w-full rounded-md bg-blue-600 py-2 text-lg">
                 <LoaderIcon />
               </div>
             ) : (
@@ -123,6 +135,7 @@ export default function LoginPage() {
             )}
           </form>
         </div>
+
         <div className="col-span-1 hidden h-screen overflow-hidden rounded-l-3xl lg:block">
           <RegisterAndLoginBg />
         </div>

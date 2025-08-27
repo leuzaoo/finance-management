@@ -1,6 +1,9 @@
 import { Schema, model, Document, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
+export const allowedCurrencies = ["USD", "EUR", "GBP", "BRL"] as const;
+export type Currency = (typeof allowedCurrencies)[number];
+
 export interface IUser extends Document {
   firstName: string;
   email: string;
@@ -11,6 +14,8 @@ export interface IUser extends Document {
     currencyType: string;
     createdAt: Date;
   }[];
+
+  primaryCurrency: Currency | null;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidate: string): Promise<boolean>;
@@ -21,6 +26,13 @@ const UserSchema = new Schema<IUser>(
     firstName: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
+
+    primaryCurrency: {
+      type: String,
+      enum: allowedCurrencies,
+      default: null,
+      required: false,
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );

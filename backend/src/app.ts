@@ -8,6 +8,7 @@ import { connectDB } from "./config/db";
 import subscriptionRoute from "./routes/subscription.route";
 import transactionRoute from "./routes/transaction.route";
 import reminderRoutes from "./routes/reminder.route";
+import forexRouter from "./routes/forex.route";
 import banksRouter from "./routes/bank.route";
 import authRoutes from "./routes/auth.route";
 import userRoutes from "./routes/user.route";
@@ -29,6 +30,7 @@ app.use(
 app.use("/api/v1", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/banks", banksRouter);
+app.use("/api/v1/forex", forexRouter);
 app.use("/api/v1/reminders", reminderRoutes);
 app.use("/api/v1/transactions", transactionRoute);
 app.use("/api/v1/subscriptions", subscriptionRoute);
