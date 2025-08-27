@@ -18,6 +18,7 @@ import { sumToBase } from "@/src/utils/sumToBase";
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import TransactionInfoCard from "@/src/components/ui/TransactionInfoCard";
 import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
+import TotalCurrencyCard from "@/src/components/ui/totalCurrencyCard";
 import ReminderModal from "@/src/components/forms/ReminderModal";
 import RemindersCard from "@/src/components/ui/RemindersCard";
 import TitlePage from "@/src/components/common/TitlePage";
@@ -67,7 +68,6 @@ export default function DashboardPage() {
     return acc;
   }, [banks]);
 
-  // 3) Calcular total em BRL
   const totalBRL = useMemo(
     () => sumToBase(balancesByCurrency, "BRL", rates),
     [balancesByCurrency, rates],
@@ -181,21 +181,7 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
-              <div className="text-sm opacity-70">Total (BRL)</div>
-              <div className="mt-1 text-3xl font-semibold">
-                {fmt(totalBRL, "BRL")}
-              </div>
-              <div className="mt-2 text-xs opacity-60">
-                {fxError
-                  ? "Erro ao atualizar cotações"
-                  : fxLoading
-                    ? "Atualizando cotações..."
-                    : updatedAt
-                      ? `Cotação de ${new Date(updatedAt).toLocaleString("pt-BR")}`
-                      : "—"}
-              </div>
-            </div>
+            <TotalCurrencyCard />
 
             <DashboardMoneyCard
               banks={banks}
