@@ -1,13 +1,19 @@
+"use client";
+
 import React, { useEffect, useMemo } from "react";
 
 import { useRatesStore } from "@/src/store/useRatesStore";
 import { useBankStore } from "@/src/store/useBankStore";
+import { useAuthStore } from "@/src/store/useAuthStore";
 import { sumToBase } from "@/src/utils/sumToBase";
 
-const fmt = (n: number, c = "BRL") =>
+const fmt = (n: number, c: string) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: c }).format(n);
 
 const TotalCurrencyCard = () => {
+  const { user } = useAuthStore();
+  const userBase = (user?.primaryCurrency || "BRL").toUpperCase();
+
   const {
     base,
     rates,
@@ -20,10 +26,10 @@ const TotalCurrencyCard = () => {
   const { banks } = useBankStore();
 
   useEffect(() => {
-    fetchRates("BRL");
-    const id = setInterval(() => fetchRates("BRL"), 15 * 60 * 1000);
+    fetchRates(userBase);
+    const id = setInterval(() => fetchRates(userBase), 15 * 60 * 1000);
     return () => clearInterval(id);
-  }, [fetchRates]);
+  }, [fetchRates, userBase]);
 
   const balancesByCurrency = useMemo(() => {
     const acc: Record<string, number> = {};
@@ -36,29 +42,29 @@ const TotalCurrencyCard = () => {
     return acc;
   }, [banks]);
 
-  const totalBRL = useMemo(
-    () => sumToBase(balancesByCurrency, "BRL", rates),
-    [balancesByCurrency, rates],
+  const totalInBase = useMemo(
+    () => sumToBase(balancesByCurrency, userBase, rates),
+    [balancesByCurrency, userBase, rates],
   );
 
   return (
-    <>
-      <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:bg-dark">
-        <div className="text-sm opacity-70">Total (BRL)</div>
-        <div className="mt-1 text-3xl font-semibold">
-          {fmt(totalBRL, "BRL")}
-        </div>
-        <div className="mt-2 text-xs opacity-60">
-          {fxError
-            ? "Erro ao atualizar cotações"
-            : fxLoading
-              ? "Atualizando cotações..."
-              : updatedAt
-                ? `Cotação de ${new Date(updatedAt).toLocaleString("pt-BR")}`
-                : "—"}
-        </div>
+    <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:bg-dark">
+      <div className="text-sm opacity-70">Total ({userBase})</div>
+      <div className="mt-1 text-3xl font-semibold">
+        {fmt(totalInBase, userBase)}
       </div>
-    </>
+      <div className="mt-2 text-xs opacity-60">
+        {fxError
+          ? "Erro ao atualizar cotações"
+          : fxLoading
+            ? "Atualizando cotações..."
+            : updatedAt
+              ? `Cotação de ${new Date(updatedAt).toLocaleString("pt-BR")}${
+                  base && base !== userBase ? ` · base atual: ${base}` : ""
+                }`
+              : "—"}
+      </div>
+    </div>
   );
 };
 

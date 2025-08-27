@@ -3,22 +3,36 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 import { clearAuthCookie, setAuthCookie } from "../utils/cookies";
-import User, { IUser } from "../models/User";
+import User, { IUser, allowedCurrencies } from "../models/User";
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
+const allowed = new Set(allowedCurrencies);
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { firstName, email, password } = req.body;
+    const { firstName, email, password, primaryCurrency } = req.body;
+
+    let pc: IUser["primaryCurrency"] = null;
+    if (typeof primaryCurrency === "string") {
+      const up = primaryCurrency.toUpperCase();
+      if (allowed.has(up as any)) pc = up as any;
+    }
+
     const exists = await User.findOne({ email });
     if (exists) {
       res.status(400).json({ message: "Email já cadastrado." });
       return;
     }
 
-    const user = new User({ firstName, email, password });
+    const user = new User({
+      firstName,
+      email,
+      password,
+      primaryCurrency: pc,
+    });
+
     await user.save();
 
     if (!JWT_SECRET) {
@@ -37,7 +51,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         id: user._id,
         firstName: user.firstName,
         email: user.email,
+        primaryCurrency: user.primaryCurrency,
       },
+      requirePrimaryCurrency: !user.primaryCurrency,
       token,
     });
     return;
@@ -50,29 +66,34 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
-    const user = (await User.findOne({ email })) as IUser;
+    const user = (await User.findOne({ email })) as IUser | null;
+
     if (!user) {
       res.status(400).json({ message: "Credenciais inválidas." });
       return;
     }
+
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       res.status(400).json({ message: "Credenciais inválidas." });
       return;
     }
+
     const token = jwt.sign({ id: user._id, email: user.email }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
     setAuthCookie(res, token);
 
-    res.status(201).json({
+    res.status(200).json({
       token,
       user: {
         id: user._id,
         firstName: user.firstName,
         email: user.email,
+        primaryCurrency: user.primaryCurrency ?? null,
       },
+      requirePrimaryCurrency: !user.primaryCurrency,
     });
     return;
   } catch (err: any) {

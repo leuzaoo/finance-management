@@ -3,14 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
 import { ToastContainer } from "react-toastify";
+import { Loader2Icon } from "lucide-react";
 
 import { useAuthStore } from "@/src/store/useAuthStore";
 
 import RegisterAndLoginBg from "@/src/components/ui/RegisterAndLoginBg";
 import InputField from "@/src/components/ui/InputField";
-import { Loader2Icon } from "lucide-react";
 
 type FieldErrors = { firstName?: string; email?: string; password?: string };
 
@@ -60,10 +59,14 @@ export default function RegisterPage() {
     try {
       setBtnLoading(true);
 
-      const success = await register(firstName, email, password);
-      if (success) {
-        await sleep(2000);
-        router.push(callbackUrl);
+      const result = await register(firstName, email, password); // { ok, requirePrimaryCurrency }
+      if (result.ok) {
+        await sleep(2000); // UX
+        if (result.requirePrimaryCurrency) {
+          router.push("/onboarding/currency");
+        } else {
+          router.push(callbackUrl);
+        }
       }
     } finally {
       setBtnLoading(false);
