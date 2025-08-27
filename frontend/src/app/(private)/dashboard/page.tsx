@@ -225,7 +225,7 @@ export default function DashboardPage() {
                           {getCategoryLabel(tx.category)}
                         </span>
                         <span className="font-semibold">
-                          <span className="font-zona-pro font-bold">
+                          <span className="font-dm_sans font-bold">
                             {formatCurrency(tx.amount)}
                           </span>{" "}
                           {bankCurrency ?? ""}

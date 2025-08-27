@@ -50,7 +50,7 @@ const TotalCurrencyCard = () => {
   return (
     <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:bg-dark">
       <div className="text-sm opacity-70">Total ({userBase})</div>
-      <div className="mt-1 text-3xl font-semibold">
+      <div className="font-dm_sans mt-1 text-3xl font-semibold">
         {fmt(totalInBase, userBase)}
       </div>
       <div className="mt-2 text-xs opacity-60">
