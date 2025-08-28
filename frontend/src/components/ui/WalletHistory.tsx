@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useTransactionStore } from "@/src/store/useTransactionStore";
 
@@ -39,16 +38,18 @@ export default function WalletHistory({
     setCurrentPage(1);
   }, [bankId, fromDate, toDate, listTransactions]);
 
-  if (isLoading) return <p className="py-4">Carregando histórico…</p>;
-
   const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
-  const pageTxs = transactions.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
+  const pageTxs = useMemo(
+    () =>
+      transactions.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE,
+      ),
+    [transactions, currentPage],
   );
 
   return (
-    <div className="2md:mt-0 mt-4 space-y-4">
+    <div className="mt-4 space-y-4 2md:mt-0">
       <DateFilters
         fromDate={fromDate}
         toDate={toDate}
@@ -67,8 +68,22 @@ export default function WalletHistory({
         }}
       />
 
-      {pageTxs.length === 0 ? (
-        <p className="text-light/60">Nenhuma transação encontrada.</p>
+      {isLoading ? (
+        <div className="space-y-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-24 animate-pulse rounded-2xl border border-black/5 bg-white/60 dark:border-white/10 dark:bg-white/5"
+            />
+          ))}
+        </div>
+      ) : pageTxs.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-black/10 p-8 text-center dark:border-white/10">
+          <p className="text-lg font-medium">Nenhuma transação encontrada</p>
+          <p className="mt-1 text-sm opacity-70">
+            Tente ajustar o período nos filtros acima.
+          </p>
+        </div>
       ) : (
         <>
           <TransactionsList
