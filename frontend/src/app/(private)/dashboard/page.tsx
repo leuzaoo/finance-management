@@ -36,14 +36,7 @@ export default function DashboardPage() {
   const [editingRem, setEditingRem] = useState<Reminder | undefined>(undefined);
   const { recentTransactions, listRecentTransactions, isRecentLoading } =
     useTransactionStore();
-  const {
-    base,
-    rates,
-    updatedAt,
-    isLoading: fxLoading,
-    error: fxError,
-    fetchRates,
-  } = useRatesStore();
+  const { rates, fetchRates } = useRatesStore();
 
   const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
   const { profile: user } = useUserStore();
