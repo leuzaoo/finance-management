@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { PencilLineIcon, UserCircle2 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -16,6 +17,12 @@ import ThemeSwitch from "@/src/components/ui/ThemeSwitch";
 import AuthModal from "@/src/components/forms/AuthModal";
 
 const CURRENCIES = ["BRL", "USD", "EUR", "GBP"] as const;
+const flag: Record<string, string> = {
+  BRL: "/brazil-flag.png",
+  GBP: "/uk-flag.png",
+  USD: "/usa-flag.png",
+  EUR: "/euro-flag.png",
+};
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -70,9 +77,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     await logout();
-    setTimeout(() => {
-      router.push("/login");
-    }, 1500);
+    setTimeout(() => router.push("/login"), 1500);
   };
 
   const handlePersonalSubmit = async (data: { firstName: string }) => {
@@ -108,148 +113,157 @@ export default function ProfilePage() {
           <LoaderIcon />
         </div>
       ) : (
-        <div className="mx-auto max-w-md">
+        <div className="mx-auto mb-5 max-w-md space-y-4">
           <div className="flex items-center justify-between">
             <TitlePage text="Meu Perfil" />
-            <button>
+            <button aria-label="Alterar tema">
               <ThemeSwitch />
             </button>
           </div>
 
-          <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+            <div className="flex items-center gap-3">
+              <span className="rounded-full bg-gradient-to-br from-black/5 to-black/0 p-2 dark:from-white/10">
                 <UserCircle2 size={40} strokeWidth={1} />
-                <div>
-                  <p className="font-medium">{profile.firstName}</p>
-                  <p className="text-sm font-light">{profile.email}</p>
-                </div>
+              </span>
+              <div>
+                <p className="text-lg font-semibold tracking-tight">
+                  {profile.firstName}
+                </p>
+                <p className="text-sm opacity-70">{profile.email}</p>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold 2md:text-xl">Dados Pessoais</h2>
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-base font-semibold tracking-tight">
+                Dados Pessoais
+              </h2>
               <button
                 onClick={() => setPdModalOpen(true)}
                 title="Editar Dados Pessoais"
-                className="cursor-pointer rounded-lg border border-dark/20 px-2 py-1 transition-all duration-1000 dark:border-light/20"
+                className="rounded-xl border border-black/10 px-2 py-1 transition hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/15 dark:hover:bg-white/10"
               >
-                <PencilLineIcon
-                  size={16}
-                  className="transition-all duration-1000 dark:text-light/50 md:text-dark/50"
-                />
+                <PencilLineIcon size={16} className="opacity-70" />
               </button>
             </div>
 
-            <div className="mt-3">
-              <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
-                Primeiro nome
-              </label>
-              <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
-                {profile.firstName}
-              </p>
+            <div className="grid gap-3">
+              <div>
+                <span className="block text-xs opacity-70">Primeiro nome</span>
+                <p className="text-sm md:text-base">{profile.firstName}</p>
+              </div>
+              <div>
+                <span className="block text-xs opacity-70">Email</span>
+                <p className="text-sm md:text-base">{profile.email}</p>
+              </div>
             </div>
+          </section>
 
-            <div className="mt-3">
-              <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
-                Email
-              </label>
-              <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
-                {profile.email}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold 2md:text-xl">Moeda principal</h2>
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-base font-semibold tracking-tight">
+                Moeda principal
+              </h2>
               <button
                 onClick={() => setEditCurrencyOpen((v) => !v)}
                 title="Alterar moeda principal"
-                className="cursor-pointer rounded-lg border border-dark/20 px-2 py-1 transition-all duration-1000 dark:border-light/20"
+                className="rounded-xl border border-black/10 px-2 py-1 transition hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/15 dark:hover:bg-white/10"
               >
-                <PencilLineIcon
-                  size={16}
-                  className="transition-all duration-1000 dark:text-light/50 md:text-dark/50"
-                />
+                <PencilLineIcon size={16} className="opacity-70" />
               </button>
             </div>
 
-            <div className="mt-3">
-              <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
-                Selecionada
-              </label>
-              <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
-                {readableCurrency}
-              </p>
+            <div className="flex items-center gap-2">
+              {currentCurrency ? (
+                <div className="flex items-center gap-2 rounded-full border border-black/10 px-2 py-0.5 text-sm dark:border-white/15">
+                  <Image
+                    src={flag[currentCurrency]}
+                    alt={`Bandeira ${currentCurrency}`}
+                    width={20}
+                    height={20}
+                    className="rounded-full"
+                  />
+                  <span className="font-medium">{currentCurrency}</span>
+                </div>
+              ) : (
+                <span className="text-sm text-black/50 dark:text-white/50">
+                  —
+                </span>
+              )}
             </div>
 
             {editCurrencyOpen && (
-              <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center">
-                <select
-                  className="w-full rounded-lg border border-dark/20 bg-transparent p-2 dark:border-light/20"
-                  value={currencyDraft}
-                  onChange={(e) => setCurrencyDraft(e.target.value as any)}
-                  disabled={savingCurrency}
-                >
+              <div className="mt-4 space-y-4">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {CURRENCIES.map((c) => (
-                    <option key={c} value={c}>
+                    <button
+                      key={c}
+                      onClick={() => setCurrencyDraft(c)}
+                      disabled={savingCurrency}
+                      className={`flex flex-col items-center justify-center gap-1 rounded-xl border p-3 text-sm font-medium shadow-sm transition-all ${
+                        currencyDraft === c
+                          ? "border-blue-500 bg-blue-50 text-blue-700 dark:border-sky-500 dark:bg-sky-500/10 dark:text-sky-300"
+                          : "border-black/10 bg-white/50 text-black/80 hover:bg-black/5 dark:border-white/15 dark:bg-white/5 dark:text-white/80"
+                      } ${savingCurrency ? "cursor-not-allowed opacity-50" : ""} `}
+                    >
+                      <Image
+                        src={flag[c]}
+                        alt={`Bandeira ${c}`}
+                        width={24}
+                        height={24}
+                        className="rounded-full"
+                      />
                       {c}
-                    </option>
+                    </button>
                   ))}
-                </select>
+                </div>
 
-                <div className="flex gap-2">
+                <div className="flex justify-end gap-2">
                   <button
                     onClick={handleSaveCurrency}
                     disabled={savingCurrency}
-                    className="rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-500 disabled:opacity-60"
+                    className="rounded-xl bg-blue-600 px-4 py-2 text-white transition hover:translate-y-[-1px] hover:bg-blue-500 active:translate-y-0 disabled:opacity-60"
                   >
                     {savingCurrency ? "Salvando..." : "Salvar"}
                   </button>
                   <button
                     onClick={() => setEditCurrencyOpen(false)}
                     disabled={savingCurrency}
-                    className="rounded-lg border border-dark/20 px-4 py-2 transition dark:border-light/20"
+                    className="rounded-xl border border-black/10 px-4 py-2 transition hover:bg-black/5 dark:border-white/15 dark:hover:bg-white/10"
                   >
                     Cancelar
                   </button>
                 </div>
               </div>
             )}
-          </div>
+          </section>
 
-          <div className="mt-4 rounded-xl border border-dark/10 p-4 transition-all duration-1000 dark:border-light/10">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold 2md:text-xl">Autenticação</h2>
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="text-base font-semibold tracking-tight">
+                Autenticação
+              </h2>
               <button
                 onClick={() => setAuthModalOpen(true)}
                 title="Editar Senha"
-                className="cursor-pointer rounded-lg border border-dark/20 px-2 py-1 dark:border-light/20"
+                className="rounded-xl border border-black/10 px-2 py-1 transition hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-white/15 dark:hover:bg-white/10"
               >
-                <PencilLineIcon
-                  size={16}
-                  className="text-dark/50 dark:text-light/50"
-                />
+                <PencilLineIcon size={16} className="opacity-70" />
               </button>
             </div>
 
-            <div className="mt-3">
-              <label className="block text-sm text-dark/50 transition-all duration-1000 dark:text-light/50 2md:text-base">
-                Senha
-              </label>
-              <p className="text-dark transition-all duration-1000 dark:text-light 2md:text-lg">
-                ••••••••••••
-              </p>
+            <div>
+              <span className="block text-xs opacity-70">Senha</span>
+              <p className="text-sm md:text-base">••••••••••••</p>
             </div>
-          </div>
+          </section>
 
           <button
             onClick={handleLogout}
-            className={`mt-4 w-full cursor-pointer rounded-xl bg-red-600 py-3 text-center font-medium text-white transition-all duration-200 hover:bg-red-400 ${
-              logoutLoading && "cursor-not-allowed opacity-50"
+            className={`mb-2 w-full rounded-2xl bg-red-600/90 py-3 font-medium text-white shadow-sm backdrop-blur transition hover:translate-y-[-1px] hover:bg-red-600 active:translate-y-0 ${
+              logoutLoading && "cursor-not-allowed opacity-60"
             }`}
           >
             {logoutLoading ? <LoaderIcon /> : "Sair da conta"}

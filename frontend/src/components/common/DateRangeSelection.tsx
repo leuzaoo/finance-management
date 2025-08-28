@@ -1,5 +1,6 @@
 "use client";
 import { subDays, subMonths } from "date-fns";
+import { CalendarClock, CalendarRange, RefreshCcw } from "lucide-react";
 
 type Props = {
   fromDate: Date | null;
@@ -29,29 +30,45 @@ export default function DateRangeSelector({
   };
 
   const noFiltersApplied = fromDate === null && toDate === null;
-  const mainStyle =
-    "cursor-pointer rounded text-blue-500 text-sm underline transition-all duration-200";
+
+  const baseBtn =
+    "inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const enabled =
+    "border-black/10 bg-white text-blue-600 hover:bg-blue-50 dark:border-white/15 dark:bg-white/5 dark:text-sky-400 dark:hover:bg-white/10";
+  const disabled =
+    "cursor-not-allowed border-black/10 bg-white text-black/40 dark:border-white/10 dark:bg-white/5 dark:text-white/30";
 
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <div className="flex flex-wrap items-center gap-2">
       <button
         onClick={handleLastWeek}
-        className={`${mainStyle} hover:text-blue-600`}
+        className={`${baseBtn} ${enabled}`}
+        title="Filtrar pela última semana"
       >
+        <CalendarClock size={16} />
         Última semana
       </button>
+
       <button
         onClick={handleLastMonth}
-        className={`${mainStyle} hover:text-blue-600`}
+        className={`${baseBtn} ${enabled}`}
+        title="Filtrar pelo último mês"
       >
+        <CalendarRange size={16} />
         Último mês
       </button>
 
       <button
         onClick={clearFilters}
         disabled={noFiltersApplied}
-        className={`${mainStyle} ${noFiltersApplied ? "cursor-not-allowed! no-underline opacity-50" : "cursor-pointer hover:text-blue-600"} `}
+        className={`${baseBtn} ${noFiltersApplied ? disabled : enabled}`}
+        aria-disabled={noFiltersApplied}
+        title="Limpar filtros"
       >
+        <RefreshCcw
+          size={16}
+          className={!noFiltersApplied ? "animate-none" : ""}
+        />
         Limpar filtros
       </button>
     </div>

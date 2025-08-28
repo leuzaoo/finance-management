@@ -7,9 +7,6 @@ type Props = {
   goToPage: (page: number) => void;
 };
 
-const disabledStyle = "border-light/20 text-light/40 cursor-not-allowed";
-const enabledStyle = "border-light/60 text-light hover:border-light/80";
-
 export default function Pagination({
   totalPages,
   currentPage,
@@ -17,44 +14,80 @@ export default function Pagination({
 }: Props) {
   if (totalPages <= 1) return null;
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const windowed = () => {
+    const pages: (number | "...")[] = [];
+    const push = (x: number | "...") =>
+      pages.length === 0 || pages[pages.length - 1] !== x
+        ? pages.push(x)
+        : null;
+
+    const addRange = (s: number, e: number) => {
+      for (let i = s; i <= e; i++) push(i);
+    };
+
+    const left = Math.max(1, currentPage - 1);
+    const right = Math.min(totalPages, currentPage + 1);
+
+    push(1);
+    if (left > 2) push("...");
+    addRange(left, right);
+    if (right < totalPages - 1) push("...");
+    if (totalPages > 1) push(totalPages);
+    return pages;
+  };
+
+  const pages = windowed();
+
+  const baseBtn =
+    "inline-flex items-center justify-center rounded-lg border px-3 py-2 text-sm transition focus:outline-none focus:ring-2 focus:ring-blue-500";
+  const enabled =
+    "border-black/15 text-black hover:bg-black/5 dark:border-white/15 dark:text-white/90 dark:hover:bg-white/10";
+  const disabled =
+    "cursor-not-allowed border-black/10 text-black/30 dark:border-white/10 dark:text-white/30";
 
   return (
-    <div className="mt-4">
-      <div className="overflow-x-auto pb-1">
-        <div className="font-dm_sans inline-flex items-center space-x-2 whitespace-nowrap px-2">
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`inline-block rounded border p-1 transition-all duration-200 hover:opacity-60 ${currentPage === 1 ? disabledStyle : enabledStyle} `}
-          >
-            <ChevronLeftIcon size={20} />
-          </button>
+    <nav className="mt-3 flex items-center justify-center">
+      <div className="inline-flex items-center gap-1 rounded-xl border border-black/10 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/5">
+        <button
+          onClick={() => goToPage(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+          className={`${baseBtn} ${currentPage === 1 ? disabled : enabled}`}
+          aria-label="Página anterior"
+        >
+          <ChevronLeftIcon size={18} />
+        </button>
 
-          {pages.map((num) => (
+        {pages.map((p, i) =>
+          p === "..." ? (
+            <span key={`d-${i}`} className="px-2 text-sm opacity-60">
+              …
+            </span>
+          ) : (
             <button
-              key={num}
-              onClick={() => goToPage(num)}
-              disabled={num === currentPage}
-              className={`inline-block min-w-[2.5rem] rounded border px-3 py-1 text-center transition-all duration-200 ${
-                num === currentPage
-                  ? "cursor-default bg-white font-semibold text-dark"
-                  : enabledStyle
-              } hover:opacity-80`}
+              key={p}
+              onClick={() => goToPage(p)}
+              disabled={p === currentPage}
+              className={`${baseBtn} ${
+                p === currentPage
+                  ? "cursor-default border-blue-500 bg-blue-600 text-white hover:bg-blue-600"
+                  : enabled
+              } min-w-[2.5rem]`}
+              aria-current={p === currentPage ? "page" : undefined}
             >
-              {num}
+              {p}
             </button>
-          ))}
+          ),
+        )}
 
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={`inline-block rounded border p-1 transition-all duration-200 hover:opacity-60 ${currentPage === totalPages ? disabledStyle : enabledStyle} `}
-          >
-            <ChevronRightIcon size={20} />
-          </button>
-        </div>
+        <button
+          onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+          className={`${baseBtn} ${currentPage === totalPages ? disabled : enabled}`}
+          aria-label="Próxima página"
+        >
+          <ChevronRightIcon size={18} />
+        </button>
       </div>
-    </div>
+    </nav>
   );
 }
