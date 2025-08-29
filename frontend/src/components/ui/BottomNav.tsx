@@ -15,10 +15,22 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-black/10 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/70 2md:hidden"
       role="navigation"
       aria-label="Barra de navegação inferior"
-      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 8px)" }}
+      className={[
+        "fixed inset-x-0 bottom-0 z-50 2md:hidden",
+        "border-t border-black/10 dark:border-white/10",
+        "bg-white/95 dark:bg-[#0b0e12]/95",
+        "supports-[backdrop-filter:blur(0)]:bg-white/75",
+        "supports-[backdrop-filter:blur(0)]:backdrop-blur-md",
+        "dark:supports-[backdrop-filter:blur(0)]:bg-[#0b0e12]/60",
+      ].join(" ")}
+      style={{
+        paddingBottom: "max(env(safe-area-inset-bottom), 8px)",
+        // Prefixo WebKit (iOS)
+        WebkitBackdropFilter: "blur(12px)",
+        backdropFilter: "blur(12px)",
+      }}
     >
       <div className="mx-auto flex max-w-screen-sm items-center justify-around px-2 py-2">
         {menuItems.map(({ id, href, Icon, label }) => {
@@ -28,34 +40,46 @@ export default function BottomNav() {
               key={id}
               href={href}
               aria-current={isActive ? "page" : undefined}
-              className={`group relative flex min-w-[88px] flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`}
+              className="group relative flex min-w-[88px] flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               <span
                 aria-hidden
-                className={`absolute inset-0 rounded-xl transition ${
+                className={[
+                  "absolute inset-0 rounded-xl transition",
                   isActive
                     ? "bg-black/5 dark:bg-white/10"
-                    : "opacity-0 group-hover:bg-black/5 group-hover:opacity-100 dark:group-hover:bg-white/5"
-                } `}
+                    : "opacity-0 group-hover:bg-black/5 group-hover:opacity-100 dark:group-hover:bg-white/5",
+                ].join(" ")}
               />
               <Icon
                 size={20}
                 strokeWidth={1.6}
-                className={`relative transition ${isActive ? "text-blue-600 dark:text-sky-400" : "text-black/60 dark:text-white/60"} `}
+                className={[
+                  "relative transition",
+                  isActive
+                    ? "text-blue-600 dark:text-sky-400"
+                    : "text-black/60 dark:text-white/60",
+                ].join(" ")}
               />
               <span
-                className={`relative font-medium tracking-tight ${
+                className={[
+                  "relative font-medium tracking-tight",
                   isActive
                     ? "text-blue-700 dark:text-sky-300"
-                    : "text-black/60 dark:text-white/60"
-                } `}
+                    : "text-black/60 dark:text-white/60",
+                ].join(" ")}
               >
                 {label}
               </span>
 
               <span
                 aria-hidden
-                className={`absolute -bottom-0.5 h-1 w-10 rounded-full transition ${isActive ? "scale-100 bg-blue-600 dark:bg-sky-400" : "scale-0"} `}
+                className={[
+                  "absolute -bottom-0.5 h-1 w-5 rounded-full transition",
+                  isActive
+                    ? "scale-100 bg-blue-600 dark:bg-sky-400"
+                    : "scale-0",
+                ].join(" ")}
               />
             </Link>
           );
