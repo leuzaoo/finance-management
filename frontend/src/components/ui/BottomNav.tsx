@@ -20,15 +20,15 @@ export default function BottomNav() {
       className={[
         "fixed inset-x-0 bottom-0 z-50 2md:hidden",
         "border-t border-black/10 dark:border-white/10",
-        "bg-white/95 dark:bg-[#0b0e12]/95",
+        "bg-white/95 dark:bg-dark/95",
         "supports-[backdrop-filter:blur(0)]:bg-white/75",
         "supports-[backdrop-filter:blur(0)]:backdrop-blur-md",
-        "dark:supports-[backdrop-filter:blur(0)]:bg-[#0b0e12]/60",
+        "dark:supports-[backdrop-filter:blur(0)]:bg-dark/60",
       ].join(" ")}
       style={{
         paddingBottom: "max(env(safe-area-inset-bottom), 8px)",
-        WebkitBackdropFilter: "blur(12px)",
-        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(2px)",
+        backdropFilter: "blur(2px)",
       }}
     >
       <div className="mx-auto flex max-w-screen-sm items-center justify-around px-2 py-2">
