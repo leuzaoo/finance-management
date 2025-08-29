@@ -27,7 +27,6 @@ export default function BottomNav() {
       ].join(" ")}
       style={{
         paddingBottom: "max(env(safe-area-inset-bottom), 8px)",
-        // Prefixo WebKit (iOS)
         WebkitBackdropFilter: "blur(12px)",
         backdropFilter: "blur(12px)",
       }}

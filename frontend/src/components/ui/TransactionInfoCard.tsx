@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { XIcon } from "lucide-react";
 
 import type { Transaction } from "@/src/store/useTransactionStore";
@@ -6,6 +7,8 @@ import type { Bank } from "@/src/store/useBankStore";
 
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 import { formatCurrency } from "@/src/utils/format-currency";
+
+import ModalOverlay from "@/src/components/ui/ModalOverlay";
 
 type ResolveBankFn = (tx: Transaction) => {
   bankName: string | null;
@@ -43,22 +46,15 @@ export default function TransactionInfoCard({
   const categoryLabel = getCategoryLabel(tx.category);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center px-4 py-8"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 w-full max-w-md rounded-xl bg-white p-4 shadow-xl dark:bg-dark/90">
+    <ModalOverlay onClose={onClose}>
+      <div className="rounded-2xl border border-black/10 bg-white/80 p-4 shadow-xl backdrop-blur dark:border-white/10 dark:bg-dark/70">
         <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-semibold">{categoryLabel}</h3>
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-semibold tracking-tight text-black dark:text-white">
+              {categoryLabel}
+            </h3>
             {transaction.description && (
-              <p className="mt-1 text-sm text-neutral-500">
+              <p className="mt-1 line-clamp-2 text-sm text-black/60 dark:text-white/70">
                 {transaction.description}
               </p>
             )}
@@ -67,19 +63,21 @@ export default function TransactionInfoCard({
           <button
             onClick={onClose}
             aria-label="Fechar"
-            className="ml-4 rounded-full p-1 hover:bg-black/5 dark:hover:bg-white/5"
+            className="ml-3 rounded-md p-1 text-black/60 transition hover:bg-black/15 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white/70 dark:hover:bg-white/10"
           >
-            <XIcon />
+            <XIcon size={18} />
           </button>
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
-          <div className="font-dm_sans text-2xl font-bold">
+        <div className="mt-5 flex items-center justify-between">
+          <div className="font-dm_sans text-2xl font-bold leading-none text-black dark:text-white">
             {sign} {amountFormatted} {bankCurrency ?? ""}
           </div>
-          <div className="text-sm text-neutral-500">{bankName ?? "—"}</div>
+          <div className="text-sm text-black opacity-70 dark:text-white">
+            {bankName ?? "—"}
+          </div>
         </div>
       </div>
-    </div>
+    </ModalOverlay>
   );
 }
