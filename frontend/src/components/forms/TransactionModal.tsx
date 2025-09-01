@@ -1,12 +1,13 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import { NumericFormat } from "react-number-format";
 import DatePicker from "react-datepicker";
+import { X } from "lucide-react";
 
+import ModalOverlay from "@/src/components/ui/ModalOverlay";
 import { TRANSACTION_CATEGORIES } from "@/src/utils/transaction.categories";
 import { useTransactionStore } from "@/src/store/useTransactionStore";
-
 import TitlePage from "../common/TitlePage";
 import InputField from "../ui/InputField";
 
@@ -63,11 +64,11 @@ export default function TransactionModal({
       return;
     }
     if (!category) {
-      setErrors((prev) => ({ ...prev, category: "Categoria é obrigatório." }));
+      setErrors((prev) => ({ ...prev, category: "Categoria é obrigatória." }));
       hasError = true;
     }
     if (!date) {
-      setErrors((prev) => ({ ...prev, category: "Data é obrigatório." }));
+      setErrors((prev) => ({ ...prev, date: "Data é obrigatória." }));
       hasError = true;
     }
     if (hasError) return;
@@ -81,10 +82,7 @@ export default function TransactionModal({
         date: date!,
       });
 
-      if (onSuccess) {
-        onSuccess();
-      }
-
+      onSuccess?.();
       onClose();
     } catch (err) {
       console.error("Error adding transaction:", err);
@@ -93,28 +91,32 @@ export default function TransactionModal({
 
   if (!isOpen) return null;
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div
-        onClick={onClose}
-        className="absolute inset-0 bg-dark/50 backdrop-blur-sm"
-      />
+  const chipBase =
+    "flex-1 rounded-md border px-4 py-2 text-center text-sm font-semibold shadow-sm transition";
+  const chipActive =
+    "border-blue-500 bg-blue-50 text-blue-700 dark:border-sky-500 dark:bg-sky-500/10 dark:text-sky-300";
+  const chipIdle =
+    "border-black/10 bg-white/50 text-black/80 hover:bg-black/5 dark:border-white/15 dark:bg-white/5 dark:text-white/80";
 
+  return (
+    <ModalOverlay onClose={onClose}>
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 w-full max-w-md rounded-lg border bg-white p-4 text-dark dark:border-white/30 dark:bg-dark dark:text-white"
+        className="relative w-full max-w-md rounded-2xl border border-black/10 bg-white/80 p-4 shadow-xl backdrop-blur dark:border-white/10 dark:bg-[#0b0e12]/70"
       >
-        <button
-          onClick={onClose}
-          type="button"
-          className="absolute right-4 top-4 cursor-pointer text-gray-400 hover:text-red-600"
-        >
-          ✕
-        </button>
+        <div className="mb-2 flex items-center justify-between">
+          <TitlePage text="Nova transação" />
+          <button
+            onClick={onClose}
+            type="button"
+            aria-label="Fechar"
+            className="rounded-md p-1 text-black/60 transition hover:bg-black/5 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white/70 dark:hover:bg-white/10"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
-        <TitlePage text="Nova transação" />
-
-        <div className="my-4 flex space-x-2 rounded-full bg-dark/30 p-1 dark:bg-dark-light">
+        <div className="my-4 flex space-x-2 rounded-full bg-dark/5 p-1 shadow-sm dark:bg-dark-light">
           {(["expense", "income"] as TransactionType[]).map((opt) => (
             <button
               key={opt}
@@ -133,7 +135,9 @@ export default function TransactionModal({
 
         <div className="mb-4 flex flex-col space-y-3">
           <div>
-            <label className="block text-sm font-medium">Valor *</label>
+            <label className="mb-1 block text-sm text-black/70 dark:text-white">
+              Valor *
+            </label>
             <NumericFormat
               displayType="input"
               thousandSeparator="."
@@ -141,12 +145,11 @@ export default function TransactionModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="font-dm_sans mt-1 w-full rounded border px-3 py-2 font-bold outline-none dark:border-light/10 dark:bg-dark-light"
-              required
+              className="w-full rounded-md border border-black/10 bg-white/70 px-3 py-2 font-dm_sans font-bold text-black shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
               value={amount}
-              onValueChange={(values) => {
-                setAmount(values.floatValue ?? undefined);
-              }}
+              onValueChange={(values) =>
+                setAmount(values.floatValue ?? undefined)
+              }
             />
             {errors.amount && (
               <p className="mt-1 text-xs text-red-500">{errors.amount}</p>
@@ -154,28 +157,40 @@ export default function TransactionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium">Descrição</label>
+            <label className="mb-1 block text-sm text-black/70 dark:text-white">
+              Descrição
+            </label>
             <InputField
               type="text"
               placeholder="(opcional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              className="border border-black/10 bg-white/70 shadow-sm backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5"
             />
           </div>
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium">Categoria *</label>
+          <label className="mb-1 block text-sm text-black/70 dark:text-white">
+            Categoria *
+          </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={`mt-1 w-full rounded border px-3 py-2 dark:border-light/10 dark:bg-dark-light dark:text-white ${
-              errors.category ? "border-red-500" : ""
-            }`}
+            className={`w-full rounded-md border border-black/10 bg-white/70 px-1 py-2 text-dark shadow-sm backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white ${errors.category ? "ring-1 ring-red-500" : ""} `}
           >
-            <option value="">Selecionar categoria…</option>
+            <option
+              value=""
+              className="text-dark dark:bg-dark/90 dark:text-white"
+            >
+              Selecionar categoria…
+            </option>
             {TRANSACTION_CATEGORIES.map((c) => (
-              <option key={c.value} value={c.value}>
+              <option
+                key={c.value}
+                value={c.value}
+                className="text-dark dark:bg-dark/90 dark:text-white"
+              >
                 {c.label}
               </option>
             ))}
@@ -186,11 +201,13 @@ export default function TransactionModal({
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-medium">Data *</label>
+          <label className="mb-1 block text-sm text-black/70 dark:text-white">
+            Data *
+          </label>
           <DatePicker
             selected={date}
             onChange={(d) => setDate(d)}
-            className="mt-1 w-full rounded border px-3 py-2 dark:border-light/10 dark:bg-dark-light dark:text-white"
+            className="w-full rounded-md border border-black/10 bg-white/70 px-3 py-2 text-dark shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
             dateFormat="dd/MM/yyyy"
           />
           {errors.date && (
@@ -198,15 +215,24 @@ export default function TransactionModal({
           )}
         </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full cursor-pointer rounded bg-blue-600 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isLoading ? "Salvando..." : "Salvar"}
-        </button>
+        {/* ações */}
+        <div className="flex w-full justify-end gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md border border-black/50 px-4 py-2 text-black transition hover:bg-black/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-white transition hover:translate-y-[-1px] hover:opacity-90 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-black"
+          >
+            {isLoading ? "Salvando..." : "Salvar"}
+          </button>
+        </div>
       </form>
-    </div>,
-    document.body,
+    </ModalOverlay>
   );
 }
