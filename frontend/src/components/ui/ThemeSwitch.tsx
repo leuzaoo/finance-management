@@ -4,36 +4,54 @@ import { useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
 
+function applyTheme(next: Theme) {
+  const root = document.documentElement;
+  root.classList.toggle("dark", next === "dark");
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+}
+
 export default function ThemeSwitch() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("theme") as Theme | null;
-      if (stored === "dark" || stored === "light") {
-        return stored;
-      }
-    }
-    return "light";
-  });
+  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme") as Theme | null;
-    if (stored === "dark" || stored === "light") {
-      setTheme(stored);
-      document.documentElement.classList.toggle("dark", stored === "dark");
-    }
+    const root = document.documentElement;
+    const initial =
+      (root.getAttribute("data-theme") as Theme) ||
+      (root.classList.contains("dark") ? "dark" : "light");
+    setTheme(initial);
+    setMounted(true);
+
+    const onStorage = (e: StorageEvent) => {
+      if (
+        e.key === "theme" &&
+        (e.newValue === "dark" || e.newValue === "light")
+      ) {
+        setTheme(e.newValue as Theme);
+        applyTheme(e.newValue as Theme);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    if (!mounted) return;
+    applyTheme(theme);
+  }, [theme, mounted]);
 
-  function toggleTheme() {
-    setTheme((t) => (t === "light" ? "dark" : "light"));
-  }
+  const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+
+  if (!mounted) return null;
 
   return (
-    <button onClick={toggleTheme} aria-label="Alternar tema claro/escuro">
+    <button
+      onClick={toggleTheme}
+      aria-label="Alternar tema claro/escuro"
+      title={theme === "dark" ? "Mudar para claro" : "Mudar para escuro"}
+      className="rounded-full border border-black/10 bg-white/70 px-3 py-1 text-sm backdrop-blur hover:bg-black/5 dark:border-white/15 dark:bg-white/10 dark:hover:bg-white/15"
+    >
       {theme === "dark" ? "🌙" : "☀️"}
     </button>
   );

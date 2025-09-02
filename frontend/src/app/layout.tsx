@@ -31,11 +31,29 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        {/* Aplica o tema antes da hidratação (evita FOUC) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function () {
+  try {
+    var stored = localStorage.getItem('theme'); // "dark" | "light" | null
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = stored || (prefersDark ? 'dark' : 'light');
+    var root = document.documentElement;
+    if (theme === 'dark') root.classList.add('dark');
+    else root.classList.remove('dark');
+    root.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+`,
+          }}
+        />
+      </head>
       <body
         className={`${archivo.className} ${dm_sans.variable} ${inter.variable} antialiased`}
       >
