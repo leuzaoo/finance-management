@@ -34,7 +34,7 @@ export default function ModalOverlay({ children, onClose }: Props) {
       onClick={onClose}
     >
       <div
-        className="mx-auto w-full max-w-lg"
+        className="mx-auto flex h-full w-full max-w-lg items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         {children}
