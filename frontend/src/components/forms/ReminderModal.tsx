@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import DatePicker from "react-datepicker";
+import { X } from "lucide-react";
 
-import { Reminder } from "@/src/store/useReminderStore";
-
+import { type Reminder } from "@/src/store/useReminderStore";
+import ModalOverlay from "@/src/components/ui/ModalOverlay";
 import TitlePage from "../common/TitlePage";
 
 interface ReminderModalProps {
@@ -54,60 +54,62 @@ export default function ReminderModal({
 
   if (!isOpen) return null;
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+  return (
+    <ModalOverlay onClose={onClose}>
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 w-full max-w-md rounded-2xl border bg-light p-4 text-dark dark:border-light/20 dark:bg-dark dark:text-light"
+        className="relative w-full max-w-lg rounded-2xl border border-black/10 bg-white/80 p-4 shadow-xl backdrop-blur dark:border-white/10 dark:bg-[#0b0e12]/70"
       >
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute right-4 top-2 cursor-pointer text-red-500"
-        >
-          ✕
-        </button>
-        <TitlePage text={reminder ? "" : "Novo Lembrete"} />
-        <div className="mt-4 space-y-4">
+        <div className="mb-2 flex items-center justify-between">
+          <TitlePage text={reminder ? "" : "Novo Lembrete"} />
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Fechar"
+            className="rounded-md p-1 text-black/60 transition hover:bg-black/5 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white/70 dark:hover:bg-white/10"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="mt-2 space-y-4">
           <div>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 flex w-full flex-col items-center justify-center rounded-lg border-b border-dark/20 py-1 pl-2 text-2xl font-bold text-dark shadow-md outline-none placeholder:text-base placeholder:font-normal dark:border-light/20 dark:bg-dark-light dark:text-light"
               placeholder="Título do lembrete"
+              className="w-full rounded-xl border border-black/10 bg-white/70 px-3 py-2 text-lg font-semibold text-black shadow-sm outline-none backdrop-blur placeholder:font-normal focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
             />
             {errors.title && (
               <p className="mt-1 text-xs text-red-500">{errors.title}</p>
             )}
           </div>
+
           <div>
             <DatePicker
               selected={date}
               onChange={(d: Date | null) => d && setDate(d)}
-              className="mt-2 w-28 rounded-lg border-b border-dark/20 px-2 py-1 text-lg font-medium text-dark shadow-md outline-none dark:border-light/20 dark:bg-dark-light dark:text-light"
               dateFormat="dd/MM/yyyy"
+              className="w-36 rounded-xl border border-black/10 bg-white/70 px-3 py-2 text-base font-medium text-black shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
             />
             {errors.date && (
               <p className="mt-1 text-xs text-red-500">{errors.date}</p>
             )}
           </div>
+
           <div>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-dark/20 bg-dark/10 p-2 text-dark shadow-md outline-none dark:border-light/20 dark:bg-dark-light dark:text-light"
+              rows={3}
               placeholder="Observações (opcional)"
-              rows={2}
+              className="w-full rounded-xl border border-black/10 bg-white/70 px-3 py-2 text-black shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
             />
           </div>
         </div>
 
-        <div className="mt-6 flex justify-between gap-4">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           {reminder && (
             <button
               type="button"
@@ -115,20 +117,20 @@ export default function ReminderModal({
                 onDelete(reminder._id);
                 onClose();
               }}
-              className="flex-1 cursor-pointer rounded border border-red-500 py-2 text-red-500 transition-all duration-200 hover:bg-red-500 hover:text-white"
+              className="flex-1 rounded-xl border border-red-500 px-4 py-2 text-red-500 transition hover:bg-red-500 hover:text-white dark:border-red-400 dark:text-red-300 dark:hover:bg-red-500/20 dark:hover:text-red-200"
             >
               Finalizar & Excluir
             </button>
           )}
+
           <button
             type="submit"
-            className="flex-1 cursor-pointer rounded-lg bg-dark py-2 text-white transition-all duration-200 hover:opacity-80 dark:bg-white dark:text-dark"
+            className="flex-1 rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-white transition hover:translate-y-[-1px] hover:opacity-90 active:translate-y-0 dark:border-white dark:bg-white dark:text-black"
           >
             {reminder ? "Atualizar" : "Criar"}
           </button>
         </div>
       </form>
-    </div>,
-    document.body,
+    </ModalOverlay>
   );
 }
