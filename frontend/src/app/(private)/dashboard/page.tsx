@@ -253,7 +253,7 @@ export default function DashboardPage() {
                 setRemModalOpen(true);
               }}
             >
-              <div className="flex cursor-pointer items-center gap-2 rounded-full bg-dark p-1 text-light transition-all duration-1000 hover:opacity-60 dark:bg-light dark:text-dark">
+              <div className="flex cursor-pointer items-center gap-2 rounded-full bg-dark p-1 text-light transition-all duration-300 hover:opacity-60 dark:bg-light dark:text-dark">
                 <PlusIcon size={20} />
               </div>
             </button>
@@ -261,11 +261,11 @@ export default function DashboardPage() {
           {remLoading ? (
             <p className="mt-2">Carregando lembretes…</p>
           ) : reminders.length === 0 ? (
-            <p className="mt-2 rounded-xl bg-white p-3 text-dark/50 shadow-md transition-all duration-1000 dark:bg-dark/50 dark:text-light/40">
+            <p className="mt-2 rounded-xl bg-white p-3 text-dark/50 shadow-md transition-all duration-300 dark:bg-dark/50 dark:text-light/40">
               Nenhum lembrete adicionado.
             </p>
           ) : (
-            <ul className="mt-2 flex flex-col gap-2 rounded-xl bg-white p-3 transition-all duration-1000 dark:bg-dark/50">
+            <ul className="mt-2 flex flex-col gap-2 rounded-xl bg-white p-3 transition-all duration-300 dark:bg-dark/50">
               {reminders.map((r) => (
                 <RemindersCard
                   key={r._id}

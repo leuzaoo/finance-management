@@ -22,12 +22,12 @@ export function SubscriptionsSection({
   onDelete,
 }: Props) {
   return (
-    <section className="mt-6 rounded-lg bg-white p-4 shadow-md transition-all duration-1000 dark:bg-dark/50">
+    <section className="mt-6 rounded-lg bg-white p-4 shadow-md transition-all duration-300 dark:bg-dark/50">
       <div className="flex items-center justify-between">
         <TitlePage text="Assinaturas" />
         <button
           onClick={onAdd}
-          className="cursor-pointer text-dark transition-all duration-1000 hover:text-light dark:text-light/50"
+          className="cursor-pointer text-dark transition-all duration-300 hover:text-light dark:text-light/50"
         >
           <PlusCircleIcon />
         </button>

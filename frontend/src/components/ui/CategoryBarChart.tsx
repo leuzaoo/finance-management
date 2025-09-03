@@ -33,9 +33,9 @@ export default function CategoryBarChart({
 
   if (data.length === 0) {
     return (
-      <section className="mt-6 rounded-lg bg-white p-4 shadow-md transition-all duration-1000 dark:bg-dark/50">
+      <section className="mt-6 rounded-lg bg-white p-4 shadow-md transition-all duration-300 dark:bg-dark/50">
         <TitlePage text="Gastos por Categoria" />
-        <p className="text-dark/60 transition-all duration-1000 dark:text-light/60">
+        <p className="text-dark/60 transition-all duration-300 dark:text-light/60">
           Nenhuma despesa neste período.
         </p>
       </section>
@@ -48,7 +48,7 @@ export default function CategoryBarChart({
   );
 
   return (
-    <section className="mt-6 space-y-4 rounded-lg bg-white p-4 shadow-md transition-all duration-1000 dark:bg-dark/50">
+    <section className="mt-6 space-y-4 rounded-lg bg-white p-4 shadow-md transition-all duration-300 dark:bg-dark/50">
       <TitlePage text="Gastos por Categoria" />
       <ul className="space-y-2 text-sm">
         {data.map((d) => {
@@ -59,7 +59,7 @@ export default function CategoryBarChart({
               <span className="w-20 font-medium capitalize">
                 {getCategoryLabel(d.category)}
               </span>
-              <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-dark/10 transition-all duration-1000 dark:bg-light/10">
+              <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-dark/10 transition-all duration-300 dark:bg-light/10">
                 <div
                   className="absolute left-0 top-0 h-full bg-green-500"
                   style={{ width: widthPct }}
@@ -72,7 +72,7 @@ export default function CategoryBarChart({
           );
         })}
       </ul>
-      <div className="flex items-center justify-end text-sm font-light text-dark/50 transition-all duration-1000 dark:text-light/70">
+      <div className="flex items-center justify-end text-sm font-light text-dark/50 transition-all duration-300 dark:text-light/70">
         <p>
           Total:{" "}
           <span className="font-dm_sans text-base font-bold">

@@ -44,7 +44,7 @@ export default function SubscriptionsCard({
   }
   if (subscriptions.length === 0) {
     return (
-      <p className="text-dark/60 transition-all duration-1000 dark:text-light/60">
+      <p className="text-dark/60 transition-all duration-300 dark:text-light/60">
         Nenhuma assinatura cadastrada.
       </p>
     );
