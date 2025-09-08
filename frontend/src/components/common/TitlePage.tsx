@@ -4,7 +4,9 @@ type Props = { text: string };
 
 const TitlePage = ({ text }: Props) => {
   return (
-    <h1 className="text-2xl font-semibold text-dark dark:text-white">{text}</h1>
+    <h1 className="text-2xl font-semibold text-dark transition-all duration-300 dark:text-white">
+      {text}
+    </h1>
   );
 };
 
