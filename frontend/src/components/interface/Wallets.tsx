@@ -39,7 +39,7 @@ export function Wallets() {
   );
 
   return (
-    <section className="pb-8">
+    <section className="mx-auto max-w-5xl pb-8 2md:mt-10">
       <div className="mb-4 flex items-center justify-between">
         <TitlePage text="Cartões" />
         <button
