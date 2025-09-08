@@ -109,11 +109,11 @@ export default function ProfilePage() {
       <ToastContainer autoClose={1500} position="top-left" />
 
       {isLoading || !profile ? (
-        <div className="mx-auto max-w-md py-10">
+        <div className="mx-auto flex h-full max-w-md items-center justify-center">
           <LoaderIcon />
         </div>
       ) : (
-        <div className="mx-auto mb-5 max-w-md space-y-4">
+        <div className="mx-auto mb-5 max-w-md space-y-4 2md:mt-10">
           <div className="flex items-center justify-between">
             <TitlePage text="Meu Perfil" />
             <button aria-label="Alterar tema">
@@ -121,13 +121,13 @@ export default function ProfilePage() {
             </button>
           </div>
 
-          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#0b0e12]/60">
             <div className="flex items-center gap-3">
               <span className="rounded-full bg-gradient-to-br from-black/5 to-black/0 p-2 dark:from-white/10">
                 <UserCircle2 size={40} strokeWidth={1} />
               </span>
               <div>
-                <p className="text-lg font-semibold tracking-tight">
+                <p className="text-lg font-semibold tracking-tight md:text-xl">
                   {profile.firstName}
                 </p>
                 <p className="text-sm opacity-70">{profile.email}</p>
@@ -135,9 +135,9 @@ export default function ProfilePage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#0b0e12]/60">
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-base font-semibold tracking-tight">
+              <h2 className="text-base font-semibold tracking-tight md:text-xl">
                 Dados Pessoais
               </h2>
               <button
@@ -151,19 +151,23 @@ export default function ProfilePage() {
 
             <div className="grid gap-3">
               <div>
-                <span className="block text-xs opacity-70">Primeiro nome</span>
+                <span className="block text-xs opacity-70 md:text-sm">
+                  Primeiro nome
+                </span>
                 <p className="text-sm md:text-base">{profile.firstName}</p>
               </div>
               <div>
-                <span className="block text-xs opacity-70">Email</span>
+                <span className="block text-xs opacity-70 md:text-sm">
+                  Email
+                </span>
                 <p className="text-sm md:text-base">{profile.email}</p>
               </div>
             </div>
           </section>
 
-          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#0b0e12]/60">
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-base font-semibold tracking-tight">
+              <h2 className="text-base font-semibold tracking-tight md:text-xl">
                 Moeda principal
               </h2>
               <button
@@ -181,11 +185,13 @@ export default function ProfilePage() {
                   <Image
                     src={flag[currentCurrency]}
                     alt={`Bandeira ${currentCurrency}`}
-                    width={20}
-                    height={20}
+                    width={24}
+                    height={24}
                     className="rounded-full"
                   />
-                  <span className="font-medium">{currentCurrency}</span>
+                  <span className="font-medium md:text-base">
+                    {currentCurrency}
+                  </span>
                 </div>
               ) : (
                 <span className="text-sm text-black/50 dark:text-white/50">
@@ -240,9 +246,9 @@ export default function ProfilePage() {
             )}
           </section>
 
-          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#0b0e12]/60">
+          <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm backdrop-blur-md transition-all duration-300 dark:border-white/10 dark:bg-[#0b0e12]/60">
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-base font-semibold tracking-tight">
+              <h2 className="text-base font-semibold tracking-tight md:text-xl">
                 Autenticação
               </h2>
               <button
