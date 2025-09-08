@@ -19,6 +19,7 @@ import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 import TransactionInfoCard from "@/src/components/ui/TransactionInfoCard";
 import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
 import TotalCurrencyCard from "@/src/components/ui/totalCurrencyCard";
+import DashboardHeader from "@/src/components/ui/DashboardHeader";
 import ReminderModal from "@/src/components/forms/ReminderModal";
 import RemindersCard from "@/src/components/ui/RemindersCard";
 import TitlePage from "@/src/components/common/TitlePage";
@@ -39,7 +40,6 @@ export default function DashboardPage() {
   const { rates, fetchRates } = useRatesStore();
 
   const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
-  const { profile: user } = useUserStore();
 
   const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
   const [txModalOpen, setTxModalOpen] = useState(false);
@@ -163,19 +163,14 @@ export default function DashboardPage() {
         />
       )}
 
-      <div className="mx-auto w-full max-w-5xl gap-10 pb-5 lg:grid lg:grid-cols-3">
+      <div className="mx-auto mt-5 w-full max-w-5xl 2md:mt-10">
+        <DashboardHeader />
+      </div>
+      <div className="mx-auto w-full max-w-5xl gap-10 pb-5 2md:mt-10 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-2">
           <section>
             <h1 className="sr-only">Moeda</h1>
-            <div className="mb-5 flex w-full items-end gap-2">
-              <UserCircle2Icon size={60} strokeWidth={1} />
-              <p className="text-lg">
-                Olá, <span className="font-bold">{user?.firstName}</span>.
-              </p>
-            </div>
-
             <TotalCurrencyCard />
-
             <DashboardMoneyCard
               banks={banks}
               currency={currency}
