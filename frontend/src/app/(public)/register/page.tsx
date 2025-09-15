@@ -58,10 +58,9 @@ export default function RegisterPage() {
 
     try {
       setBtnLoading(true);
-
-      const result = await register(firstName, email, password); // { ok, requirePrimaryCurrency }
+      const result = await register(firstName, email, password);
       if (result.ok) {
-        await sleep(2000); // UX
+        await sleep(2000);
         if (result.requirePrimaryCurrency) {
           router.push("/onboarding/currency");
         } else {
