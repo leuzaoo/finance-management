@@ -17,8 +17,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [callbackUrl, setCallbackUrl] = useState("/dashboard");
+  const [loginIn, setLoginIn] = useState(false);
 
-  const { login, isLoading: loginLoading } = useAuthStore();
+  const { login } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -46,8 +47,9 @@ export default function LoginPage() {
     if (!validateFields()) return;
 
     const result = await login(email, password);
+    setLoginIn(true);
     if (result.ok) {
-      await sleep(2000);
+      await sleep(1500);
       if (result.requirePrimaryCurrency) {
         router.push("/onboarding/currency");
       } else {
@@ -58,7 +60,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <ToastContainer autoClose={1000} position="top-left" />
+      <ToastContainer autoClose={1500} position="top-left" />
       <section className="mx-auto flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
         <div className="mx-auto w-full max-w-md p-4 lg:col-span-1">
           <p className="text-4xl font-medium lg:text-5xl">
@@ -86,7 +88,7 @@ export default function LoginPage() {
                   placeholder="johndoe@mail.com"
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
-                  disabled={loginLoading}
+                  disabled={loginIn}
                 />
                 {fieldErrors.email && (
                   <p className="text-xs text-red-500">{fieldErrors.email}</p>
@@ -99,7 +101,7 @@ export default function LoginPage() {
                   placeholder="••••••••••••"
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
-                  disabled={loginLoading}
+                  disabled={loginIn}
                 />
                 {fieldErrors.password && (
                   <p className="text-xs text-red-500">{fieldErrors.password}</p>
@@ -109,11 +111,7 @@ export default function LoginPage() {
 
             <div className="mt-5 flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="size-4"
-                  disabled={loginLoading}
-                />
+                <input type="checkbox" className="size-4" disabled={loginIn} />
                 Salvar dados?
               </div>
               <Link href="/recover-password" className="text-sky-300 underline">
@@ -121,7 +119,7 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {loginLoading ? (
+            {loginIn ? (
               <div className="mx-auto my-5 w-full rounded-md bg-blue-600 py-2 text-lg">
                 <LoaderIcon />
               </div>

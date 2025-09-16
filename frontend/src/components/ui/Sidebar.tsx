@@ -26,8 +26,9 @@ const MENU = [
 export default function Sidebar() {
   const pathname = usePathname() || "/";
   const router = useRouter();
+  const [leaving, setLeaving] = useState(false);
 
-  const { logout, isLoading: logoutLoading } = useAuthStore();
+  const { logout } = useAuthStore();
   const { profile: user, getProfile } = useUserStore();
 
   const [collapsed, setCollapsed] = useState(true);
@@ -37,8 +38,11 @@ export default function Sidebar() {
   }, [getProfile]);
 
   const handleLogout = async () => {
+    setLeaving(true);
     await logout();
-    router.push("/login");
+    setTimeout(() => {
+      router.push("/login");
+    }, 1500);
   };
 
   const isActive = (href: string) =>
@@ -137,11 +141,12 @@ export default function Sidebar() {
 
         <button
           onClick={handleLogout}
-          disabled={logoutLoading}
+          disabled={leaving}
+          aria-busy={leaving}
           className={`flex w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-3 py-2 text-sm font-medium text-white transition-all hover:opacity-90 active:translate-y-[1px] disabled:opacity-60 ${collapsed ? "py-2" : "py-2"} `}
           title={collapsed ? "Sair" : undefined}
         >
-          {logoutLoading ? (
+          {leaving ? (
             <LoaderIcon />
           ) : collapsed ? (
             <LogOut size={22} strokeWidth={1.5} />

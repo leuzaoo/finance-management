@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 
 import { useRatesStore } from "@/src/store/useRatesStore";
 import { useAuthStore } from "@/src/store/useAuthStore";
@@ -42,7 +43,7 @@ export default function ChooseCurrencyPage() {
               busy === c ? "opacity-70" : "hover:bg-black/5"
             }`}
           >
-            {busy === c ? "Salvando..." : c}
+            {busy === c ? <LoaderIcon /> : c}
           </button>
         ))}
       </div>

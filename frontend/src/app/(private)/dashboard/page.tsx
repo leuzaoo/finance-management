@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
@@ -66,6 +67,8 @@ export default function DashboardPage() {
 
   return (
     <>
+      <ToastContainer position="top-left" autoClose={1500} />
+
       <BankModal
         isOpen={bankModal.open}
         onClose={bankModal.onClose}

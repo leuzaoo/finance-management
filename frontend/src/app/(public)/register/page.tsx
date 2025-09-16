@@ -19,13 +19,10 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [callbackUrl, setCallbackUrl] = useState("/dashboard");
+  const [registering, setRegistering] = useState(false);
 
-  const { register, isLoading: registerLoading } = useAuthStore();
+  const { register } = useAuthStore();
   const [btnLoading, setBtnLoading] = useState(false);
-  const loading = useMemo(
-    () => registerLoading || btnLoading,
-    [registerLoading, btnLoading],
-  );
 
   const router = useRouter();
 
@@ -53,12 +50,11 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (loading) return;
     if (!validateFields()) return;
 
     try {
-      setBtnLoading(true);
       const result = await register(firstName, email, password);
+      setRegistering(true);
       if (result.ok) {
         await sleep(2000);
         if (result.requirePrimaryCurrency) {
@@ -74,7 +70,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <ToastContainer autoClose={3000} position="top-left" />
+      <ToastContainer autoClose={1500} position="top-left" />
       <section className="mx-auto flex h-screen flex-col items-center justify-center lg:grid lg:grid-cols-2">
         <div className="mx-auto w-full max-w-md p-4 lg:col-span-1">
           <p className="text-4xl font-medium lg:text-5xl">
@@ -100,7 +96,7 @@ export default function RegisterPage() {
                   value={firstName}
                   type="text"
                   placeholder="José"
-                  disabled={loading}
+                  disabled={registering}
                 />
                 {fieldErrors.firstName && (
                   <p className="text-xs text-red-500">
@@ -115,7 +111,7 @@ export default function RegisterPage() {
                   value={email}
                   type="email"
                   placeholder="johndoe@mail.com"
-                  disabled={loading}
+                  disabled={registering}
                 />
                 {fieldErrors.email && (
                   <p className="text-xs text-red-500">{fieldErrors.email}</p>
@@ -128,7 +124,7 @@ export default function RegisterPage() {
                   value={password}
                   type="password"
                   placeholder="Senha"
-                  disabled={loading}
+                  disabled={registering}
                 />
                 {fieldErrors.password && (
                   <p className="text-xs text-red-500">{fieldErrors.password}</p>
@@ -148,18 +144,17 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              disabled={loading}
-              aria-busy={loading}
+              disabled={registering}
+              aria-busy={registering}
               className={`mx-auto my-5 flex w-full items-center justify-center gap-2 rounded-md py-2 text-lg text-white transition-all duration-200 ${
-                loading
+                registering
                   ? "cursor-not-allowed bg-blue-600/70 opacity-80"
                   : "cursor-pointer bg-blue-600 hover:bg-blue-500"
               }`}
             >
-              {loading ? (
+              {registering ? (
                 <>
                   <Loader2Icon className="h-5 w-5 animate-spin" />
-                  Criando conta...
                 </>
               ) : (
                 "Finalizar"
