@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { NumericFormat } from "react-number-format";
 import DatePicker from "react-datepicker";
 import { X } from "lucide-react";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 
 import ModalOverlay from "@/src/components/ui/ModalOverlay";
 import { TRANSACTION_CATEGORIES } from "@/src/utils/transaction.categories";
@@ -29,7 +30,8 @@ export default function TransactionModal({
   onSuccess,
 }: TransactionModalProps) {
   const addTransaction = useTransactionStore((s) => s.addTransaction);
-  const isLoading = useTransactionStore((s) => s.isLoading);
+
+  const [isSaving, setIsSaving] = useState(false);
 
   const [type, setType] = useState<TransactionType>("expense");
   const [amount, setAmount] = useState<number | undefined>(undefined);
@@ -43,6 +45,7 @@ export default function TransactionModal({
     date?: string;
   }>({});
 
+  //
   useEffect(() => {
     if (isOpen) {
       setType("expense");
@@ -51,11 +54,13 @@ export default function TransactionModal({
       setDescription("");
       setDate(new Date());
       setErrors({});
+      setIsSaving(false);
     }
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSaving) return;
     setErrors({});
 
     let hasError = false;
@@ -74,6 +79,7 @@ export default function TransactionModal({
     if (hasError) return;
 
     try {
+      setIsSaving(true);
       await addTransaction(bankId, {
         type,
         amount: amount!,
@@ -86,20 +92,18 @@ export default function TransactionModal({
       onClose();
     } catch (err) {
       console.error("Error adding transaction:", err);
+      setIsSaving(false);
     }
   };
 
   if (!isOpen) return null;
 
-  const chipBase =
-    "flex-1 rounded-md border px-4 py-2 text-center text-sm font-semibold shadow-sm transition";
-  const chipActive =
-    "border-blue-500 bg-blue-50 text-blue-700 dark:border-sky-500 dark:bg-sky-500/10 dark:text-sky-300";
-  const chipIdle =
-    "border-black/10 bg-white/50 text-black/80 hover:bg-black/5 dark:border-white/15 dark:bg-white/5 dark:text-white/80";
+  const guardedClose = () => {
+    if (!isSaving) onClose();
+  };
 
   return (
-    <ModalOverlay onClose={onClose}>
+    <ModalOverlay onClose={guardedClose}>
       <form
         onSubmit={handleSubmit}
         className="relative w-full max-w-md rounded-2xl border border-black/10 bg-white/80 p-4 shadow-xl backdrop-blur dark:border-white/10 dark:bg-[#0b0e12]/70"
@@ -107,10 +111,11 @@ export default function TransactionModal({
         <div className="mb-2 flex items-center justify-between">
           <TitlePage text="Nova transação" />
           <button
-            onClick={onClose}
+            onClick={guardedClose}
             type="button"
             aria-label="Fechar"
-            className="rounded-md p-1 text-black/60 transition hover:bg-black/5 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white/70 dark:hover:bg-white/10"
+            disabled={isSaving}
+            className="rounded-md p-1 text-black/60 transition hover:bg-black/5 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50 dark:text-white/70 dark:hover:bg-white/10"
           >
             <X size={18} />
           </button>
@@ -121,8 +126,9 @@ export default function TransactionModal({
             <button
               key={opt}
               type="button"
-              onClick={() => setType(opt)}
-              className={`flex-1 cursor-pointer rounded-full py-2 text-center transition-all duration-200 ${
+              onClick={() => !isSaving && setType(opt)}
+              disabled={isSaving}
+              className={`flex-1 cursor-pointer rounded-full py-2 text-center transition-all duration-200 disabled:opacity-60 ${
                 type === opt
                   ? "bg-white text-xl font-semibold text-dark"
                   : "font-semibold text-dark/50 hover:bg-light/10 dark:text-light/50"
@@ -145,7 +151,8 @@ export default function TransactionModal({
               decimalScale={2}
               allowNegative={false}
               suffix={` ${currencyType}`}
-              className="w-full rounded-md border border-black/10 bg-white/70 px-3 py-2 font-dm_sans font-bold text-black shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
+              disabled={isSaving}
+              className="w-full rounded-md border border-black/10 bg-white/70 px-3 py-2 font-dm_sans font-bold text-black shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 disabled:opacity-60 dark:border-white/15 dark:bg-white/5 dark:text-white"
               value={amount}
               onValueChange={(values) =>
                 setAmount(values.floatValue ?? undefined)
@@ -165,7 +172,8 @@ export default function TransactionModal({
               placeholder="(opcional)"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="border border-black/10 bg-white/70 shadow-sm backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5"
+              disabled={isSaving}
+              className="border border-black/10 bg-white/70 shadow-sm backdrop-blur focus:ring-1 focus:ring-blue-500 disabled:opacity-60 dark:border-white/15 dark:bg-white/5"
             />
           </div>
         </div>
@@ -177,7 +185,10 @@ export default function TransactionModal({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={`w-full rounded-md border border-black/10 bg-white/70 px-1 py-2 text-dark shadow-sm backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white ${errors.category ? "ring-1 ring-red-500" : ""} `}
+            disabled={isSaving}
+            className={`w-full rounded-md border border-black/10 bg-white/70 px-1 py-2 text-dark shadow-sm backdrop-blur focus:ring-1 focus:ring-blue-500 disabled:opacity-60 dark:border-white/15 dark:bg-white/5 dark:text-white ${
+              errors.category ? "ring-1 ring-red-500" : ""
+            }`}
           >
             <option
               value=""
@@ -206,8 +217,9 @@ export default function TransactionModal({
           </label>
           <DatePicker
             selected={date}
-            onChange={(d) => setDate(d)}
-            className="w-full rounded-md border border-black/10 bg-white/70 px-3 py-2 text-dark shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 dark:border-white/15 dark:bg-white/5 dark:text-white"
+            onChange={(d: Date | null) => setDate(d)}
+            disabled={isSaving}
+            className="w-full rounded-md border border-black/10 bg-white/70 px-3 py-2 text-dark shadow-sm outline-none backdrop-blur focus:ring-1 focus:ring-blue-500 disabled:opacity-60 dark:border-white/15 dark:bg-white/5 dark:text-white"
             dateFormat="dd/MM/yyyy"
           />
           {errors.date && (
@@ -215,21 +227,22 @@ export default function TransactionModal({
           )}
         </div>
 
-        {/* ações */}
         <div className="flex w-full justify-end gap-2">
           <button
             type="button"
-            onClick={onClose}
-            className="rounded-md border border-black/50 px-4 py-2 text-black transition hover:bg-black/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
+            onClick={guardedClose}
+            disabled={isSaving}
+            className="rounded-md border border-black/50 px-4 py-2 text-black transition hover:bg-black/5 disabled:opacity-60 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
           >
             Cancelar
           </button>
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isSaving}
+            aria-busy={isSaving}
             className="rounded-md border border-blue-600 bg-blue-600 px-4 py-2 text-white transition hover:translate-y-[-1px] hover:opacity-90 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:bg-white dark:text-black"
           >
-            {isLoading ? "Salvando..." : "Salvar"}
+            {isSaving ? <LoaderIcon /> : "Salvar"}
           </button>
         </div>
       </form>

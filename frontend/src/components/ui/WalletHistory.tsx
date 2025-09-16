@@ -17,7 +17,7 @@ export interface WalletHistoryProps {
   onDelete: (txId: string) => Promise<void>;
 }
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 12;
 
 export default function WalletHistory({
   bankId,
@@ -70,7 +70,7 @@ export default function WalletHistory({
 
       {isLoading ? (
         <div className="space-y-3">
-          {Array.from({ length: 4 }).map((_, i) => (
+          {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
               className="h-24 animate-pulse rounded-2xl border border-black/5 bg-white/60 dark:border-white/10 dark:bg-white/5"
