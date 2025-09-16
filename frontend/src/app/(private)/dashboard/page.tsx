@@ -1,67 +1,45 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import { PlusIcon } from "lucide-react";
-import { format } from "date-fns";
+import { useEffect, useState } from "react";
+import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
 
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
+import { useBankStore } from "@/src/store/useBankStore";
 import {
   useTransactionStore,
   type Transaction,
 } from "@/src/store/useTransactionStore";
-import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
-import { formatCurrency } from "@/src/utils/format-currency";
-import { useRatesStore } from "@/src/store/useRatesStore";
-import { useBankStore } from "@/src/store/useBankStore";
-import { sumToBase } from "@/src/utils/sumToBase";
 
-import { LoaderIcon } from "@/src/assets/icons/LoaderCircleIcon";
+import { useResolveBankInfo } from "@/src/hooks/useResolveBankInfo";
+import { useBanksBalances } from "@/src/hooks/useBanksBalances";
+import { useModalState } from "@/src/hooks/useModalState";
+import { useFxPolling } from "@/src/hooks/useFxPolling";
+
+import TransactionsSection from "@/src/components/sections/TransactionsSection";
 import TransactionInfoCard from "@/src/components/ui/TransactionInfoCard";
-import DashboardMoneyCard from "@/src/components/ui/DashboardMoneyCard";
-import TotalCurrencyCard from "@/src/components/ui/totalCurrencyCard";
-import DashboardHeader from "@/src/components/ui/DashboardHeader";
-import ReminderModal from "@/src/components/forms/ReminderModal";
-import RemindersCard from "@/src/components/ui/RemindersCard";
-import TitlePage from "@/src/components/common/TitlePage";
-import BankModal from "@/src/components/forms/BankModal";
 import RemindersSection from "@/src/components/sections/RemindersSection";
+import DashboardHeader from "@/src/components/ui/DashboardHeader";
+import MoneySection from "@/src/components/sections/MoneySection";
+import ReminderModal from "@/src/components/forms/ReminderModal";
+import BankModal from "@/src/components/forms/BankModal";
 
 const ALL = "Todas";
 
 export default function DashboardPage() {
   const [currency, setCurrency] = useState<string>(ALL);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [isRemModalOpen, setRemModalOpen] = useState(false);
-  const [editingRem, setEditingRem] = useState<Reminder | undefined>(undefined);
+
   const { recentTransactions, listRecentTransactions, isRecentLoading } =
     useTransactionStore();
-  const { rates, fetchRates } = useRatesStore();
+  const { listBanks, addBank, isLoading: banksLoading } = useBankStore();
+  const { listReminders, createReminder, updateReminder, deleteReminder } =
+    useReminderStore();
 
-  const { banks, isLoading: banksLoading, listBanks, addBank } = useBankStore();
+  const { currencies, banks } = useBanksBalances();
+  const resolveBankInfo = useResolveBankInfo();
+  useFxPolling("BRL");
 
-  const [selectedTx, setSelectedTx] = useState<Transaction | null>(null);
-  const [txModalOpen, setTxModalOpen] = useState(false);
-
-  useEffect(() => {
-    fetchRates("BRL");
-    const id = setInterval(() => fetchRates("BRL"), 15 * 60 * 1000);
-    return () => clearInterval(id);
-  }, [fetchRates]);
-
-  const balancesByCurrency = useMemo(() => {
-    const acc: Record<string, number> = {};
-    for (const b of banks) {
-      const code = (b.currencyType || "").toUpperCase();
-      const val = Number(b.currencyValue || 0);
-      if (!code) continue;
-      acc[code] = (acc[code] || 0) + val;
-    }
-    return acc;
-  }, [banks]);
-
-  const totalBRL = useMemo(
-    () => sumToBase(balancesByCurrency, "BRL", rates),
-    [balancesByCurrency, rates],
-  );
+  const bankModal = useModalState();
+  const remModal = useModalState<Reminder>();
+  const txModal = useModalState<Transaction>();
 
   useEffect(() => {
     listRecentTransactions();
@@ -71,91 +49,51 @@ export default function DashboardPage() {
     listBanks();
   }, [listBanks]);
 
-  const currencies = [
-    ALL,
-    ...Array.from(new Set(banks.map((b) => b.currencyType))).sort(),
-  ];
-
-  const {
-    reminders,
-    isLoading: remLoading,
-    listReminders,
-    createReminder,
-    updateReminder,
-    deleteReminder,
-  } = useReminderStore();
-
   useEffect(() => {
     listReminders();
   }, [listReminders]);
 
-  const handleCreate = async (data: {
+  const handleCreateBank = async (data: {
     bankName: string;
     currencyType: string;
     initialValue?: number;
   }) => {
     await addBank(data.bankName, data.currencyType, data.initialValue);
-    setModalOpen(false);
+    bankModal.onClose();
   };
 
   if (banksLoading) return <LoaderIcon />;
 
-  const resolveBankInfo = (tx: Transaction) => {
-    if (tx.bank && typeof tx.bank === "object") {
-      const b = tx.bank as any;
-      return {
-        bankName: b.bankName ?? null,
-        bankCurrency: b.currencyType ?? null,
-      };
-    }
-
-    const bankId =
-      typeof tx.bank === "string" ? tx.bank : (tx.bank as any)?._id;
-    const found = banks.find((bb) => String(bb.id) === String(bankId));
-    return {
-      bankName: found?.bankName ?? null,
-      bankCurrency: found?.currencyType ?? null,
-    };
-  };
-
   return (
     <>
       <BankModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        onSubmit={handleCreate}
+        isOpen={bankModal.open}
+        onClose={bankModal.onClose}
+        onSubmit={handleCreateBank}
       />
 
       <ReminderModal
-        isOpen={isRemModalOpen}
-        reminder={editingRem}
-        onClose={() => {
-          setRemModalOpen(false);
-          setEditingRem(undefined);
-        }}
+        isOpen={remModal.open}
+        reminder={remModal.data}
+        onClose={remModal.onClose}
         onSubmit={async (data) => {
-          if (editingRem) {
-            await updateReminder(editingRem._id, data);
+          if (remModal.data) {
+            await updateReminder(remModal.data._id, data);
           } else {
             await createReminder(data);
           }
-          setRemModalOpen(false);
-          setEditingRem(undefined);
+          remModal.onClose();
         }}
         onDelete={async (id) => {
           await deleteReminder(id);
-          setRemModalOpen(false);
-          setEditingRem(undefined);
+          remModal.onClose();
         }}
       />
 
-      {txModalOpen && selectedTx && (
+      {txModal.open && txModal.data && (
         <TransactionInfoCard
-          transaction={selectedTx}
-          onClose={() => {
-            setSelectedTx(null);
-            setTxModalOpen(false);
-          }}
+          transaction={txModal.data}
+          onClose={txModal.onClose}
           resolveBankInfo={resolveBankInfo}
         />
       )}
@@ -163,89 +101,31 @@ export default function DashboardPage() {
       <div className="mx-auto mt-5 w-full max-w-5xl 2md:mt-10">
         <DashboardHeader />
       </div>
+
       <div className="mx-auto w-full max-w-5xl gap-10 pb-5 2md:mt-10 lg:grid lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <section>
-            <h1 className="sr-only">Moeda</h1>
-            <TotalCurrencyCard />
-            <DashboardMoneyCard
-              banks={banks}
-              currency={currency}
-              currencies={currencies}
-              onCurrencyChange={setCurrency}
-              onOpenAdd={() => setModalOpen(true)}
-            />
-          </section>
+          <MoneySection
+            banks={banks}
+            currencies={[ALL, ...currencies]}
+            selectedCurrency={currency}
+            onCurrencyChange={setCurrency}
+            onOpenAdd={bankModal.onOpen}
+          />
 
           <section className="mt-5">
-            <TitlePage text="Transações" />
-            {isRecentLoading ? (
-              <p className="my-5">Carregando transações…</p>
-            ) : recentTransactions.length === 0 ? (
-              <p className="my-5 text-dark/50">Nenhuma transação recente.</p>
-            ) : (
-              <ul className="my-5 space-y-3">
-                {recentTransactions.map((tx) => {
-                  const { bankName, bankCurrency } = resolveBankInfo(tx);
-
-                  return (
-                    <li
-                      key={tx._id}
-                      className="cursor-pointer py-2 transition-all duration-200 hover:rounded-xl hover:bg-dark/5 hover:px-3 dark:hover:bg-white/5"
-                      onClick={() => {
-                        setSelectedTx(tx);
-                        setTxModalOpen(true);
-                      }}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          setSelectedTx(tx);
-                          setTxModalOpen(true);
-                        }
-                      }}
-                    >
-                      <div className="flex w-full justify-between">
-                        <span className="font-semibold">
-                          {getCategoryLabel(tx.category)}
-                        </span>
-                        <span className="font-semibold">
-                          <span className="font-dm_sans font-bold">
-                            {formatCurrency(tx.amount)}
-                          </span>{" "}
-                          {bankCurrency ?? ""}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-1">
-                          <span className="text-xs font-light">
-                            {tx.type === "expense" ? "Saiu" : "Entrou"}
-                          </span>
-                          <span className="text-xs font-light">
-                            • {format(new Date(tx.date), "dd/MM/yyyy")}
-                          </span>
-                        </div>
-                        <span className="text-xs">{bankName ?? "—"}</span>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <TransactionsSection
+              transactions={recentTransactions}
+              isLoading={isRecentLoading}
+              resolveBankInfo={resolveBankInfo}
+              onOpen={(tx) => txModal.onOpen(tx)}
+            />
           </section>
         </div>
 
         <section className="mt-6 w-full max-w-sm rounded-xl lg:mt-0">
           <RemindersSection
-            onCreate={() => {
-              setEditingRem(undefined);
-              setRemModalOpen(true);
-            }}
-            onEdit={(rem) => {
-              setEditingRem(rem);
-              setRemModalOpen(true);
-            }}
+            onCreate={() => remModal.onOpen(undefined)}
+            onEdit={(rem) => remModal.onOpen(rem)}
           />
         </section>
       </div>
