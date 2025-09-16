@@ -22,6 +22,10 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isLoggingIn: boolean;
+  isRegistering: boolean;
+  isLoggingOut: boolean;
+  isSettingPrimaryCurrency: boolean;
   message: string | null;
   error: string | null;
 
@@ -31,6 +35,7 @@ interface AuthState {
     email: string,
     password: string,
   ) => Promise<{ ok: boolean; requirePrimaryCurrency: boolean }>;
+
   register: (
     firstName: string,
     email: string,
@@ -41,7 +46,7 @@ interface AuthState {
 
   setPrimaryCurrency: (
     pc: NonNullable<User["primaryCurrency"]>,
-  ) => Promise<void>;
+  ) => Promise<boolean>;
 }
 
 const loadUserFromStorage = (): User | null => {
@@ -66,6 +71,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: initialUser,
   isAuthenticated: !!initialUser,
   isLoading: false,
+  isLoggingIn: false,
+  isRegistering: false,
+  isLoggingOut: false,
+  isSettingPrimaryCurrency: false,
   error: null,
   message: null,
 
@@ -75,7 +84,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   login: async (email, password) => {
-    set({ isLoading: true, error: null, message: null });
+    set({
+      isLoading: true,
+      isLoggingIn: true,
+      error: null,
+      message: null,
+    });
 
     try {
       const response: AxiosResponse<{
@@ -90,7 +104,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: response.data.user,
         isAuthenticated: true,
-        isLoading: false,
         message: response.data.message || "Login realizado.",
       });
 
@@ -104,14 +117,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       const msg = axiosError.response?.data?.message || "Erro ao fazer login";
-      set({ error: msg, isLoading: false });
+      set({ error: msg });
       toast.error(msg);
       return { ok: false, requirePrimaryCurrency: false };
+    } finally {
+      set({ isLoading: false, isLoggingIn: false });
     }
   },
 
   register: async (firstName, email, password) => {
-    set({ isLoading: true, error: null, message: null });
+    set({
+      isLoading: true,
+      isRegistering: true,
+      error: null,
+      message: null,
+    });
 
     try {
       const response: AxiosResponse<{
@@ -130,7 +150,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: response.data.user,
         isAuthenticated: true,
-        isLoading: false,
         message: response.data.message || "Conta criada com sucesso.",
       });
 
@@ -146,14 +165,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const msg =
         axiosError.response?.data?.message ||
         "Erro ao criar a conta. Verifique os dados.";
-      set({ error: msg, isLoading: false });
+      set({ error: msg });
       toast.error(msg);
       return { ok: false, requirePrimaryCurrency: false };
+    } finally {
+      set({ isLoading: false, isRegistering: false });
     }
   },
 
   logout: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true, isLoggingOut: true });
 
     try {
       await axios.post(`${AUTH_PATH}/logout`);
@@ -166,17 +187,19 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: null,
         isAuthenticated: false,
-        isLoading: false,
         error: null,
         message: null,
+        isLoading: false,
+        isLoggingOut: false,
       });
 
-      toast.success("Logout realizado com sucesso!");
+      toast.success("Você saiu da sua conta.");
     }
   },
 
   setPrimaryCurrency: async (pc) => {
-    if (!pc) return;
+    if (!pc) return false;
+    set({ isSettingPrimaryCurrency: true });
     try {
       const { data } = await axios.patch(`${USERS_PATH}/me/primary-currency`, {
         primaryCurrency: pc,
@@ -191,12 +214,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ user: updated });
       persistUser(updated);
       toast.success("Moeda principal atualizada!");
+      return true;
     } catch (err) {
       const axiosError = err as AxiosError<{ message?: string }>;
       const msg =
         axiosError.response?.data?.message ||
         "Erro ao definir moeda principal.";
       toast.error(msg);
+      return false;
+    } finally {
+      set({ isSettingPrimaryCurrency: false });
     }
   },
 }));
