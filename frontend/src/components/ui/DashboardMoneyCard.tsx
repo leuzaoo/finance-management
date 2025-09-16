@@ -33,7 +33,9 @@ export default function DashboardMoneyCard({
   if (!banks || banks.length === 0) {
     return (
       <>
-        <TitlePage text="Banco" />
+        <div className="mt-5">
+          <TitlePage text="Banco" />
+        </div>
         <div className="mt-2 h-32 w-full cursor-pointer rounded-lg border border-dashed border-neutral-300 bg-white p-4 text-center shadow-sm transition-all duration-200 hover:opacity-50 dark:border-neutral-700 dark:bg-dark/60">
           <button
             type="button"
