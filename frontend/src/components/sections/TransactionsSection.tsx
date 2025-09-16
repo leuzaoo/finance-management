@@ -30,17 +30,17 @@ export default function TransactionsSection({
       <TitlePage text="Transações" />
 
       {isLoading ? (
-        <div className="my-4 space-y-2">
+        <div className="my-5 space-y-2">
           <div className="h-14 animate-pulse rounded-xl border border-black/10 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/10" />
           <div className="h-14 animate-pulse rounded-xl border border-black/10 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/10" />
           <div className="h-14 animate-pulse rounded-xl border border-black/10 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/10" />
         </div>
       ) : transactions.length === 0 ? (
-        <div className="my-4 rounded-xl border border-black/10 bg-white/70 p-4 text-sm text-black/60 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-white/70">
+        <div className="mt-2 rounded-xl border border-black/10 bg-white/70 p-4 text-sm text-black/60 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10 dark:text-white/70">
           Nenhuma transação recente.
         </div>
       ) : (
-        <ul className="my-4 space-y-2">
+        <ul className="mt-2 space-y-2">
           {transactions.map((tx) => {
             const { bankName, bankCurrency } = resolveBankInfo(tx);
             const isExpense = tx.type === "expense";

@@ -65,9 +65,11 @@ export function Wallets() {
         </div>
       ) : banks.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-black/10 p-8 text-center dark:border-white/10">
-          <p className="text-lg font-medium">Nenhum cartão cadastrado</p>
-          <p className="mt-1 text-sm opacity-70">
-            Crie seus cartões para acompanhar saldos por moeda.
+          <p className="text-xl font-medium md:text-2xl md:font-semibold">
+            Nenhum cartão cadastrado
+          </p>
+          <p className="mt-1 text-sm font-light opacity-70 md:text-base">
+            Adicione cartões para começar a gerenciar suas finanças.
           </p>
           <button
             onClick={() => setModalOpen(true)}

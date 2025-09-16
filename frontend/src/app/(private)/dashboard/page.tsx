@@ -122,7 +122,7 @@ export default function DashboardPage() {
           </section>
         </div>
 
-        <section className="mt-6 w-full max-w-sm rounded-xl lg:mt-0">
+        <section className="mt-5 w-full max-w-sm rounded-xl lg:mt-0">
           <RemindersSection
             onCreate={() => remModal.onOpen(undefined)}
             onEdit={(rem) => remModal.onOpen(rem)}

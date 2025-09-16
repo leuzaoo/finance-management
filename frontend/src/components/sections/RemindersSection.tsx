@@ -29,7 +29,7 @@ export default function RemindersSection({ onCreate, onEdit }: Props) {
       </div>
 
       {remLoading ? (
-        <div className="mt-3 space-y-2">
+        <div className="mt-2 space-y-2">
           <div className="h-14 animate-pulse rounded-xl border border-black/10 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/10" />
           <div className="h-14 animate-pulse rounded-xl border border-black/10 bg-white/60 backdrop-blur dark:border-white/10 dark:bg-white/10" />
         </div>
