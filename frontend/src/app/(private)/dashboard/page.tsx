@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { PlusIcon, UserCircle2Icon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { useReminderStore, type Reminder } from "@/src/store/useReminderStore";
@@ -11,7 +11,6 @@ import {
 import { getCategoryLabel } from "@/src/utils/getCategoryLabels";
 import { formatCurrency } from "@/src/utils/format-currency";
 import { useRatesStore } from "@/src/store/useRatesStore";
-import { useUserStore } from "@/src/store/useUserStore";
 import { useBankStore } from "@/src/store/useBankStore";
 import { sumToBase } from "@/src/utils/sumToBase";
 
@@ -24,11 +23,9 @@ import ReminderModal from "@/src/components/forms/ReminderModal";
 import RemindersCard from "@/src/components/ui/RemindersCard";
 import TitlePage from "@/src/components/common/TitlePage";
 import BankModal from "@/src/components/forms/BankModal";
+import RemindersSection from "@/src/components/sections/RemindersSection";
 
 const ALL = "Todas";
-
-const fmt = (n: number, c = "BRL") =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: c }).format(n);
 
 export default function DashboardPage() {
   const [currency, setCurrency] = useState<string>(ALL);
@@ -240,39 +237,16 @@ export default function DashboardPage() {
         </div>
 
         <section className="mt-6 w-full max-w-sm rounded-xl lg:mt-0">
-          <div className="flex items-center justify-between">
-            <TitlePage text="Lembretes" />
-            <button
-              onClick={() => {
-                setEditingRem(undefined);
-                setRemModalOpen(true);
-              }}
-            >
-              <div className="flex cursor-pointer items-center gap-2 rounded-full bg-dark p-1 text-light transition-all duration-300 hover:opacity-60 dark:bg-light dark:text-dark">
-                <PlusIcon size={20} />
-              </div>
-            </button>
-          </div>
-          {remLoading ? (
-            <p className="mt-2">Carregando lembretes…</p>
-          ) : reminders.length === 0 ? (
-            <p className="mt-2 rounded-xl bg-white p-3 text-dark/50 shadow-md transition-all duration-300 dark:bg-dark/50 dark:text-light/40">
-              Nenhum lembrete adicionado.
-            </p>
-          ) : (
-            <ul className="mt-2 flex flex-col gap-2 rounded-xl bg-white p-3 transition-all duration-300 dark:bg-dark/50">
-              {reminders.map((r) => (
-                <RemindersCard
-                  key={r._id}
-                  reminder={r}
-                  onClick={(rem) => {
-                    setEditingRem(rem);
-                    setRemModalOpen(true);
-                  }}
-                />
-              ))}
-            </ul>
-          )}
+          <RemindersSection
+            onCreate={() => {
+              setEditingRem(undefined);
+              setRemModalOpen(true);
+            }}
+            onEdit={(rem) => {
+              setEditingRem(rem);
+              setRemModalOpen(true);
+            }}
+          />
         </section>
       </div>
     </>
