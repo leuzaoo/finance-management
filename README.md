@@ -78,7 +78,3 @@ npm run dev
 - Autenticação via JWT, armazenado em cookies HttpOnly.
 - Rotas protegidas no backend via middleware.
 - No frontend, controle de sessão via Zustand.
-
-## 👨‍💻 Autor
-Leonardo Costa de Oliveira
-Desenvolvedor full-stack
