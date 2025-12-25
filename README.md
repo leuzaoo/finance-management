@@ -1,80 +1,146 @@
-# FinSafe - Aplicativo web de Gestão Financeira Pessoal
+# FinSafe - Personal Finance Management Web App
 
-O **FinSafe** é uma aplicação web para controle e visualização de finanças pessoais. Permite o gerenciamento de contas bancárias, receitas, despesas, assinaturas recorrentes e geração de gráficos financeiros com base em categorias e períodos.  
+FinSafe is a full-stack web application for tracking personal finances. It lets you manage bank accounts, income and expenses, recurring subscriptions, reminders, and view dashboards with charts and summaries.
 
-Desenvolvido com foco em organização, produtividade e visão clara dos gastos.
+## Features
 
----
+- Authentication with JWT stored in HttpOnly cookies
+- Bank accounts (wallets) management
+- Income and expense tracking
+- Recurring subscriptions
+- Reminders and alerts
+- Category-based and date-range filtering
+- Interactive charts (Recharts)
+- Responsive UI
 
-## Funcionalidades
+## Architecture
 
-- ✅ Autenticação com JWT (via cookies HttpOnly)
-- ✅ Cadastro de contas bancárias (wallets)
-- ✅ Registro de receitas e despesas
-- ✅ Assinaturas recorrentes
-- ✅ Filtragem por data, tipo e categoria
-- ✅ Gráficos interativos com Recharts
-- ✅ Interface responsiva com Tailwind CSS
+### Frontend
 
----
+- Next.js (App Router) + React
+- State management with Zustand
+- UI with Tailwind CSS and MUI
+- Data fetching via Axios
+- Charts via Recharts
 
-## Tecnologias utilizadas
+### Backend
 
-| Camada | Stack |
-|--------|-------|
-| Frontend | Next.js (App Router), TypeScript, Tailwind CSS, Zustand, Recharts |
-| Backend | Node.js, Express, TypeScript, MongoDB, JWT |
-| Hospedagem | Vercel (frontend) + Render (backend) |
-| Outros | Axios, React Toastify, Cookies, ESLint, Prettier |
+- Node.js + Express (TypeScript)
+- REST API under `/api/v1`
+- JWT-based authentication
+- CORS + cookies for session handling
 
----
+### Database
 
-## Instalação e execução local
+- MongoDB
 
-- Node.js 18+
-- MongoDB local ou MongoDB Atlas
-- Yarn ou NPM
+## Tech Stack
 
-```bash
-git clone https://github.com/leuzaoo/finance-management.git
-cd backend
-cp .env.example .env
-# configure as variáveis como MONGO_URI e JWT_SECRET
-npm install
-npm run dev
-```
+- **Language:** TypeScript
+- **Frontend:** Next.js, React, Zustand, Tailwind CSS, MUI, Recharts
+- **Backend:** Node.js, Express, Mongoose
+- **Database:** MongoDB
+- **Tooling:** ESLint, Prettier
 
-```bash
-cd ../frontend
-cp .env.local.example .env.local
-# configure o ambiente, ex: NODE_ENV=development
-npm install
-npm run dev
-```
-## 📁 Estrutura do projeto (resumo)
+## Project Structure (Summary)
 
 ```
 /backend
-  ├── src/
-  │   ├── controllers/
-  │   ├── routes/
-  │   ├── services/
-  │   ├── middlewares/
-  │   └── models/
-  └── index.ts
+  src/
+    controllers/
+    routes/
+    services/
+    middlewares/
+    models/
+    utils/
+    app.ts
 
 /frontend
-  ├── app/
-  │   ├── (auth)/
-  │   ├── (dashboard)/
-  ├── components/
-  ├── store/
-  ├── utils/
-  └── styles/
-  ```
+  src/
+    app/
+    components/
+    hooks/
+    store/
+    utils/
+    middleware.ts
+```
 
-## 🔐Autenticação
+## Environment Variables
 
-- Autenticação via JWT, armazenado em cookies HttpOnly.
-- Rotas protegidas no backend via middleware.
-- No frontend, controle de sessão via Zustand.
+### Backend (`backend/.env`)
+
+```
+MONGO_URI=
+JWT_SECRET=
+PORT=5001
+FRONTEND_URL=http://localhost:3000
+```
+
+### Frontend (`frontend/.env`)
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:5001/api/v1
+NODE_ENV=development
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+ (or 22+)
+- MongoDB (local or Atlas)
+
+### Installation
+
+```bash
+git clone https://github.com/leuzaoo/finance-management.git
+cd finance-management
+```
+
+### Run the Backend
+
+```bash
+cd backend
+cp .env.example .env
+# set MONGO_URI and JWT_SECRET
+npm install
+npm run dev
+```
+
+### Run the Frontend
+
+```bash
+cd ../frontend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:5001`
+
+## Scripts
+
+### Backend
+
+- `npm run dev` - start API in watch mode
+- `npm run build` - compile TypeScript
+- `npm start` - run production build
+
+### Frontend
+
+- `npm run dev` - start Next.js dev server
+- `npm run build` - build for production
+- `npm run start` - start production server
+- `npm run lint` - run linting
+
+## Deployment
+
+- Frontend can be hosted on Vercel
+- Backend can be hosted on Render
+
+## Authentication
+
+- JWT stored in HttpOnly cookies
+- Protected routes on the backend via middleware
+- Client session state managed with Zustand
