@@ -41,7 +41,11 @@ export default function RootLayout({
             __html: `
 (function () {
   try {
-    var stored = localStorage.getItem('theme'); // "dark" | "light" | null
+    var storage = typeof localStorage !== 'undefined' ? localStorage : null;
+    var stored =
+      storage && typeof storage.getItem === 'function'
+        ? storage.getItem('theme') // "dark" | "light" | null
+        : null;
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     var theme = stored || (prefersDark ? 'dark' : 'light');
     var root = document.documentElement;

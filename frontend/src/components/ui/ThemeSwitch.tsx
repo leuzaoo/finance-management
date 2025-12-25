@@ -8,7 +8,12 @@ function applyTheme(next: Theme) {
   const root = document.documentElement;
   root.classList.toggle("dark", next === "dark");
   root.setAttribute("data-theme", next);
-  localStorage.setItem("theme", next);
+  if (typeof window !== "undefined") {
+    const storage = window.localStorage;
+    if (storage && typeof storage.setItem === "function") {
+      storage.setItem("theme", next);
+    }
+  }
 }
 
 export default function ThemeSwitch() {
