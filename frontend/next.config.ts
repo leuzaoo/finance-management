@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     if (process.env.NODE_ENV === "development") {
       rules.push({
         source: "/api/v1/:path*",
-        destination: "http://localhost:5000/api/v1/:path*",
+        destination: "http://localhost:5001/api/v1/:path*",
       });
     }
     rules.push({

@@ -2,10 +2,14 @@ import axios, { type AxiosError, type AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api/v1";
+
+axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 
-const AUTH_PATH = "/api/v1";
-const USERS_PATH = "/api/v1/users";
+const AUTH_PATH = "";
+const USERS_PATH = "/users";
 
 const deleteCookie = (name: string) => {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -49,10 +53,16 @@ interface AuthState {
   ) => Promise<boolean>;
 }
 
+const isLocalStorageAvailable = (): boolean => {
+  if (typeof window === "undefined") return false;
+  const storage = window.localStorage;
+  return !!storage && typeof storage.getItem === "function";
+};
+
 const loadUserFromStorage = (): User | null => {
-  if (typeof window === "undefined") return null;
+  if (!isLocalStorageAvailable()) return null;
   try {
-    const userJSON = localStorage.getItem("auth_user");
+    const userJSON = window.localStorage.getItem("auth_user");
     return userJSON ? JSON.parse(userJSON) : null;
   } catch {
     return null;
@@ -60,8 +70,16 @@ const loadUserFromStorage = (): User | null => {
 };
 
 const persistUser = (u: User) => {
+  if (!isLocalStorageAvailable()) return;
   try {
-    localStorage.setItem("auth_user", JSON.stringify(u));
+    window.localStorage.setItem("auth_user", JSON.stringify(u));
+  } catch {}
+};
+
+const removeUserFromStorage = () => {
+  if (!isLocalStorageAvailable()) return;
+  try {
+    window.localStorage.removeItem("auth_user");
   } catch {}
 };
 
@@ -181,7 +199,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (err) {
       console.error("Erro ao fazer logout no servidor:", err);
     } finally {
-      localStorage.removeItem("auth_user");
+      removeUserFromStorage();
       deleteCookie("token");
 
       set({

@@ -2,9 +2,13 @@ import { toast } from "react-toastify";
 import { create } from "zustand";
 import axios from "axios";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api/v1";
+
+axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 
-const BANKS_PATH = "/api/v1/banks";
+const BANKS_PATH = "/banks";
 
 interface BankFromApi {
   _id: string;

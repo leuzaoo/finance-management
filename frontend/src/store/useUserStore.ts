@@ -2,12 +2,13 @@ import { toast } from "react-toastify";
 import { create } from "zustand";
 import axios from "axios";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api/v1";
+
+axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 
-const API_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000/api/v1/users"
-    : "/api/v1/users";
+const API_URL = "/users";
 
 export interface UserProfile {
   _id: string;
